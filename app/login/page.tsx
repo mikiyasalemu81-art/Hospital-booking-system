@@ -258,7 +258,7 @@ export default function LoginPage() {
                       type="email"
                       value={resetEmail}
                       onChange={(e) => setResetEmail(e.target.value)}
-                      className="w-full mt-1 px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white"
+                      className="w-full mt-1 px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white text-slate-900 placeholder:text-slate-400"
                     />
                   </div>
                   <div>
@@ -267,7 +267,7 @@ export default function LoginPage() {
                       type="text"
                       value={newPassword}
                       onChange={(e) => setNewPassword(e.target.value)}
-                      className="w-full mt-1 px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white font-mono"
+                      className="w-full mt-1 px-2.5 py-1.5 border border-slate-300 rounded-lg text-xs bg-white font-mono text-slate-900 placeholder:text-slate-400"
                     />
                   </div>
                   <button

@@ -134,7 +134,7 @@ export default function SignUpPage() {
                   value={clinicName}
                   onChange={(e) => setClinicName(e.target.value)}
                   placeholder="e.g. St. Paul Specialist Clinic"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
                 />
               </div>
             </div>
@@ -152,7 +152,7 @@ export default function SignUpPage() {
                   value={adminFullName}
                   onChange={(e) => setAdminFullName(e.target.value)}
                   placeholder="e.g. Dr. Abebe Bikila"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
                 />
               </div>
             </div>
@@ -171,7 +171,7 @@ export default function SignUpPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@stpaulclinic.com"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
                 />
               </div>
             </div>
@@ -199,7 +199,7 @@ export default function SignUpPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="At least 6 characters"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
                 />
               </div>
             </div>

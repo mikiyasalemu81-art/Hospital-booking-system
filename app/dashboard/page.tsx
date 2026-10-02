@@ -12,6 +12,39 @@ export default function DashboardPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [origin, setOrigin] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setOrigin(window.location.origin);
+    }
+  }, []);
+
+  const clinicId = clinic?.id || staff?.clinic_id || '';
+  const bookingUrl = clinicId ? `${origin || ''}/book/${clinicId}` : '';
+
+  const handleCopyLink = async () => {
+    if (!bookingUrl) return;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(bookingUrl);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = bookingUrl;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+    }
+  };
 
   useEffect(() => {
     async function loadDashboardData() {
@@ -100,6 +133,102 @@ export default function DashboardPage() {
               </svg>
               Add Patient
             </Link>
+          </div>
+        </div>
+
+        {/* Your Booking Link Card */}
+        <div className="bg-white rounded-2xl border border-teal-200/80 p-5 sm:p-6 shadow-xs relative overflow-hidden bg-gradient-to-br from-white via-teal-50/20 to-teal-50/40">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="space-y-1 max-w-xl">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-lg bg-teal-100 text-teal-700">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                  </svg>
+                </span>
+                <h3 className="text-base font-bold text-slate-900">Your Booking Link</h3>
+                <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                  Permanent • Never Expires
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Share this public booking link with your patients via SMS, email, or website. Patients can schedule appointments directly with{' '}
+                <strong className="text-slate-800">{clinic?.name || 'your clinic'}</strong> without an account. This link never expires and does not require regeneration.
+              </p>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto">
+              <div className="relative flex-1 md:w-80 lg:w-96">
+                <input
+                  type="text"
+                  readOnly
+                  value={bookingUrl || 'Loading permanent booking link...'}
+                  onClick={(e) => (e.target as HTMLInputElement).select()}
+                  className="w-full pl-3.5 pr-10 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono text-slate-900 select-all focus:outline-none focus:border-teal-500 transition shadow-2xs"
+                  title="Click to select entire URL"
+                />
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-teal-600 transition"
+                  title={copied ? 'Copied!' : 'Copy to clipboard'}
+                >
+                  {copied ? (
+                    <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleCopyLink}
+                  disabled={!bookingUrl}
+                  className={`inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold shadow-xs transition ${
+                    copied
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-teal-600 hover:bg-teal-700 text-white'
+                  }`}
+                >
+                  {copied ? (
+                    <>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      Copied!
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                      </svg>
+                      Copy Link
+                    </>
+                  )}
+                </button>
+
+                {bookingUrl && (
+                  <a
+                    href={bookingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-xs transition"
+                    title="Open booking link in new tab"
+                  >
+                    <svg className="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                    Preview
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 

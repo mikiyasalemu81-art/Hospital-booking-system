@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
 }
 
 @theme inline {
@@ -12,15 +12,27 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  color-scheme: light;
+}
+
+/* Base styles ensuring input, textarea, and select elements globally render with dark, visible text and readable placeholders */
+input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+textarea,
+select {
+  color: #0f172a !important; /* text-slate-900 */
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8 !important; /* text-slate-400 / text-gray-400 */
+  opacity: 1 !important;
+}
+
+select option {
+  color: #0f172a;
+  background-color: #ffffff;
 }

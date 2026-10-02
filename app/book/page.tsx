@@ -11,6 +11,15 @@ export default function PublicClinicsDirectoryPage() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const search = new URLSearchParams(window.location.search);
+      const clinicId = search.get('clinic_id') || search.get('clinic');
+      if (clinicId) {
+        window.location.replace(`/book/${clinicId}`);
+        return;
+      }
+    }
+
     async function fetchClinics() {
       try {
         setLoading(true);

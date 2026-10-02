@@ -261,12 +261,6 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
               >
                 + Book Another Appointment
               </button>
-              <Link
-                href="/book"
-                className="flex-1 py-3 px-4 rounded-xl bg-teal-600 hover:bg-teal-700 font-semibold text-xs text-white text-center shadow-xs transition"
-              >
-                Back to Clinics Directory
-              </Link>
             </div>
           </div>
         </div>
@@ -276,35 +270,44 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      {/* Top Navbar */}
+      {/* Top Navbar - Dedicated Clinic Brand */}
       <header className="bg-white border-b border-slate-200/80 sticky top-0 z-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link
-              href="/book"
-              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
-              title="Return to clinics list"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7" />
-              </svg>
-            </Link>
+            <div className="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center text-white font-bold shadow-sm shadow-teal-600/20 text-base">
+              {clinic?.name ? clinic.name.charAt(0).toUpperCase() : '🏥'}
+            </div>
             <div>
-              <h1 className="text-base font-bold text-slate-900 leading-tight">
-                {clinic?.name || 'Clinic Booking'}
-              </h1>
+              <div className="flex items-center gap-2">
+                <h1 className="text-base font-bold text-slate-900 leading-tight">
+                  {clinic?.name || 'Clinic Booking'}
+                </h1>
+                <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 hidden sm:inline-block">
+                  Verified Clinic
+                </span>
+              </div>
               <p className="text-xs text-slate-500">
                 {clinic?.phone ? `📞 ${clinic.phone} • ` : ''}Public Patient Scheduling
               </p>
             </div>
           </div>
 
-          <Link
-            href="/book"
-            className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 px-3 py-1.5 rounded-xl border border-teal-200 transition"
-          >
-            ← Change Clinic
-          </Link>
+          <div className="flex items-center gap-2">
+            {clinic?.phone && (
+              <a
+                href={`tel:${clinic.phone}`}
+                className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100/70 px-3.5 py-1.5 rounded-xl border border-teal-200/60 transition"
+              >
+                📞 <span className="hidden sm:inline">Call Clinic</span>
+              </a>
+            )}
+            <Link
+              href="/login"
+              className="text-xs font-medium text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200 transition"
+            >
+              Staff Portal
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -321,12 +324,16 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
         ) : error ? (
           <div className="p-6 bg-red-50 border border-red-200 rounded-2xl text-red-900 text-center space-y-3">
             <p className="font-semibold text-sm">{error}</p>
-            <Link
-              href="/book"
-              className="inline-block px-4 py-2 bg-red-700 text-white rounded-xl text-xs font-semibold hover:bg-red-800"
+            <p className="text-xs text-red-700 max-w-sm mx-auto">
+              Please verify your booking link or contact the clinic reception directly.
+            </p>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="inline-block px-4 py-2 bg-teal-700 text-white rounded-xl text-xs font-semibold hover:bg-teal-800 transition"
             >
-              Back to Clinics
-            </Link>
+              Reload Page
+            </button>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -429,7 +436,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                     min={new Date().toISOString().split('T')[0]}
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full sm:w-64 px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                    className="w-full sm:w-64 px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
                   />
                 </div>
 
@@ -510,7 +517,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="e.g. Almaz Ayana"
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs focus:outline-none focus:border-teal-500"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
                     />
                   </div>
 
@@ -524,7 +531,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="e.g. +251911223344"
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs focus:outline-none focus:border-teal-500"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
                     />
                   </div>
                 </div>
@@ -538,7 +545,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="e.g. Health checkup, recurring fever"
-                    className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-teal-500"
+                    className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
                   />
                 </div>
               </div>

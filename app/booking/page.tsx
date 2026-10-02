@@ -588,7 +588,7 @@ export default function BookingPage() {
                       type="date"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
                     />
                   </div>
                   <div>
@@ -748,7 +748,7 @@ export default function BookingPage() {
                       value={patientSearch}
                       onChange={(e) => setPatientSearch(e.target.value)}
                       placeholder="Search patient by name or phone..."
-                      className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-xs focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                      className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
                     />
                     {searchingPatients && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -838,7 +838,7 @@ export default function BookingPage() {
                       value={newPatientName}
                       onChange={(e) => setNewPatientName(e.target.value)}
                       placeholder="e.g. Almaz Ayana"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:outline-none focus:border-teal-500"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
                     />
                   </div>
                   <div>
@@ -851,7 +851,7 @@ export default function BookingPage() {
                       value={newPatientPhone}
                       onChange={(e) => setNewPatientPhone(e.target.value)}
                       placeholder="e.g. +251911223344"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:outline-none focus:border-teal-500"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
                     />
                   </div>
                 </div>
@@ -867,7 +867,7 @@ export default function BookingPage() {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g. Routine checkup, throat irritation"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-teal-500"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
                 />
               </div>
             </div>
@@ -1016,7 +1016,7 @@ export default function BookingPage() {
                   value={apptSearchQuery}
                   onChange={(e) => setApptSearchQuery(e.target.value)}
                   placeholder="Search patient, phone, doctor..."
-                  className="pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-xl focus:outline-none focus:border-teal-500"
+                  className="pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
                 />
               </div>
 
@@ -1239,7 +1239,7 @@ export default function BookingPage() {
                     required
                     value={rescheduleDate}
                     onChange={(e) => setRescheduleDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs focus:outline-none focus:border-teal-500"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-teal-500 bg-white"
                   />
                 </div>
 

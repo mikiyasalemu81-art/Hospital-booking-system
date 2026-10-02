@@ -271,7 +271,7 @@ export default function DoctorsPage() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search doctors by name or department..."
-              className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+              className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
             />
           </div>
 
@@ -477,7 +477,7 @@ export default function DoctorsPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Dr. Sarah Jenkins"
-                    className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                    className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
                   />
                 </div>
 
@@ -491,7 +491,7 @@ export default function DoctorsPage() {
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     placeholder="e.g. Cardiology, Pediatrics, General Medicine"
-                    className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                    className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
                   />
                 </div>
 
@@ -576,7 +576,7 @@ export default function DoctorsPage() {
                       required
                       value={startTime}
                       onChange={(e) => setStartTime(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
                     />
                   </div>
                   <div>
@@ -588,7 +588,7 @@ export default function DoctorsPage() {
                       required
                       value={endTime}
                       onChange={(e) => setEndTime(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
                     />
                   </div>
                 </div>
