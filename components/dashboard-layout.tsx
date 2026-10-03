@@ -113,7 +113,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     },
   ];
 
-  const SidebarContent = () => (
+  const sidebarContent = (
     <div className="flex flex-col h-full bg-white border-r border-slate-200">
       {/* Clinic Header */}
       <div className="p-5 border-b border-slate-100 flex items-center gap-3">
@@ -218,7 +218,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <div className="min-h-screen bg-slate-50 flex">
       {/* Desktop Sidebar */}
       <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-30">
-        <SidebarContent />
+        {sidebarContent}
       </aside>
 
       {/* Mobile Drawer */}
@@ -239,7 +239,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 </svg>
               </button>
             </div>
-            <SidebarContent />
+            {sidebarContent}
           </div>
         </div>
       )}
