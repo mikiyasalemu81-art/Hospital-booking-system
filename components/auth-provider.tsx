@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { User } from '@supabase/supabase-js';
 import { createClient } from '@/lib/supabase/client';
+import { isSupabaseConfigured, friendlyAuthError, SUPABASE_NOT_CONFIGURED_MESSAGE } from '@/lib/supabase/config';
 import { Clinic, Staff } from '@/lib/types';
 import { useRouter } from 'next/navigation';
 
@@ -14,6 +15,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
   refresh: () => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<{ error: string | null }>;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -24,6 +26,7 @@ const AuthContext = createContext<AuthContextType>({
   signIn: async () => ({ error: 'Not implemented' }),
   signOut: async () => {},
   refresh: async () => {},
+  changePassword: async () => ({ error: 'Not implemented' }),
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -105,6 +108,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase, loadStaffAndClinic]);
 
   const signIn = async (email: string, password: string) => {
+    if (!isSupabaseConfigured) {
+      console.error(
+        '[auth] NEXT_PUBLIC_SUPABASE_URL / NEXT_PUBLIC_SUPABASE_ANON_KEY are missing or invalid in this build.'
+      );
+      return { error: SUPABASE_NOT_CONFIGURED_MESSAGE };
+    }
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -112,7 +121,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (error) {
-        return { error: error.message };
+        console.error('[auth] signIn error:', error);
+        return { error: friendlyAuthError(error) };
       }
 
       if (data.session) {
@@ -121,8 +131,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       return { error: null };
-    } catch (err: any) {
-      return { error: err?.message || 'Login failed' };
+    } catch (err: unknown) {
+      console.error('[auth] signIn exception:', err);
+      return { error: friendlyAuthError(err) };
+    }
+  };
+
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    if (!isSupabaseConfigured) return { error: SUPABASE_NOT_CONFIGURED_MESSAGE };
+
+    const email = user?.email;
+    if (!email) return { error: 'Your session has expired. Please sign in again.' };
+
+    try {
+      // 1. Verify the current password by re-authenticating the same user.
+      const { error: verifyError } = await supabase.auth.signInWithPassword({
+        email,
+        password: currentPassword,
+      });
+      if (verifyError) {
+        const msg = verifyError.message?.toLowerCase() || '';
+        if (msg.includes('invalid login credentials')) {
+          return { error: 'Your current password is incorrect.' };
+        }
+        return { error: friendlyAuthError(verifyError) };
+      }
+
+      // 2. Update to the new password via Supabase Auth.
+      const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+      if (updateError) {
+        const msg = updateError.message?.toLowerCase() || '';
+        if (msg.includes('different from the old')) {
+          return { error: 'Your new password must be different from your current password.' };
+        }
+        if (msg.includes('weak') || msg.includes('at least')) {
+          return { error: updateError.message };
+        }
+        if (msg.includes('reauthentication')) {
+          return {
+            error:
+              'Your account requires re-authentication to change the password. Please sign out, sign in again, and retry.',
+          };
+        }
+        return { error: friendlyAuthError(updateError) };
+      }
+
+      return { error: null };
+    } catch (err: unknown) {
+      return { error: friendlyAuthError(err) };
     }
   };
 
@@ -154,6 +210,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         signIn,
         signOut,
         refresh,
+        changePassword,
       }}
     >
       {children}

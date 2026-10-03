@@ -1,7 +1,13 @@
 import { createBrowserClient } from '@supabase/ssr';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import { supabaseUrl, supabaseAnonKey } from './config';
 
-export function createClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
-  return createBrowserClient(url, anonKey);
+let browserClient: SupabaseClient | null = null;
+
+/** Singleton browser Supabase client (avoids multiple GoTrue instances / lock contention). */
+export function createClient(): SupabaseClient {
+  if (!browserClient) {
+    browserClient = createBrowserClient(supabaseUrl, supabaseAnonKey);
+  }
+  return browserClient;
 }
