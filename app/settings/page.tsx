@@ -55,7 +55,7 @@ export default function SettingsPage() {
   };
 
   const inputClass =
-    'w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20';
+    'w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-2xs transition';
 
   return (
     <DashboardLayout>
@@ -66,7 +66,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Account summary */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+        <div className="bg-white rounded-2xl border border-slate-200/70 shadow-xs p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
           <div>
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</p>
             <p className="mt-1 font-semibold text-slate-900 truncate">{staff?.full_name || '—'}</p>
@@ -82,7 +82,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Change password */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-200/70 shadow-xs overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
             <div>
               <h3 className="text-base font-bold text-slate-900">Change Password</h3>
@@ -91,7 +91,7 @@ export default function SettingsPage() {
             <button
               type="button"
               onClick={() => setShowPasswords((v) => !v)}
-              className="text-xs text-teal-600 hover:text-teal-700 font-medium"
+              className="text-xs text-blue-600 hover:text-blue-700 font-semibold"
             >
               {showPasswords ? 'Hide passwords' : 'Show passwords'}
             </button>
@@ -99,12 +99,12 @@ export default function SettingsPage() {
 
           <form onSubmit={handleSubmit} className="p-6 space-y-4" noValidate>
             {error && (
-              <div role="alert" className="p-3 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700">
+              <div role="alert" className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">
                 {error}
               </div>
             )}
             {success && (
-              <div role="status" className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-sm text-emerald-800">
+              <div role="status" className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800">
                 {success}
               </div>
             )}
@@ -159,7 +159,7 @@ export default function SettingsPage() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-5 py-2.5 bg-teal-600 text-white rounded-xl text-sm font-semibold hover:bg-teal-700 disabled:opacity-50 transition shadow-sm"
+                className="px-5 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 disabled:opacity-50 transition shadow-xs"
               >
                 {submitting ? 'Updating Password...' : 'Update Password'}
               </button>

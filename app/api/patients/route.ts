@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { full_name, phone } = body;
+    const { full_name, phone, notes } = body;
 
     if (!full_name || typeof full_name !== 'string' || !full_name.trim()) {
       return NextResponse.json({ error: 'Patient full name is required' }, { status: 400 });
@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
       clinic_id: auth.staff.clinic_id,
       full_name: full_name.trim(),
       phone: phone.trim(),
+      notes: typeof notes === 'string' && notes.trim() ? notes.trim() : null,
     };
 
     const { data, error } = await supabaseAdmin

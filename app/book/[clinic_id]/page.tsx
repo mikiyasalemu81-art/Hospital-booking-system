@@ -45,7 +45,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
   const [submitting, setSubmitting] = useState(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
   const [confirmedBooking, setConfirmedBooking] = useState<{
-    appointment: any;
+    appointment: unknown;
     clinic: PublicClinic;
     doctor: { full_name: string; department: string | null };
     patient: { full_name: string; phone: string };
@@ -75,8 +75,8 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
         if (dRes.doctors && dRes.doctors.length > 0) {
           setSelectedDoctorId(dRes.doctors[0].id);
         }
-      } catch (err: any) {
-        setError(err.message || 'Error loading clinic information');
+      } catch (err: unknown) {
+        setError(err instanceof Error ? err.message : 'Error loading clinic information');
       } finally {
         setLoadingClinic(false);
       }
@@ -87,7 +87,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
   // 2. Load Free Slots when Doctor or Date changes
   useEffect(() => {
     if (!selectedDoctorId || !selectedDate || !clinicId) {
-      setSlotResult(null);
+      Promise.resolve().then(() => setSlotResult(null));
       return;
     }
 
@@ -173,8 +173,8 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
         dateFormatted,
         timeFormatted: selectedSlot.displayLabel,
       });
-    } catch (err: any) {
-      setBookingError(err.message || 'Error creating appointment');
+    } catch (err: unknown) {
+      setBookingError(err instanceof Error ? err.message : 'Error creating appointment');
       // Refresh slots in case a double-booking occurred
       const slotRes = await getPublicDoctorSlots(clinicId, selectedDoctorId, selectedDate);
       if (slotRes.success && slotRes.result) {
@@ -219,16 +219,16 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                 <span className="text-slate-400 text-xs font-medium">Doctor</span>
                 <div className="text-right">
                   <span className="font-bold text-slate-900 block">{confirmedBooking.doctor.full_name}</span>
-                  <span className="text-xs text-teal-700 font-medium">{confirmedBooking.doctor.department || 'General'}</span>
+                  <span className="text-xs text-blue-700 font-medium">{confirmedBooking.doctor.department || 'General'}</span>
                 </div>
               </div>
               <div className="flex justify-between items-center pb-2.5 border-b border-slate-200/60">
                 <span className="text-slate-400 text-xs font-medium">Scheduled Date</span>
-                <span className="font-bold text-teal-800">{confirmedBooking.dateFormatted}</span>
+                <span className="font-bold text-blue-800">{confirmedBooking.dateFormatted}</span>
               </div>
               <div className="flex justify-between items-center pb-2.5 border-b border-slate-200/60">
                 <span className="text-slate-400 text-xs font-medium">Consultation Time</span>
-                <span className="font-bold text-teal-800">{confirmedBooking.timeFormatted}</span>
+                <span className="font-bold text-blue-800">{confirmedBooking.timeFormatted}</span>
               </div>
               <div className="flex justify-between items-center pb-2.5 border-b border-slate-200/60">
                 <span className="text-slate-400 text-xs font-medium">Patient Name</span>
@@ -241,7 +241,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
             </div>
 
             {confirmedBooking.clinic.phone && (
-              <div className="p-3 bg-teal-50/70 border border-teal-200/70 rounded-xl text-xs text-teal-900 flex items-center justify-between">
+              <div className="p-3 bg-blue-50/70 border border-blue-200/70 rounded-xl text-xs text-blue-900 flex items-center justify-between">
                 <span>Clinic Contact Phone:</span>
                 <a href={`tel:${confirmedBooking.clinic.phone}`} className="font-mono font-bold hover:underline">
                   📞 {confirmedBooking.clinic.phone}
@@ -274,7 +274,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
       <header className="bg-white border-b border-slate-200/80 sticky top-0 z-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-teal-600 flex items-center justify-center text-white font-bold shadow-sm shadow-teal-600/20 text-base">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-xs shadow-blue-600/20 text-base">
               {clinic?.name ? clinic.name.charAt(0).toUpperCase() : '🏥'}
             </div>
             <div>
@@ -296,7 +296,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
             {clinic?.phone && (
               <a
                 href={`tel:${clinic.phone}`}
-                className="text-xs font-semibold text-teal-700 hover:text-teal-900 bg-teal-50 hover:bg-teal-100/70 px-3.5 py-1.5 rounded-xl border border-teal-200/60 transition"
+                className="text-xs font-semibold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100/70 px-3.5 py-1.5 rounded-xl border border-blue-200/60 transition"
               >
                 📞 <span className="hidden sm:inline">Call Clinic</span>
               </a>
@@ -315,7 +315,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8">
         {loadingClinic ? (
           <div className="py-24 text-center text-slate-400 text-sm flex flex-col items-center justify-center gap-3">
-            <svg className="animate-spin h-7 w-7 text-teal-600" viewBox="0 0 24 24" fill="none">
+            <svg className="animate-spin h-7 w-7 text-blue-600" viewBox="0 0 24 24" fill="none">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -330,7 +330,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
             <button
               type="button"
               onClick={() => window.location.reload()}
-              className="inline-block px-4 py-2 bg-teal-700 text-white rounded-xl text-xs font-semibold hover:bg-teal-800 transition"
+              className="inline-block px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition"
             >
               Reload Page
             </button>
@@ -343,7 +343,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
               <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">
+                    <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
                       1
                     </span>
                     <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
@@ -377,13 +377,13 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                           }}
                           className={`p-3.5 rounded-xl border cursor-pointer transition flex items-start gap-3 select-none ${
                             isSelected
-                              ? 'border-teal-600 bg-teal-50/60 shadow-xs ring-2 ring-teal-600/20'
+                              ? 'border-blue-600 bg-blue-50/60 shadow-xs ring-2 ring-blue-600/20'
                               : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
                           }`}
                         >
                           <div
                             className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
-                              isSelected ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-700'
+                              isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700'
                             }`}
                           >
                             {doc.full_name.charAt(0).toUpperCase()}
@@ -394,10 +394,10 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                                 {doc.full_name}
                               </h3>
                               {isSelected && (
-                                <span className="text-teal-600 text-xs font-bold shrink-0">✓</span>
+                                <span className="text-blue-600 text-xs font-bold shrink-0">✓</span>
                               )}
                             </div>
-                            <p className="text-xs text-teal-700 font-medium truncate mt-0.5">
+                            <p className="text-xs text-blue-700 font-medium truncate mt-0.5">
                               {doc.department || 'General Medicine'}
                             </p>
                           </div>
@@ -412,7 +412,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
               <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">
+                    <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
                       2
                     </span>
                     <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
@@ -436,7 +436,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                     min={new Date().toISOString().split('T')[0]}
                     value={selectedDate}
                     onChange={(e) => setSelectedDate(e.target.value)}
-                    className="w-full sm:w-64 px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
+                    className="w-full sm:w-64 px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
                   />
                 </div>
 
@@ -448,7 +448,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
 
                   {loadingSlots ? (
                     <div className="py-8 text-center text-slate-400 text-xs flex items-center justify-center gap-2">
-                      <svg className="animate-spin h-4 w-4 text-teal-600" viewBox="0 0 24 24" fill="none">
+                      <svg className="animate-spin h-4 w-4 text-blue-600" viewBox="0 0 24 24" fill="none">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
@@ -481,8 +481,8 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                             onClick={() => setSelectedSlot(slot)}
                             className={`py-2 px-2.5 rounded-xl text-xs font-semibold border transition text-center ${
                               isChosen
-                                ? 'bg-teal-600 text-white border-teal-600 shadow-xs ring-2 ring-teal-600/20'
-                                : 'bg-white text-slate-700 border-slate-200 hover:border-teal-500 hover:bg-teal-50/40'
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs ring-2 ring-blue-600/20'
+                                : 'bg-white text-slate-700 border-slate-200 hover:border-blue-500 hover:bg-blue-50/40'
                             }`}
                           >
                             <span className="block font-bold">{formatTime(slot.startTime)}</span>
@@ -498,7 +498,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
               {/* STEP 3: PATIENT CONTACT INFORMATION */}
               <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
                     3
                   </span>
                   <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
@@ -517,7 +517,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="e.g. Almaz Ayana"
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
                     />
                   </div>
 
@@ -531,7 +531,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="e.g. +251911223344"
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
                     />
                   </div>
                 </div>
@@ -545,7 +545,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
                     placeholder="e.g. Health checkup, recurring fever"
-                    className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
+                    className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
                   />
                 </div>
               </div>
@@ -555,7 +555,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
             <div className="lg:col-span-5 space-y-6">
               <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm sticky top-24">
                 <div className="flex items-center gap-2 pb-4 border-b border-slate-100">
-                  <div className="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold">
+                  <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -590,7 +590,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                   </div>
                   <div className="flex justify-between items-center py-1 border-b border-slate-100">
                     <span className="text-slate-400 font-medium">Date</span>
-                    <span className="font-bold text-teal-800">
+                    <span className="font-bold text-blue-800">
                       {selectedDate
                         ? new Date(selectedDate).toLocaleDateString(undefined, {
                             weekday: 'short',
@@ -603,7 +603,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                   </div>
                   <div className="flex justify-between items-center py-1 border-b border-slate-100">
                     <span className="text-slate-400 font-medium">Time Slot</span>
-                    <span className="font-bold text-teal-800">{selectedSlot?.displayLabel || 'No slot selected'}</span>
+                    <span className="font-bold text-blue-800">{selectedSlot?.displayLabel || 'No slot selected'}</span>
                   </div>
                   <div className="flex justify-between items-center py-1 border-b border-slate-100">
                     <span className="text-slate-400 font-medium">Patient</span>
@@ -626,7 +626,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                       !fullName.trim() ||
                       !phone.trim()
                     }
-                    className="w-full py-3 px-4 bg-teal-600 hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl text-sm shadow-sm transition flex items-center justify-center gap-2"
+                    className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl text-sm shadow-xs transition flex items-center justify-center gap-2"
                   >
                     {submitting ? (
                       <>

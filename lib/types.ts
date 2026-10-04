@@ -32,6 +32,7 @@ export interface Patient {
   clinic_id: string;
   full_name: string;
   phone: string;
+  notes?: string | null;
   created_at: string;
 }
 

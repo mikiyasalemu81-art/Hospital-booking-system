@@ -42,15 +42,15 @@ export default function DoctorsPage() {
       }
       const data = await res.json();
       setDoctors(data.doctors || []);
-    } catch (err: any) {
-      setError(err.message || 'Error fetching doctors');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Error fetching doctors');
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchDoctors();
+    Promise.resolve().then(() => fetchDoctors());
   }, [fetchDoctors]);
 
   const resetForm = () => {
@@ -170,8 +170,8 @@ export default function DoctorsPage() {
       closeModals();
       await fetchDoctors();
       setTimeout(() => setSuccessMessage(null), 4000);
-    } catch (err: any) {
-      setFormError(err.message || 'Operation failed');
+    } catch (err: unknown) {
+      setFormError(err instanceof Error ? err.message : 'Operation failed');
     } finally {
       setSubmitting(false);
     }
@@ -190,8 +190,8 @@ export default function DoctorsPage() {
       setSuccessMessage(`Dr. ${docName} deleted successfully.`);
       await fetchDoctors();
       setTimeout(() => setSuccessMessage(null), 4000);
-    } catch (err: any) {
-      setError(err.message || 'Error deleting doctor');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Error deleting doctor');
     }
   };
 
@@ -211,7 +211,7 @@ export default function DoctorsPage() {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6 max-w-7xl mx-auto">
+      <div className="space-y-6">
         {/* Header with Title and Add Button */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
@@ -223,9 +223,9 @@ export default function DoctorsPage() {
           <div>
             <button
               onClick={openAddModal}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 shadow-sm shadow-teal-600/20 transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 shadow-xs transition"
             >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
               Add New Doctor
@@ -238,7 +238,7 @@ export default function DoctorsPage() {
           <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center justify-between">
             <div className="flex items-center gap-2">
               <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
               <span>{successMessage}</span>
             </div>
@@ -256,7 +256,7 @@ export default function DoctorsPage() {
         )}
 
         {/* Filter and Search Bar */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="w-full sm:w-96 relative">
             <svg
               className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
@@ -271,7 +271,7 @@ export default function DoctorsPage() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search doctors by name or department..."
-              className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
+              className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white shadow-2xs"
             />
           </div>
 
@@ -282,7 +282,7 @@ export default function DoctorsPage() {
                 onClick={() => setStatusFilter('all')}
                 className={`px-3 py-1.5 rounded-lg transition ${
                   statusFilter === 'all'
-                    ? 'bg-white text-slate-900 shadow-xs font-semibold'
+                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -292,7 +292,7 @@ export default function DoctorsPage() {
                 onClick={() => setStatusFilter('active')}
                 className={`px-3 py-1.5 rounded-lg transition ${
                   statusFilter === 'active'
-                    ? 'bg-white text-emerald-700 shadow-xs font-semibold'
+                    ? 'bg-white text-blue-700 shadow-2xs font-semibold'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -302,7 +302,7 @@ export default function DoctorsPage() {
                 onClick={() => setStatusFilter('inactive')}
                 className={`px-3 py-1.5 rounded-lg transition ${
                   statusFilter === 'inactive'
-                    ? 'bg-white text-slate-700 shadow-xs font-semibold'
+                    ? 'bg-white text-slate-700 shadow-2xs font-semibold'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -312,25 +312,25 @@ export default function DoctorsPage() {
           </div>
         </div>
 
-        {/* Doctors Table / Cards */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+        {/* Doctors Table */}
+        <div className="bg-white rounded-2xl border border-slate-200/70 shadow-xs overflow-hidden">
           {loading ? (
             <div className="py-16 text-center text-slate-500">
-              <svg className="animate-spin h-8 w-8 text-teal-600 mx-auto mb-2" viewBox="0 0 24 24" fill="none">
+              <svg className="animate-spin h-7 w-7 text-blue-600 mx-auto mb-2" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <p className="text-sm">Loading doctors from Supabase...</p>
+              <p className="text-xs">Loading doctors...</p>
             </div>
           ) : filteredDoctors.length === 0 ? (
             <div className="py-16 text-center px-4">
-              <div className="w-14 h-14 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h3 className="text-base font-semibold text-slate-900">No doctors found</h3>
-              <p className="text-sm text-slate-500 max-w-sm mx-auto mt-1">
+              <h3 className="text-sm font-semibold text-slate-900">No doctors found</h3>
+              <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1">
                 {searchTerm
                   ? `No doctors match the search "${searchTerm}".`
                   : 'Get started by registering a doctor for this clinic.'}
@@ -338,7 +338,7 @@ export default function DoctorsPage() {
               {!searchTerm && (
                 <button
                   onClick={openAddModal}
-                  className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-teal-600 text-white rounded-xl text-xs font-semibold hover:bg-teal-700 transition"
+                  className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition"
                 >
                   Add First Doctor
                 </button>
@@ -361,23 +361,23 @@ export default function DoctorsPage() {
                 <tbody className="divide-y divide-slate-100 text-sm">
                   {filteredDoctors.map((doc) => (
                     <tr key={doc.id} className="hover:bg-slate-50/60 transition">
-                      <td className="py-4 px-4 sm:px-6">
+                      <td className="py-3.5 px-4 sm:px-6">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center font-bold text-xs shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">
                             {doc.full_name.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900">{doc.full_name}</div>
-                            <div className="text-xs text-slate-400 font-mono">ID: {doc.id.slice(0, 8)}...</div>
+                            <div className="font-semibold text-slate-900 text-sm">{doc.full_name}</div>
+                            <div className="text-[11px] text-slate-400 font-mono">ID: {doc.id.slice(0, 8)}...</div>
                           </div>
                         </div>
                       </td>
-                      <td className="py-4 px-4">
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-slate-100 text-slate-700">
+                      <td className="py-3.5 px-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-700">
                           {doc.department || 'General Medicine'}
                         </span>
                       </td>
-                      <td className="py-4 px-4 text-slate-600 font-medium">
+                      <td className="py-3.5 px-4 text-slate-600 font-medium text-xs">
                         <span className="inline-flex items-center gap-1">
                           <svg className="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -385,15 +385,15 @@ export default function DoctorsPage() {
                           {doc.slot_minutes} min
                         </span>
                       </td>
-                      <td className="py-4 px-4">
-                        <span className="text-xs text-slate-700 font-medium bg-slate-50 border border-slate-200/80 px-2 py-1 rounded-lg">
+                      <td className="py-3.5 px-4">
+                        <span className="text-xs text-slate-700 font-medium bg-slate-50 border border-slate-200/70 px-2 py-1 rounded-lg">
                           {formatWorkDays(doc.work_days)}
                         </span>
                       </td>
-                      <td className="py-4 px-4 text-xs text-slate-600 whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-xs text-slate-600 whitespace-nowrap">
                         {formatTime(doc.start_time)} - {formatTime(doc.end_time)}
                       </td>
-                      <td className="py-4 px-4">
+                      <td className="py-3.5 px-4">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             doc.active
@@ -404,11 +404,11 @@ export default function DoctorsPage() {
                           {doc.active ? 'Active' : 'Inactive'}
                         </span>
                       </td>
-                      <td className="py-4 px-4 sm:px-6 text-right whitespace-nowrap">
-                        <div className="flex items-center justify-end gap-2">
+                      <td className="py-3.5 px-4 sm:px-6 text-right whitespace-nowrap">
+                        <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => openEditModal(doc)}
-                            className="p-1.5 text-slate-500 hover:text-teal-600 hover:bg-teal-50 rounded-lg transition"
+                            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition"
                             title="Edit Doctor"
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -417,7 +417,7 @@ export default function DoctorsPage() {
                           </button>
                           <button
                             onClick={() => handleDeleteDoctor(doc.id, doc.full_name)}
-                            className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
                             title="Delete Doctor"
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -436,12 +436,12 @@ export default function DoctorsPage() {
 
         {/* Add/Edit Doctor Modal */}
         {(isAddModalOpen || editingDoctor) && (
-          <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-200 overflow-hidden transform transition-all">
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden transform transition-all">
               {/* Modal Header */}
               <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900">
+                  <h3 className="text-base font-bold text-slate-900">
                     {editingDoctor ? 'Edit Doctor Profile' : 'Add New Doctor'}
                   </h3>
                   <p className="text-xs text-slate-500">
@@ -450,7 +450,7 @@ export default function DoctorsPage() {
                 </div>
                 <button
                   onClick={closeModals}
-                  className="p-2 text-slate-400 hover:text-slate-600 rounded-lg"
+                  className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -477,7 +477,7 @@ export default function DoctorsPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Dr. Sarah Jenkins"
-                    className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
                   />
                 </div>
 
@@ -491,7 +491,7 @@ export default function DoctorsPage() {
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     placeholder="e.g. Cardiology, Pediatrics, General Medicine"
-                    className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
                   />
                 </div>
 
@@ -501,7 +501,7 @@ export default function DoctorsPage() {
                     <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
                       Consultation Slot Duration (Minutes) *
                     </label>
-                    <span className="text-xs text-teal-600 font-semibold">{slotMinutes} mins</span>
+                    <span className="text-xs text-blue-600 font-semibold">{slotMinutes} mins</span>
                   </div>
                   <div className="flex items-center gap-2">
                     {[15, 20, 30, 45, 60].map((mins) => (
@@ -511,7 +511,7 @@ export default function DoctorsPage() {
                         onClick={() => setSlotMinutes(mins)}
                         className={`flex-1 py-1.5 text-xs font-semibold rounded-lg border transition ${
                           slotMinutes === mins
-                            ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                             : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
                         }`}
                       >
@@ -531,14 +531,14 @@ export default function DoctorsPage() {
                       <button
                         type="button"
                         onClick={setWeekdayPreset}
-                        className="text-[11px] text-teal-600 hover:text-teal-800 font-medium underline"
+                        className="text-[11px] text-blue-600 hover:text-blue-800 font-medium underline"
                       >
                         Mon-Fri
                       </button>
                       <button
                         type="button"
                         onClick={setAllDaysPreset}
-                        className="text-[11px] text-teal-600 hover:text-teal-800 font-medium underline"
+                        className="text-[11px] text-blue-600 hover:text-blue-800 font-medium underline"
                       >
                         All 7 Days
                       </button>
@@ -554,7 +554,7 @@ export default function DoctorsPage() {
                           onClick={() => toggleDay(day.value)}
                           className={`py-2 px-1 text-center text-xs font-semibold rounded-xl border transition ${
                             isSelected
-                              ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
+                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                               : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                           }`}
                         >
@@ -576,7 +576,7 @@ export default function DoctorsPage() {
                       required
                       value={startTime}
                       onChange={(e) => setStartTime(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
+                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
                     />
                   </div>
                   <div>
@@ -588,7 +588,7 @@ export default function DoctorsPage() {
                       required
                       value={endTime}
                       onChange={(e) => setEndTime(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
+                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
                     />
                   </div>
                 </div>
@@ -603,7 +603,7 @@ export default function DoctorsPage() {
                     type="button"
                     onClick={() => setActive(!active)}
                     className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                      active ? 'bg-teal-600' : 'bg-slate-200'
+                      active ? 'bg-blue-600' : 'bg-slate-200'
                     }`}
                   >
                     <span
@@ -619,14 +619,14 @@ export default function DoctorsPage() {
                   <button
                     type="button"
                     onClick={closeModals}
-                    className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800"
+                    className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-800"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2.5 bg-teal-600 text-white rounded-xl text-sm font-semibold hover:bg-teal-700 disabled:opacity-50 transition shadow-sm"
+                    className="px-5 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 disabled:opacity-50 transition shadow-xs"
                   >
                     {submitting ? 'Saving...' : editingDoctor ? 'Update Doctor' : 'Create Doctor'}
                   </button>

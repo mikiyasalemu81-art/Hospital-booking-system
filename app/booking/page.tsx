@@ -8,7 +8,7 @@ import { generateDoctorSlots, SlotGenerationResult } from '@/lib/slot-generator'
 import { bookAppointmentAction, cancelAppointmentAction, rescheduleAppointmentAction } from '@/app/actions/booking';
 
 export default function BookingPage() {
-  const { clinic, staff } = useAuth();
+  const { clinic } = useAuth();
 
   // Database records
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -82,8 +82,8 @@ export default function BookingPage() {
         const pData = await patientsRes.json();
         setPatients(pData.patients || []);
       }
-    } catch (err: any) {
-      setErrorAlert(err.message || 'Error loading clinic resources');
+    } catch (err: unknown) {
+      setErrorAlert(err instanceof Error ? err.message : 'Error loading clinic resources');
     } finally {
       setLoadingDoctors(false);
     }
@@ -98,7 +98,7 @@ export default function BookingPage() {
         const data = await res.json();
         setAppointments(data.appointments || []);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error fetching appointments:', err);
     } finally {
       setLoadingAppointments(false);
@@ -106,8 +106,10 @@ export default function BookingPage() {
   }, []);
 
   useEffect(() => {
-    fetchDoctorsAndPatients();
-    fetchAppointments();
+    Promise.resolve().then(() => {
+      fetchDoctorsAndPatients();
+      fetchAppointments();
+    });
   }, [fetchDoctorsAndPatients, fetchAppointments]);
 
   // 3. Search Existing Patients (debounced)
@@ -174,34 +176,36 @@ export default function BookingPage() {
   }, [selectedDoctorId, selectedDate, doctors]);
 
   useEffect(() => {
-    calculateSlots();
+    Promise.resolve().then(() => calculateSlots());
   }, [calculateSlots]);
 
   // 5. Calculate Slots for Reschedule Modal
   useEffect(() => {
     if (!reschedulingAppt || !rescheduleDate) {
-      setRescheduleSlotResult(null);
+      Promise.resolve().then(() => setRescheduleSlotResult(null));
       return;
     }
 
     const doctor = doctors.find((d) => d.id === reschedulingAppt.doctor_id);
     if (!doctor) return;
 
-    setLoadingRescheduleSlots(true);
-    setRescheduleSlot(null);
+    Promise.resolve().then(() => {
+      setLoadingRescheduleSlots(true);
+      setRescheduleSlot(null);
 
-    fetch(`/api/appointments?doctor_id=${doctor.id}&date=${rescheduleDate}&status=booked`)
-      .then((res) => res.json())
-      .then((data) => {
-        const booked = data.appointments || [];
-        // Exclude the appointment being rescheduled so its current slot doesn't conflict
-        const result = generateDoctorSlots(doctor, rescheduleDate, booked, reschedulingAppt.id);
-        setRescheduleSlotResult(result);
-      })
-      .catch(console.error)
-      .finally(() => {
-        setLoadingRescheduleSlots(false);
-      });
+      fetch(`/api/appointments?doctor_id=${doctor.id}&date=${rescheduleDate}&status=booked`)
+        .then((res) => res.json())
+        .then((data) => {
+          const booked = data.appointments || [];
+          // Exclude the appointment being rescheduled so its current slot doesn't conflict
+          const result = generateDoctorSlots(doctor, rescheduleDate, booked, reschedulingAppt.id);
+          setRescheduleSlotResult(result);
+        })
+        .catch(console.error)
+        .finally(() => {
+          setLoadingRescheduleSlots(false);
+        });
+    });
   }, [reschedulingAppt, rescheduleDate, doctors]);
 
   // 6. Confirm Appointment Booking
@@ -282,8 +286,8 @@ export default function BookingPage() {
       await fetchAppointments();
       await fetchDoctorsAndPatients();
       await calculateSlots();
-    } catch (err: any) {
-      setErrorAlert(err.message || 'Error occurred while booking');
+    } catch (err: unknown) {
+      setErrorAlert(err instanceof Error ? err.message : 'Error occurred while booking');
     } finally {
       setSubmittingBooking(false);
     }
@@ -319,8 +323,8 @@ export default function BookingPage() {
       if (selectedDoctorId === cancellingAppt.doctor_id) {
         await calculateSlots();
       }
-    } catch (err: any) {
-      setErrorAlert(err.message || 'Error cancelling appointment');
+    } catch (err: unknown) {
+      setErrorAlert(err instanceof Error ? err.message : 'Error cancelling appointment');
     } finally {
       setCancellingLoading(false);
     }
@@ -374,8 +378,8 @@ export default function BookingPage() {
       if (selectedDoctorId === reschedulingAppt.doctor_id) {
         await calculateSlots();
       }
-    } catch (err: any) {
-      setRescheduleError(err.message || 'Error rescheduling appointment');
+    } catch (err: unknown) {
+      setRescheduleError(err instanceof Error ? err.message : 'Error rescheduling appointment');
     } finally {
       setSubmittingReschedule(false);
     }
@@ -422,7 +426,7 @@ export default function BookingPage() {
         {/* Page Header */}
         <div className="border-b border-slate-200/80 pb-4">
           <div className="flex items-center gap-2">
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 font-semibold">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-semibold">
               Clinic Appointments
             </span>
             <span className="text-xs text-slate-500">• {clinic?.name || 'Clinic'}</span>
@@ -486,7 +490,7 @@ export default function BookingPage() {
             <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
                     1
                   </span>
                   <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
@@ -522,13 +526,13 @@ export default function BookingPage() {
                         }}
                         className={`p-3.5 rounded-xl border cursor-pointer transition flex items-start gap-3 select-none ${
                           isSelected
-                            ? 'border-teal-600 bg-teal-50/60 shadow-xs ring-2 ring-teal-600/20'
+                            ? 'border-blue-600 bg-blue-50/60 shadow-xs ring-2 ring-blue-600/20'
                             : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
                         }`}
                       >
                         <div
                           className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
-                            isSelected ? 'bg-teal-600 text-white' : 'bg-slate-100 text-slate-700'
+                            isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700'
                           }`}
                         >
                           {doc.full_name.charAt(0).toUpperCase()}
@@ -539,10 +543,10 @@ export default function BookingPage() {
                               {doc.full_name}
                             </h3>
                             {isSelected && (
-                              <span className="text-teal-600 text-xs font-bold shrink-0">✓</span>
+                              <span className="text-blue-600 text-xs font-bold shrink-0">✓</span>
                             )}
                           </div>
-                          <p className="text-xs text-teal-700 font-medium truncate">
+                          <p className="text-xs text-blue-700 font-medium truncate">
                             {doc.department || 'General Practice'}
                           </p>
                           <p className="text-[11px] text-slate-500 mt-1">
@@ -563,7 +567,7 @@ export default function BookingPage() {
             <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
                     2
                   </span>
                   <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
@@ -588,7 +592,7 @@ export default function BookingPage() {
                       type="date"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
                     />
                   </div>
                   <div>
@@ -642,7 +646,7 @@ export default function BookingPage() {
 
                 {loadingSlots ? (
                   <div className="py-8 text-center text-slate-400 text-xs flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-4 w-4 text-teal-600" viewBox="0 0 24 24" fill="none">
+                    <svg className="animate-spin h-4 w-4 text-blue-600" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -679,8 +683,8 @@ export default function BookingPage() {
                           onClick={() => setSelectedSlot(slot)}
                           className={`py-2 px-2.5 rounded-xl text-xs font-semibold border transition text-center ${
                             isChosen
-                              ? 'bg-teal-600 text-white border-teal-600 shadow-xs ring-2 ring-teal-600/20'
-                              : 'bg-white text-slate-700 border-slate-200 hover:border-teal-500 hover:bg-teal-50/40'
+                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs ring-2 ring-blue-600/20'
+                              : 'bg-white text-slate-700 border-slate-200 hover:border-blue-500 hover:bg-blue-50/40'
                           }`}
                         >
                           <span className="block font-bold">{formatTime(slot.startTime)}</span>
@@ -697,7 +701,7 @@ export default function BookingPage() {
             <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-teal-600 text-white text-xs font-bold flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
                     3
                   </span>
                   <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
@@ -748,7 +752,7 @@ export default function BookingPage() {
                       value={patientSearch}
                       onChange={(e) => setPatientSearch(e.target.value)}
                       placeholder="Search patient by name or phone..."
-                      className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 bg-white"
+                      className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
                     />
                     {searchingPatients && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -761,28 +765,41 @@ export default function BookingPage() {
                   </div>
 
                   {selectedPatient && (
-                    <div className="p-3 bg-teal-50 border border-teal-200 rounded-xl flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-teal-600 text-white font-bold flex items-center justify-center">
-                          {selectedPatient.full_name.charAt(0).toUpperCase()}
+                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center">
+                            {selectedPatient.full_name.charAt(0).toUpperCase()}
+                          </div>
+                          <div>
+                            <p className="font-bold text-slate-900">{selectedPatient.full_name}</p>
+                            <p className="text-blue-800 font-mono text-[11px]">{selectedPatient.phone}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="font-bold text-slate-900">{selectedPatient.full_name}</p>
-                          <p className="text-teal-800 font-mono text-[11px]">{selectedPatient.phone}</p>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs px-2 py-0.5 rounded bg-blue-200/70 text-blue-900 font-semibold">
+                            ✓ Picked
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedPatient(null)}
+                            className="text-xs text-slate-400 hover:text-slate-600 underline"
+                          >
+                            Change
+                          </button>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs px-2 py-0.5 rounded bg-teal-200/70 text-teal-900 font-semibold">
-                          ✓ Picked
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedPatient(null)}
-                          className="text-xs text-slate-400 hover:text-slate-600 underline"
-                        >
-                          Change
-                        </button>
-                      </div>
+
+                      {selectedPatient.notes && (
+                        <div className="flex items-start gap-2 rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-2 text-[11px] text-amber-900">
+                          <svg className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span>
+                            <strong className="font-semibold">Patient note:</strong> {selectedPatient.notes}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -807,16 +824,24 @@ export default function BookingPage() {
                               }
                             }}
                             className={`p-2.5 flex items-center justify-between text-xs cursor-pointer hover:bg-slate-50 transition select-none ${
-                              isSelected ? 'bg-teal-50/80 font-semibold' : ''
+                              isSelected ? 'bg-blue-50/80 font-semibold' : ''
                             }`}
                           >
                             <div>
                               <span className="font-medium text-slate-900">{p.full_name}</span>
                               <span className="text-slate-400 ml-2 font-mono text-[11px]">{p.phone}</span>
+                              {p.notes && (
+                                <p
+                                  className="text-[10px] text-amber-700 truncate max-w-[220px]"
+                                  title={p.notes}
+                                >
+                                  {p.notes}
+                                </p>
+                              )}
                             </div>
                             <button
                               type="button"
-                              className="text-[11px] text-teal-600 hover:text-teal-800 font-semibold"
+                              className="text-[11px] text-blue-600 hover:text-blue-800 font-semibold"
                             >
                               {isSelected ? 'Selected' : 'Pick'}
                             </button>
@@ -838,7 +863,7 @@ export default function BookingPage() {
                       value={newPatientName}
                       onChange={(e) => setNewPatientName(e.target.value)}
                       placeholder="e.g. Almaz Ayana"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
                     />
                   </div>
                   <div>
@@ -851,7 +876,7 @@ export default function BookingPage() {
                       value={newPatientPhone}
                       onChange={(e) => setNewPatientPhone(e.target.value)}
                       placeholder="e.g. +251911223344"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
                     />
                   </div>
                 </div>
@@ -867,7 +892,7 @@ export default function BookingPage() {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g. Routine checkup, throat irritation"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
                 />
               </div>
             </div>
@@ -877,7 +902,7 @@ export default function BookingPage() {
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm sticky top-20">
               <div className="flex items-center gap-2 pb-4 border-b border-slate-100">
-                <div className="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -905,7 +930,7 @@ export default function BookingPage() {
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-100">
                   <span className="text-slate-400 font-medium">Date</span>
-                  <span className="font-bold text-teal-800">
+                  <span className="font-bold text-blue-800">
                     {selectedDate
                       ? new Date(selectedDate).toLocaleDateString(undefined, {
                           weekday: 'short',
@@ -919,7 +944,7 @@ export default function BookingPage() {
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-100">
                   <span className="text-slate-400 font-medium">Time Slot</span>
-                  <span className="font-bold text-teal-800">
+                  <span className="font-bold text-blue-800">
                     {selectedSlot ? selectedSlot.displayLabel : 'No slot picked yet'}
                   </span>
                 </div>
@@ -942,6 +967,13 @@ export default function BookingPage() {
                   </span>
                 </div>
 
+                {patientMode === 'existing' && selectedPatient?.notes && (
+                  <div className="flex justify-between items-start py-1 border-b border-slate-100 gap-3">
+                    <span className="text-slate-400 font-medium shrink-0">Patient Note</span>
+                    <span className="text-amber-800 text-right">{selectedPatient.notes}</span>
+                  </div>
+                )}
+
                 <div className="flex justify-between items-center py-1">
                   <span className="text-slate-400 font-medium">Initial Status</span>
                   <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold text-[11px]">
@@ -961,7 +993,7 @@ export default function BookingPage() {
                     (patientMode === 'existing' && !selectedPatient) ||
                     (patientMode === 'new' && (!newPatientName.trim() || !newPatientPhone.trim()))
                   }
-                  className="w-full py-3 px-4 bg-teal-600 hover:bg-teal-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl text-sm shadow-sm transition flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl text-sm shadow-sm transition flex items-center justify-center gap-2"
                 >
                   {submittingBooking ? (
                     <>
@@ -990,7 +1022,7 @@ export default function BookingPage() {
                 <h2 className="text-base font-bold text-slate-900">
                   Upcoming Appointments for the Clinic
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-teal-100 text-teal-800 text-xs font-semibold">
+                <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold">
                   {upcomingCount} Upcoming
                 </span>
               </div>
@@ -1016,7 +1048,7 @@ export default function BookingPage() {
                   value={apptSearchQuery}
                   onChange={(e) => setApptSearchQuery(e.target.value)}
                   placeholder="Search patient, phone, doctor..."
-                  className="pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-teal-500 bg-white"
+                  className="pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
                 />
               </div>
 
@@ -1027,7 +1059,7 @@ export default function BookingPage() {
                   onClick={() => setApptViewFilter('upcoming')}
                   className={`px-3 py-1.5 rounded-lg transition ${
                     apptViewFilter === 'upcoming'
-                      ? 'bg-white text-teal-700 font-bold shadow-xs'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -1038,7 +1070,7 @@ export default function BookingPage() {
                   onClick={() => setApptViewFilter('all')}
                   className={`px-3 py-1.5 rounded-lg transition ${
                     apptViewFilter === 'all'
-                      ? 'bg-white text-teal-700 font-bold shadow-xs'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -1049,7 +1081,7 @@ export default function BookingPage() {
                   onClick={() => setApptViewFilter('cancelled')}
                   className={`px-3 py-1.5 rounded-lg transition ${
                     apptViewFilter === 'cancelled'
-                      ? 'bg-white text-teal-700 font-bold shadow-xs'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -1060,7 +1092,7 @@ export default function BookingPage() {
               <button
                 type="button"
                 onClick={fetchAppointments}
-                className="px-3 py-1.5 text-xs font-semibold text-teal-600 hover:text-teal-800 border border-teal-200 rounded-xl hover:bg-teal-50 transition"
+                className="px-3 py-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 border border-blue-200 rounded-xl hover:bg-blue-50 transition"
               >
                 ↻ Refresh
               </button>
@@ -1069,7 +1101,7 @@ export default function BookingPage() {
 
           {loadingAppointments ? (
             <div className="py-16 text-center text-slate-400 text-sm flex items-center justify-center gap-2">
-              <svg className="animate-spin h-4 w-4 text-teal-600" viewBox="0 0 24 24" fill="none">
+              <svg className="animate-spin h-4 w-4 text-blue-600" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
@@ -1113,7 +1145,7 @@ export default function BookingPage() {
                             </div>
                             <a
                               href={`tel:${appt.patient?.phone}`}
-                              className="text-xs text-teal-700 hover:underline flex items-center gap-1 mt-0.5 font-mono"
+                              className="text-xs text-blue-700 hover:underline flex items-center gap-1 mt-0.5 font-mono"
                             >
                               📞 {appt.patient?.phone}
                             </a>
@@ -1239,7 +1271,7 @@ export default function BookingPage() {
                     required
                     value={rescheduleDate}
                     onChange={(e) => setRescheduleDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-teal-500 bg-white"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-500 bg-white"
                   />
                 </div>
 
@@ -1271,7 +1303,7 @@ export default function BookingPage() {
                             onClick={() => setRescheduleSlot(slot)}
                             className={`py-2 px-1 text-center rounded-lg border text-xs font-semibold transition ${
                               isChosen
-                                ? 'bg-teal-600 text-white border-teal-600 shadow-xs'
+                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                                 : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                             }`}
                           >
@@ -1294,7 +1326,7 @@ export default function BookingPage() {
                   <button
                     type="submit"
                     disabled={submittingReschedule || !rescheduleSlot}
-                    className="px-5 py-2 bg-teal-600 text-white rounded-xl text-xs font-semibold hover:bg-teal-700 disabled:opacity-50 shadow-sm"
+                    className="px-5 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 disabled:opacity-50 shadow-sm"
                   >
                     {submittingReschedule ? 'Rescheduling...' : 'Confirm Reschedule'}
                   </button>

@@ -75,8 +75,8 @@ export default function SignUpPage() {
         // 3. Redirect to dashboard
         router.push('/dashboard');
       }
-    } catch (err: any) {
-      setError(err?.message || 'Error occurred during sign up');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Error occurred during sign up');
       setLoading(false);
     }
   };
@@ -86,7 +86,7 @@ export default function SignUpPage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         {/* Healthcare Brand Icon */}
         <div className="flex justify-center">
-          <div className="h-14 w-14 rounded-2xl bg-teal-600 flex items-center justify-center text-white shadow-lg shadow-teal-600/30">
+          <div className="h-14 w-14 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-xs shadow-blue-600/20">
             <svg
               className="w-8 h-8"
               fill="none"
@@ -107,7 +107,7 @@ export default function SignUpPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0">
-        <div className="bg-white py-8 px-6 shadow-sm border border-slate-200/80 rounded-2xl sm:px-10">
+        <div className="bg-white py-8 px-6 shadow-xs border border-slate-200/80 rounded-2xl sm:px-10">
           <form className="space-y-4" onSubmit={handleSubmit}>
             {error && (
               <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 flex items-start gap-2.5">
@@ -134,7 +134,7 @@ export default function SignUpPage() {
                   value={clinicName}
                   onChange={(e) => setClinicName(e.target.value)}
                   placeholder="e.g. St. Paul Specialist Clinic"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm transition"
                 />
               </div>
             </div>
@@ -152,7 +152,7 @@ export default function SignUpPage() {
                   value={adminFullName}
                   onChange={(e) => setAdminFullName(e.target.value)}
                   placeholder="e.g. Dr. Abebe Bikila"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm transition"
                 />
               </div>
             </div>
@@ -171,7 +171,7 @@ export default function SignUpPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@stpaulclinic.com"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm transition"
                 />
               </div>
             </div>
@@ -185,7 +185,7 @@ export default function SignUpPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-xs text-teal-600 hover:text-teal-700 font-medium"
+                  className="text-xs text-blue-600 hover:text-blue-700 font-medium"
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
@@ -199,7 +199,7 @@ export default function SignUpPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="At least 6 characters"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm transition"
                 />
               </div>
             </div>
@@ -208,7 +208,7 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-xl shadow-sm text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-xl shadow-xs text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -229,7 +229,7 @@ export default function SignUpPage() {
           <div className="mt-6 pt-5 border-t border-slate-100 text-center">
             <p className="text-xs text-slate-500">
               Already registered your clinic?{' '}
-              <Link href="/login" className="font-semibold text-teal-600 hover:text-teal-700 hover:underline">
+              <Link href="/login" className="font-semibold text-blue-600 hover:text-blue-700 hover:underline">
                 Sign In to Portal
               </Link>
             </p>
