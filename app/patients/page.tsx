@@ -166,7 +166,7 @@ export default function PatientsPage() {
                 setFormError(null);
                 setIsAddModalOpen(true);
               }}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 shadow-xs transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 text-white text-xs font-semibold hover:bg-sky-600 shadow-xs transition"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -199,7 +199,7 @@ export default function PatientsPage() {
         )}
 
         {/* Search Bar */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/70 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="bg-white p-4 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="w-full relative">
             <svg
               className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
@@ -214,7 +214,7 @@ export default function PatientsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search patients by full name or phone number..."
-              className="w-full pl-10 pr-10 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white shadow-2xs"
+              className="w-full pl-10 pr-10 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white shadow-2xs"
             />
             {searchQuery && (
               <button
@@ -234,10 +234,10 @@ export default function PatientsPage() {
         </div>
 
         {/* Patients Table */}
-        <div className="bg-white rounded-2xl border border-slate-200/70 shadow-xs overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs overflow-hidden">
           {loading ? (
             <div className="py-16 text-center text-slate-500">
-              <svg className="animate-spin h-7 w-7 text-blue-600 mx-auto mb-2" viewBox="0 0 24 24" fill="none">
+              <svg className="animate-spin h-7 w-7 text-sky-600 mx-auto mb-2" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
@@ -245,7 +245,7 @@ export default function PatientsPage() {
             </div>
           ) : patients.length === 0 ? (
             <div className="py-16 text-center px-4">
-              <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
@@ -259,7 +259,7 @@ export default function PatientsPage() {
               {!searchQuery && (
                 <button
                   onClick={() => setIsAddModalOpen(true)}
-                  className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 transition"
+                  className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-sky-500 text-white rounded-xl text-xs font-semibold hover:bg-sky-600 transition"
                 >
                   Add First Patient
                 </button>
@@ -278,12 +278,12 @@ export default function PatientsPage() {
                     <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 text-sm">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
                   {patients.map((patient) => (
                     <tr key={patient.id} className="hover:bg-slate-50/60 transition">
                       <td className="py-3.5 px-4 sm:px-6">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-xs shrink-0">
                             {patient.full_name.charAt(0).toUpperCase()}
                           </div>
                           <div>
@@ -295,7 +295,7 @@ export default function PatientsPage() {
                       <td className="py-3.5 px-4 text-slate-700 font-medium text-xs font-mono">
                         <a
                           href={`tel:${patient.phone}`}
-                          className="inline-flex items-center gap-1.5 text-blue-600 hover:text-blue-800 hover:underline"
+                          className="inline-flex items-center gap-1.5 text-sky-600 hover:text-sky-800 hover:underline"
                         >
                           <svg className="w-3.5 h-3.5 text-blue-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -331,7 +331,7 @@ export default function PatientsPage() {
                         <button
                           type="button"
                           onClick={() => handleOpenNotesModal(patient)}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-medium text-slate-600 hover:bg-sky-50 hover:text-sky-700 hover:border-sky-200 transition"
                           title="View or edit patient notes"
                         >
                           <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -351,8 +351,8 @@ export default function PatientsPage() {
         {/* Add Patient Modal */}
         {isAddModalOpen && (
           <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-xl border border-slate-200 overflow-hidden transform transition-all">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full shadow-xl border border-slate-200 overflow-hidden transform transition-all">
+              <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50">
                 <div>
                   <h3 className="text-base font-bold text-slate-900">Add New Patient</h3>
                   <p className="text-xs text-slate-500">
@@ -386,7 +386,7 @@ export default function PatientsPage() {
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="e.g. John Doe"
-                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
                   />
                 </div>
 
@@ -400,7 +400,7 @@ export default function PatientsPage() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="e.g. +251 91 123 4567"
-                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
                   />
                 </div>
 
@@ -414,14 +414,14 @@ export default function PatientsPage() {
                     maxLength={500}
                     rows={2}
                     placeholder="e.g. diabetic, prefers Dr. X"
-                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white resize-none"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white resize-none"
                   />
                   <p className="text-[11px] text-slate-400 mt-1">
                     Short free-text note shown to staff during booking.
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3">
                   <button
                     type="button"
                     onClick={() => setIsAddModalOpen(false)}
@@ -432,7 +432,7 @@ export default function PatientsPage() {
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="px-5 py-2.5 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 disabled:opacity-50 transition shadow-xs"
+                    className="px-5 py-2.5 bg-sky-500 text-white rounded-xl text-xs font-semibold hover:bg-sky-600 disabled:opacity-50 transition shadow-xs"
                   >
                     {submitting ? 'Registering...' : 'Register Patient'}
                   </button>
@@ -445,8 +445,8 @@ export default function PatientsPage() {
         {/* Edit Patient Notes Modal */}
         {editingPatient && (
           <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-xl border border-slate-200 overflow-hidden transform transition-all">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full shadow-xl border border-slate-200 overflow-hidden transform transition-all">
+              <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50">
                 <div>
                   <h3 className="text-base font-bold text-slate-900">Patient Notes</h3>
                   <p className="text-xs text-slate-500">
@@ -482,12 +482,12 @@ export default function PatientsPage() {
                     rows={3}
                     autoFocus
                     placeholder="e.g. diabetic, prefers Dr. X"
-                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white resize-none"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white resize-none"
                   />
                   <p className="text-[11px] text-slate-400 mt-1 text-right">{editNotes.length}/500</p>
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
                   <button
                     type="button"
                     onClick={() => setEditNotes('')}
@@ -506,7 +506,7 @@ export default function PatientsPage() {
                     <button
                       type="submit"
                       disabled={savingNotes}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 disabled:opacity-50 transition shadow-xs"
+                      className="px-4 py-2 bg-sky-500 text-white rounded-xl text-xs font-semibold hover:bg-sky-600 disabled:opacity-50 transition shadow-xs"
                     >
                       {savingNotes ? 'Saving...' : 'Save Notes'}
                     </button>

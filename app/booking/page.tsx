@@ -426,7 +426,7 @@ export default function BookingPage() {
         {/* Page Header */}
         <div className="border-b border-slate-200/80 pb-4">
           <div className="flex items-center gap-2">
-            <span className="text-xs px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 font-semibold">
+            <span className="text-xs px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 font-semibold">
               Clinic Appointments
             </span>
             <span className="text-xs text-slate-500">• {clinic?.name || 'Clinic'}</span>
@@ -487,10 +487,10 @@ export default function BookingPage() {
           {/* Left 7 Columns: Selection Form */}
           <div className="lg:col-span-7 space-y-6">
             {/* STEP 1: PICK DOCTOR */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold flex items-center justify-center">
                     1
                   </span>
                   <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
@@ -526,13 +526,13 @@ export default function BookingPage() {
                         }}
                         className={`p-3.5 rounded-xl border cursor-pointer transition flex items-start gap-3 select-none ${
                           isSelected
-                            ? 'border-blue-600 bg-blue-50/60 shadow-xs ring-2 ring-blue-600/20'
+                            ? 'border-sky-500 bg-sky-50/60 shadow-xs ring-2 ring-blue-600/20'
                             : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
                         }`}
                       >
                         <div
                           className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
-                            isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700'
+                            isSelected ? 'bg-sky-500 text-white' : 'bg-slate-100 text-slate-700'
                           }`}
                         >
                           {doc.full_name.charAt(0).toUpperCase()}
@@ -543,10 +543,10 @@ export default function BookingPage() {
                               {doc.full_name}
                             </h3>
                             {isSelected && (
-                              <span className="text-blue-600 text-xs font-bold shrink-0">✓</span>
+                              <span className="text-sky-600 text-xs font-bold shrink-0">✓</span>
                             )}
                           </div>
-                          <p className="text-xs text-blue-700 font-medium truncate">
+                          <p className="text-xs text-sky-700 font-medium truncate">
                             {doc.department || 'General Practice'}
                           </p>
                           <p className="text-[11px] text-slate-500 mt-1">
@@ -564,10 +564,10 @@ export default function BookingPage() {
             </div>
 
             {/* STEP 2: PICK DATE & SEE FREE TIME SLOTS */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold flex items-center justify-center">
                     2
                   </span>
                   <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
@@ -592,7 +592,7 @@ export default function BookingPage() {
                       type="date"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
                     />
                   </div>
                   <div>
@@ -639,14 +639,14 @@ export default function BookingPage() {
               </div>
 
               {/* Free Slots Grid */}
-              <div className="pt-2 border-t border-slate-100">
+              <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
                 <label className="block text-xs font-semibold text-slate-700 mb-2">
                   Generated Free Time Slots (Excluding Already Booked)
                 </label>
 
                 {loadingSlots ? (
                   <div className="py-8 text-center text-slate-400 text-xs flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-4 w-4 text-blue-600" viewBox="0 0 24 24" fill="none">
+                    <svg className="animate-spin h-4 w-4 text-sky-600" viewBox="0 0 24 24" fill="none">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -683,8 +683,8 @@ export default function BookingPage() {
                           onClick={() => setSelectedSlot(slot)}
                           className={`py-2 px-2.5 rounded-xl text-xs font-semibold border transition text-center ${
                             isChosen
-                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs ring-2 ring-blue-600/20'
-                              : 'bg-white text-slate-700 border-slate-200 hover:border-blue-500 hover:bg-blue-50/40'
+                              ? 'bg-sky-500 text-white border-sky-500 shadow-xs ring-2 ring-blue-600/20'
+                              : 'bg-white text-slate-700 border-slate-200 hover:border-blue-500 hover:bg-sky-50/40'
                           }`}
                         >
                           <span className="block font-bold">{formatTime(slot.startTime)}</span>
@@ -698,10 +698,10 @@ export default function BookingPage() {
             </div>
 
             {/* STEP 3: PICK PATIENT (SEARCH OR ADD NEW INLINE) */}
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-xs">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">
+                  <span className="w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold flex items-center justify-center">
                     3
                   </span>
                   <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
@@ -752,7 +752,7 @@ export default function BookingPage() {
                       value={patientSearch}
                       onChange={(e) => setPatientSearch(e.target.value)}
                       placeholder="Search patient by name or phone..."
-                      className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 bg-white"
+                      className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
                     />
                     {searchingPatients && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -765,19 +765,19 @@ export default function BookingPage() {
                   </div>
 
                   {selectedPatient && (
-                    <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs space-y-2">
+                    <div className="p-3 bg-sky-50 border border-sky-200 rounded-xl text-xs space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center">
+                          <div className="w-8 h-8 rounded-full bg-sky-500 text-white font-bold flex items-center justify-center">
                             {selectedPatient.full_name.charAt(0).toUpperCase()}
                           </div>
                           <div>
                             <p className="font-bold text-slate-900">{selectedPatient.full_name}</p>
-                            <p className="text-blue-800 font-mono text-[11px]">{selectedPatient.phone}</p>
+                            <p className="text-sky-800 font-mono text-[11px]">{selectedPatient.phone}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs px-2 py-0.5 rounded bg-blue-200/70 text-blue-900 font-semibold">
+                          <span className="text-xs px-2 py-0.5 rounded bg-blue-200/70 text-sky-900 font-semibold">
                             ✓ Picked
                           </span>
                           <button
@@ -803,7 +803,7 @@ export default function BookingPage() {
                     </div>
                   )}
 
-                  <div className="max-h-44 overflow-y-auto divide-y divide-slate-100 border border-slate-200 rounded-xl">
+                  <div className="max-h-44 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 rounded-xl">
                     {patients.length === 0 ? (
                       <div className="p-3 text-center text-xs text-slate-400">
                         No patients matched. Switch to &quot;+ Add New Inline&quot; to create one.
@@ -824,7 +824,7 @@ export default function BookingPage() {
                               }
                             }}
                             className={`p-2.5 flex items-center justify-between text-xs cursor-pointer hover:bg-slate-50 transition select-none ${
-                              isSelected ? 'bg-blue-50/80 font-semibold' : ''
+                              isSelected ? 'bg-sky-50/80 font-semibold' : ''
                             }`}
                           >
                             <div>
@@ -841,7 +841,7 @@ export default function BookingPage() {
                             </div>
                             <button
                               type="button"
-                              className="text-[11px] text-blue-600 hover:text-blue-800 font-semibold"
+                              className="text-[11px] text-sky-600 hover:text-sky-800 font-semibold"
                             >
                               {isSelected ? 'Selected' : 'Pick'}
                             </button>
@@ -863,7 +863,7 @@ export default function BookingPage() {
                       value={newPatientName}
                       onChange={(e) => setNewPatientName(e.target.value)}
                       placeholder="e.g. Almaz Ayana"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 bg-white"
                     />
                   </div>
                   <div>
@@ -876,14 +876,14 @@ export default function BookingPage() {
                       value={newPatientPhone}
                       onChange={(e) => setNewPatientPhone(e.target.value)}
                       placeholder="e.g. +251911223344"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
+                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 bg-white"
                     />
                   </div>
                 </div>
               )}
 
               {/* Optional Notes */}
-              <div className="mt-3 pt-3 border-t border-slate-100">
+              <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Appointment Notes / Reason (Optional)
                 </label>
@@ -892,7 +892,7 @@ export default function BookingPage() {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g. Routine checkup, throat irritation"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
+                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 bg-white"
                 />
               </div>
             </div>
@@ -900,9 +900,9 @@ export default function BookingPage() {
 
           {/* Right 5 Columns: Confirmation Card */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm sticky top-20">
-              <div className="flex items-center gap-2 pb-4 border-b border-slate-100">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm sticky top-20">
+              <div className="flex items-center gap-2 pb-4 border-b border-slate-100 dark:border-slate-800">
+                <div className="w-8 h-8 rounded-lg bg-sky-500 text-white flex items-center justify-center font-bold">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -914,23 +914,23 @@ export default function BookingPage() {
               </div>
 
               <div className="py-4 space-y-3 text-xs text-slate-700">
-                <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-slate-400 font-medium">Doctor</span>
                   <span className="font-bold text-slate-900">
                     {selectedDoctor ? selectedDoctor.full_name : 'None selected'}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-slate-400 font-medium">Department</span>
                   <span className="font-medium text-slate-700">
                     {selectedDoctor?.department || 'General Practice'}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-slate-400 font-medium">Date</span>
-                  <span className="font-bold text-blue-800">
+                  <span className="font-bold text-sky-800">
                     {selectedDate
                       ? new Date(selectedDate).toLocaleDateString(undefined, {
                           weekday: 'short',
@@ -942,14 +942,14 @@ export default function BookingPage() {
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-slate-400 font-medium">Time Slot</span>
-                  <span className="font-bold text-blue-800">
+                  <span className="font-bold text-sky-800">
                     {selectedSlot ? selectedSlot.displayLabel : 'No slot picked yet'}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-slate-400 font-medium">Patient</span>
                   <span className="font-bold text-slate-900">
                     {patientMode === 'existing'
@@ -958,7 +958,7 @@ export default function BookingPage() {
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
                   <span className="text-slate-400 font-medium">Phone</span>
                   <span className="font-mono text-slate-800">
                     {patientMode === 'existing'
@@ -968,7 +968,7 @@ export default function BookingPage() {
                 </div>
 
                 {patientMode === 'existing' && selectedPatient?.notes && (
-                  <div className="flex justify-between items-start py-1 border-b border-slate-100 gap-3">
+                  <div className="flex justify-between items-start py-1 border-b border-slate-100 dark:border-slate-800 gap-3">
                     <span className="text-slate-400 font-medium shrink-0">Patient Note</span>
                     <span className="text-amber-800 text-right">{selectedPatient.notes}</span>
                   </div>
@@ -993,7 +993,7 @@ export default function BookingPage() {
                     (patientMode === 'existing' && !selectedPatient) ||
                     (patientMode === 'new' && (!newPatientName.trim() || !newPatientPhone.trim()))
                   }
-                  className="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl text-sm shadow-sm transition flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 bg-sky-500 hover:bg-sky-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-xl text-sm shadow-sm transition flex items-center justify-center gap-2"
                 >
                   {submittingBooking ? (
                     <>
@@ -1015,14 +1015,14 @@ export default function BookingPage() {
         {/* ============================================================ */}
         {/* SECTION 2: UPCOMING APPOINTMENTS LIST FOR THE CLINIC        */}
         {/* ============================================================ */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-          <div className="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden">
+          <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-bold text-slate-900">
                   Upcoming Appointments for the Clinic
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 text-xs font-semibold">
+                <span className="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-xs font-semibold">
                   {upcomingCount} Upcoming
                 </span>
               </div>
@@ -1048,7 +1048,7 @@ export default function BookingPage() {
                   value={apptSearchQuery}
                   onChange={(e) => setApptSearchQuery(e.target.value)}
                   placeholder="Search patient, phone, doctor..."
-                  className="pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-blue-500 bg-white"
+                  className="pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 bg-white"
                 />
               </div>
 
@@ -1059,7 +1059,7 @@ export default function BookingPage() {
                   onClick={() => setApptViewFilter('upcoming')}
                   className={`px-3 py-1.5 rounded-lg transition ${
                     apptViewFilter === 'upcoming'
-                      ? 'bg-white text-blue-700 font-bold shadow-xs'
+                      ? 'bg-white text-sky-700 font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -1070,7 +1070,7 @@ export default function BookingPage() {
                   onClick={() => setApptViewFilter('all')}
                   className={`px-3 py-1.5 rounded-lg transition ${
                     apptViewFilter === 'all'
-                      ? 'bg-white text-blue-700 font-bold shadow-xs'
+                      ? 'bg-white text-sky-700 font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -1081,7 +1081,7 @@ export default function BookingPage() {
                   onClick={() => setApptViewFilter('cancelled')}
                   className={`px-3 py-1.5 rounded-lg transition ${
                     apptViewFilter === 'cancelled'
-                      ? 'bg-white text-blue-700 font-bold shadow-xs'
+                      ? 'bg-white text-sky-700 font-bold shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -1092,7 +1092,7 @@ export default function BookingPage() {
               <button
                 type="button"
                 onClick={fetchAppointments}
-                className="px-3 py-1.5 text-xs font-semibold text-blue-600 hover:text-blue-800 border border-blue-200 rounded-xl hover:bg-blue-50 transition"
+                className="px-3 py-1.5 text-xs font-semibold text-sky-600 hover:text-sky-800 border border-sky-200 rounded-xl hover:bg-sky-50 transition"
               >
                 ↻ Refresh
               </button>
@@ -1101,7 +1101,7 @@ export default function BookingPage() {
 
           {loadingAppointments ? (
             <div className="py-16 text-center text-slate-400 text-sm flex items-center justify-center gap-2">
-              <svg className="animate-spin h-4 w-4 text-blue-600" viewBox="0 0 24 24" fill="none">
+              <svg className="animate-spin h-4 w-4 text-sky-600" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
@@ -1132,7 +1132,7 @@ export default function BookingPage() {
                     <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 text-sm">
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
                   {displayedAppointments.map((appt) => {
                     const isBooked = appt.status === 'booked';
                     const isCancelled = appt.status === 'cancelled';
@@ -1145,7 +1145,7 @@ export default function BookingPage() {
                             </div>
                             <a
                               href={`tel:${appt.patient?.phone}`}
-                              className="text-xs text-blue-700 hover:underline flex items-center gap-1 mt-0.5 font-mono"
+                              className="text-xs text-sky-700 hover:underline flex items-center gap-1 mt-0.5 font-mono"
                             >
                               📞 {appt.patient?.phone}
                             </a>
@@ -1188,7 +1188,7 @@ export default function BookingPage() {
                           <span
                             className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
                               isBooked
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
                                 : isCancelled
                                 ? 'bg-rose-50 text-rose-700 border border-rose-200'
                                 : 'bg-slate-100 text-slate-700'
@@ -1236,8 +1236,8 @@ export default function BookingPage() {
         {/* ============================================================ */}
         {reschedulingAppt && (
           <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
+              <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50">
                 <div>
                   <h3 className="text-base font-bold text-slate-900">Reschedule Appointment</h3>
                   <p className="text-xs text-slate-500">
@@ -1271,7 +1271,7 @@ export default function BookingPage() {
                     required
                     value={rescheduleDate}
                     onChange={(e) => setRescheduleDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-blue-500 bg-white"
+                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-sky-500 bg-white"
                   />
                 </div>
 
@@ -1303,7 +1303,7 @@ export default function BookingPage() {
                             onClick={() => setRescheduleSlot(slot)}
                             className={`py-2 px-1 text-center rounded-lg border text-xs font-semibold transition ${
                               isChosen
-                                ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                                ? 'bg-sky-500 text-white border-sky-500 shadow-xs'
                                 : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
                             }`}
                           >
@@ -1315,7 +1315,7 @@ export default function BookingPage() {
                   )}
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 flex items-center justify-end gap-3">
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3">
                   <button
                     type="button"
                     onClick={() => setReschedulingAppt(null)}
@@ -1326,7 +1326,7 @@ export default function BookingPage() {
                   <button
                     type="submit"
                     disabled={submittingReschedule || !rescheduleSlot}
-                    className="px-5 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold hover:bg-blue-700 disabled:opacity-50 shadow-sm"
+                    className="px-5 py-2 bg-sky-500 text-white rounded-xl text-xs font-semibold hover:bg-sky-600 disabled:opacity-50 shadow-sm"
                   >
                     {submittingReschedule ? 'Rescheduling...' : 'Confirm Reschedule'}
                   </button>
@@ -1341,7 +1341,7 @@ export default function BookingPage() {
         {/* ============================================================ */}
         {cancellingAppt && (
           <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
               <div className="p-6 space-y-4">
                 <div className="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1361,7 +1361,7 @@ export default function BookingPage() {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
                   <button
                     type="button"
                     disabled={cancellingLoading}

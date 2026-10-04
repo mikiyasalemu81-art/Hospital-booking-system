@@ -82,11 +82,11 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         {/* Healthcare Brand Icon */}
         <div className="flex justify-center">
-          <div className="h-14 w-14 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-xs shadow-blue-600/20">
+          <div className="h-14 w-14 rounded-2xl bg-red-500 flex items-center justify-center text-white shadow-lg shadow-red-500/25">
             <svg
               className="w-8 h-8"
               fill="none"
@@ -98,7 +98,7 @@ export default function SignUpPage() {
             </svg>
           </div>
         </div>
-        <h2 className="mt-4 text-center text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h2 className="mt-4 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
           Register New Clinic
         </h2>
         <p className="mt-1 text-center text-sm text-slate-500">
@@ -107,7 +107,7 @@ export default function SignUpPage() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0">
-        <div className="bg-white py-8 px-6 shadow-xs border border-slate-200/80 rounded-2xl sm:px-10">
+        <div className="bg-white dark:bg-slate-900 py-8 px-6 shadow-xs border border-slate-200/80 dark:border-slate-800 rounded-2xl sm:px-10">
           <form className="space-y-4" onSubmit={handleSubmit}>
             {error && (
               <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 flex items-start gap-2.5">
@@ -123,7 +123,7 @@ export default function SignUpPage() {
 
             {/* Clinic Name */}
             <div>
-              <label htmlFor="clinic_name" className="block text-xs font-semibold text-slate-700">
+              <label htmlFor="clinic_name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Clinic / Hospital Name *
               </label>
               <div className="mt-1.5">
@@ -134,14 +134,14 @@ export default function SignUpPage() {
                   value={clinicName}
                   onChange={(e) => setClinicName(e.target.value)}
                   placeholder="e.g. St. Paul Specialist Clinic"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 dark:border-slate-700 px-3.5 py-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 text-sm transition"
                 />
               </div>
             </div>
 
             {/* Admin Full Name */}
             <div>
-              <label htmlFor="full_name" className="block text-xs font-semibold text-slate-700">
+              <label htmlFor="full_name" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Admin Full Name *
               </label>
               <div className="mt-1.5">
@@ -152,14 +152,14 @@ export default function SignUpPage() {
                   value={adminFullName}
                   onChange={(e) => setAdminFullName(e.target.value)}
                   placeholder="e.g. Dr. Abebe Bikila"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 dark:border-slate-700 px-3.5 py-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 text-sm transition"
                 />
               </div>
             </div>
 
             {/* Email Address */}
             <div>
-              <label htmlFor="email" className="block text-xs font-semibold text-slate-700">
+              <label htmlFor="email" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                 Admin Work Email Address *
               </label>
               <div className="mt-1.5">
@@ -171,7 +171,7 @@ export default function SignUpPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@stpaulclinic.com"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 dark:border-slate-700 px-3.5 py-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 text-sm transition"
                 />
               </div>
             </div>
@@ -179,13 +179,13 @@ export default function SignUpPage() {
             {/* Password */}
             <div>
               <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-xs font-semibold text-slate-700">
+                <label htmlFor="password" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                   Password *
                 </label>
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-xs text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 font-medium"
                 >
                   {showPassword ? 'Hide' : 'Show'}
                 </button>
@@ -199,7 +199,7 @@ export default function SignUpPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="At least 6 characters"
-                  className="block w-full rounded-xl border border-slate-300 px-3.5 py-2.5 bg-white text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 text-sm transition"
+                  className="block w-full rounded-xl border border-slate-300 dark:border-slate-700 px-3.5 py-2.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 text-sm transition"
                 />
               </div>
             </div>
@@ -208,7 +208,7 @@ export default function SignUpPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-xl shadow-xs text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                className="w-full flex justify-center items-center py-2.5 px-4 border border-transparent rounded-xl shadow-xs text-sm font-semibold text-white bg-sky-500 hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -226,10 +226,10 @@ export default function SignUpPage() {
           </form>
 
           {/* Link back to login */}
-          <div className="mt-6 pt-5 border-t border-slate-100 text-center">
-            <p className="text-xs text-slate-500">
+          <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800 text-center">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
               Already registered your clinic?{' '}
-              <Link href="/login" className="font-semibold text-blue-600 hover:text-blue-700 hover:underline">
+              <Link href="/login" className="font-semibold text-sky-600 dark:text-sky-400 hover:text-sky-700 dark:hover:text-sky-300 hover:underline">
                 Sign In to Portal
               </Link>
             </p>

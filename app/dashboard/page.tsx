@@ -87,10 +87,10 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Welcome Header */}
-        <div className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/70 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-7 border border-slate-200/70 dark:border-slate-800 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-1.5 max-w-2xl">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-900">
                 Staff Dashboard
               </span>
               <span className="text-xs text-slate-500">
@@ -108,7 +108,7 @@ export default function DashboardPage() {
           <div className="flex flex-wrap gap-2.5 shrink-0">
             <Link
               href="/booking"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-sky-500 hover:bg-sky-600 text-white text-xs font-semibold shadow-xs transition"
             >
               <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -137,17 +137,17 @@ export default function DashboardPage() {
         </div>
 
         {/* Your Booking Link Card */}
-        <div className="bg-white rounded-2xl border border-slate-200/70 p-5 sm:p-6 shadow-xs relative overflow-hidden">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 p-5 sm:p-6 shadow-xs relative overflow-hidden">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-1 max-w-xl">
               <div className="flex items-center gap-2">
-                <span className="p-1.5 rounded-lg bg-blue-50 text-blue-600">
+                <span className="p-1.5 rounded-lg bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                 </span>
                 <h3 className="text-base font-bold text-slate-900">Your Booking Link</h3>
-                <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                <span className="text-[11px] font-semibold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 px-2.5 py-0.5 rounded-full border border-teal-200 dark:border-teal-900">
                   Permanent • Never Expires
                 </span>
               </div>
@@ -164,13 +164,13 @@ export default function DashboardPage() {
                   readOnly
                   value={bookingUrl || 'Loading permanent booking link...'}
                   onClick={(e) => (e.target as HTMLInputElement).select()}
-                  className="w-full pl-3.5 pr-10 py-2.5 bg-slate-50/50 border border-slate-200 rounded-xl text-xs font-mono text-slate-800 select-all focus:outline-none focus:border-blue-500 transition shadow-2xs"
+                  className="w-full pl-3.5 pr-10 py-2.5 bg-slate-50/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-mono text-slate-800 dark:text-slate-200 select-all focus:outline-none focus:border-sky-500 transition shadow-2xs"
                   title="Click to select entire URL"
                 />
                 <button
                   type="button"
                   onClick={handleCopyLink}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-blue-600 transition"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 dark:text-slate-500 hover:text-sky-600 dark:hover:text-sky-400 transition"
                   title={copied ? 'Copied!' : 'Copy to clipboard'}
                 >
                   {copied ? (
@@ -193,7 +193,7 @@ export default function DashboardPage() {
                   className={`inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold shadow-xs transition ${
                     copied
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-blue-600 hover:bg-blue-700 text-white'
+                      : 'bg-sky-500 hover:bg-sky-600 text-white'
                   }`}
                 >
                   {copied ? (
@@ -233,19 +233,19 @@ export default function DashboardPage() {
         </div>
 
         {error && (
-          <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
+          <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900 text-red-700 dark:text-red-400 text-sm">
             {error}
           </div>
         )}
 
         {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xs">
+          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Total Doctors
               </span>
-              <div className="p-2 rounded-xl bg-blue-50 text-blue-600">
+              <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
@@ -262,12 +262,12 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xs">
+          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Total Patients
               </span>
-              <div className="p-2 rounded-xl bg-indigo-50 text-indigo-600">
+              <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
@@ -275,14 +275,14 @@ export default function DashboardPage() {
             </div>
             <div className="mt-3 flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-slate-900">{patients.length}</span>
-              <span className="text-xs text-blue-600 font-medium">Registered</span>
+              <span className="text-xs text-sky-600 font-medium">Registered</span>
             </div>
             <p className="mt-1.5 text-xs text-slate-400">
               Filtered by clinic records
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xs">
+          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Clinic Phone
@@ -303,12 +303,12 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/70 shadow-xs">
+          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 Clinic Timezone
               </span>
-              <div className="p-2 rounded-xl bg-sky-50 text-sky-600">
+              <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -328,7 +328,7 @@ export default function DashboardPage() {
         {/* Two-column preview: Recent Doctors & Recent Patients */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Doctors Preview */}
-          <div className="bg-white rounded-2xl border border-slate-200/70 shadow-xs p-5 sm:p-6">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs p-5 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-base font-bold text-slate-900">Doctors Overview</h3>
@@ -336,7 +336,7 @@ export default function DashboardPage() {
               </div>
               <Link
                 href="/doctors"
-                className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                className="text-xs font-semibold text-sky-600 hover:text-sky-700 flex items-center gap-1"
               >
                 View all ({doctors.length})
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -348,18 +348,18 @@ export default function DashboardPage() {
             {loading ? (
               <div className="py-8 text-center text-slate-400 text-sm">Loading doctors...</div>
             ) : doctors.length === 0 ? (
-              <div className="text-center py-8 px-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+              <div className="text-center py-8 px-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
                 <p className="text-sm font-medium text-slate-600">No doctors registered yet</p>
                 <p className="text-xs text-slate-400 mt-1">Get started by adding your first doctor</p>
                 <Link
                   href="/doctors"
-                  className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition"
+                  className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-500 text-white rounded-lg text-xs font-semibold hover:bg-sky-600 transition"
                 >
                   Add Doctor
                 </Link>
               </div>
             ) : (
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-slate-100 dark:divide-slate-800">
                 {doctors.slice(0, 4).map((doc) => (
                   <div key={doc.id} className="py-3 flex items-center justify-between gap-3">
                     <div className="min-w-0">
@@ -375,7 +375,7 @@ export default function DashboardPage() {
                       <span
                         className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium ${
                           doc.active
-                            ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                            ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900'
                             : 'bg-slate-100 text-slate-500'
                         }`}
                       >
@@ -389,7 +389,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Patients Preview */}
-          <div className="bg-white rounded-2xl border border-slate-200/70 shadow-xs p-5 sm:p-6">
+          <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs p-5 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-base font-bold text-slate-900">Patients Directory</h3>
@@ -397,7 +397,7 @@ export default function DashboardPage() {
               </div>
               <Link
                 href="/patients"
-                className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                className="text-xs font-semibold text-sky-600 hover:text-sky-700 flex items-center gap-1"
               >
                 View all ({patients.length})
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -409,18 +409,18 @@ export default function DashboardPage() {
             {loading ? (
               <div className="py-8 text-center text-slate-400 text-sm">Loading patients...</div>
             ) : patients.length === 0 ? (
-              <div className="text-center py-8 px-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200">
+              <div className="text-center py-8 px-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
                 <p className="text-sm font-medium text-slate-600">No patients registered yet</p>
                 <p className="text-xs text-slate-400 mt-1">Register new patients to schedule visits</p>
                 <Link
                   href="/patients"
-                  className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-semibold hover:bg-blue-700 transition"
+                  className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-500 text-white rounded-lg text-xs font-semibold hover:bg-sky-600 transition"
                 >
                   Add Patient
                 </Link>
               </div>
             ) : (
-              <div className="divide-y divide-slate-100">
+              <div className="divide-y divide-slate-100 dark:divide-slate-800">
                 {patients.slice(0, 4).map((patient) => (
                   <div key={patient.id} className="py-3 flex items-center justify-between gap-3">
                     <div className="min-w-0">

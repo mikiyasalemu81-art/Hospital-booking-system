@@ -1,38 +1,104 @@
 @import "tailwindcss";
 
+/* ─── Light mode tokens ────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #0f172a;
+  --background: #f8fafc;       /* slate-50 */
+  --foreground: #0f172a;       /* slate-900 */
+  --surface:    #ffffff;
+  --border:     #e2e8f0;       /* slate-200 */
+  --muted:      #94a3b8;       /* slate-400 */
+
+  /* Primary: sky blue */
+  --primary:    #0ea5e9;       /* sky-500 */
+  --primary-dk: #0284c7;       /* sky-600 */
+  --primary-lt: #e0f2fe;       /* sky-100 */
+
+  /* Accent: teal/green */
+  --accent:     #14b8a6;       /* teal-500 */
+  --accent-dk:  #0f766e;       /* teal-700 */
+  --accent-lt:  #ccfbf1;       /* teal-100 */
+
+  /* Logo / favicon: red */
+  --logo:       #ef4444;       /* red-500 */
 }
 
+/* ─── Dark mode tokens ─────────────────────────────────────────── */
+.dark {
+  --background: #0f172a;       /* slate-950 */
+  --foreground: #f1f5f9;       /* slate-100 */
+  --surface:    #1e293b;       /* slate-800 */
+  --border:     #334155;       /* slate-700 */
+  --muted:      #64748b;       /* slate-500 */
+
+  --primary:    #38bdf8;       /* sky-400 */
+  --primary-dk: #0ea5e9;       /* sky-500 */
+  --primary-lt: #0c4a6e;       /* sky-900 */
+
+  --accent:     #2dd4bf;       /* teal-400 */
+  --accent-dk:  #14b8a6;       /* teal-500 */
+  --accent-lt:  #134e4a;       /* teal-900 */
+
+  --logo:       #f87171;       /* red-400 */
+}
+
+/* ─── Tailwind v4 theme tokens ─────────────────────────────────── */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface:    var(--surface);
+  --color-border:     var(--border);
+  --color-muted:      var(--muted);
+  --color-primary:    var(--primary);
+  --font-sans:        var(--font-geist-sans);
+  --font-mono:        var(--font-geist-mono);
 }
 
+/* ─── Base body ────────────────────────────────────────────────── */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans, Arial, sans-serif);
   color-scheme: light;
 }
 
-/* Base styles ensuring input, textarea, and select elements globally render with dark, visible text and readable placeholders */
+.dark body {
+  color-scheme: dark;
+}
+
+/* ─── Input text always visible ────────────────────────────────── */
 input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
 textarea,
 select {
-  color: #0f172a !important; /* text-slate-900 */
+  color: var(--foreground) !important;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #94a3b8 !important; /* text-slate-400 / text-gray-400 */
+  color: var(--muted) !important;
   opacity: 1 !important;
 }
 
 select option {
   color: #0f172a;
   background-color: #ffffff;
+}
+
+.dark select option {
+  color: #f1f5f9;
+  background-color: #1e293b;
+}
+
+/* ─── Smooth theme transitions ─────────────────────────────────── */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 150ms;
+  transition-timing-function: ease;
+}
+
+/* Don't animate layout/transform props */
+*:where([class*="transition-"], [class*="animate-"]) {
+  transition-property: revert;
+  transition-duration: revert;
 }

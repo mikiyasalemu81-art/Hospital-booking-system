@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/components/auth-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Test Clinic – Staff Portal",
+  title: "ClinicHub – Staff Portal",
   description: "Manage clinic doctors, patients, schedules, and appointments",
 };
 
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full bg-slate-50 text-slate-900 font-sans`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full font-sans bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200`}
       >
-        <AuthProvider>{children}</AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
