@@ -1,5 +1,4 @@
 /**
- * Re-export placeholder SMS functions from lib/sms.ts.
- * The actual SMS provider integration will be wired next.
+ * Re-export the Afro Message SMS functions from lib/sms.ts (server-only).
  */
 export * from './sms';

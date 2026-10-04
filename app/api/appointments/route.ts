@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedStaff } from '@/lib/auth-server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { sendAppointmentSms } from '@/lib/sms';
+import { sendAndLogSms, buildConfirmationMessage } from '@/lib/sms';
 
 // GET /api/appointments - List appointments for current staff's clinic
 export async function GET(request: NextRequest) {
@@ -205,23 +205,25 @@ export async function POST(request: NextRequest) {
         minute: '2-digit',
       });
 
-    const smsResult = await sendAppointmentSms({
+    const smsResult = await sendAndLogSms({
       clinicId,
       appointmentId: appointment.id,
       phone: patientPhone,
-      patientName,
-      clinicName: auth.clinic.name,
-      doctorName: doctor.full_name,
-      appointmentDate: dateFormatted,
-      appointmentTime: timeFormatted,
       kind: 'confirmation',
+      message: buildConfirmationMessage({
+        patientName,
+        clinicName: auth.clinic.name,
+        doctorName: doctor.full_name,
+        date: dateFormatted,
+        time: timeFormatted,
+      }),
     });
 
     return NextResponse.json(
       {
         success: true,
         appointment,
-        smsResult,
+        smsResult: { success: smsResult.success, error: smsResult.error },
       },
       { status: 201 }
     );

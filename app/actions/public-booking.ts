@@ -3,7 +3,7 @@
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { generateDoctorSlots, SlotGenerationResult } from '@/lib/slot-generator';
 import { Doctor } from '@/lib/types';
-import { sendAppointmentSms } from '@/lib/sms';
+import { sendAndLogSms, buildConfirmationMessage, formatAppointmentDateTime } from '@/lib/sms';
 
 export interface PublicClinic {
   id: string;
@@ -185,7 +185,7 @@ export async function bookPublicAppointmentAction(
 
     // Fetch clinic & doctor
     const [clinicRes, docRes] = await Promise.all([
-      supabaseAdmin.from('clinics').select('id, name, phone, created_at').eq('id', clinicId).single(),
+      supabaseAdmin.from('clinics').select('id, name, phone, created_at, timezone').eq('id', clinicId).single(),
       supabaseAdmin.from('doctors').select('id, full_name, department, active').eq('id', doctorId).eq('clinic_id', clinicId).single(),
     ]);
 
@@ -273,23 +273,27 @@ export async function bookPublicAppointmentAction(
       };
     }
 
-    // Placeholder SMS call (empty placeholder function)
-    await sendAppointmentSms({
+    // Send confirmation SMS via Afro Message (logged to sms_log).
+    // sendAndLogSms never throws; an SMS failure must not fail the booking.
+    const fallback = formatAppointmentDateTime(startsAt, clinic.timezone);
+    await sendAndLogSms({
       clinicId,
       appointmentId: appointment.id,
       phone: cleanPhone,
-      patientName: cleanFullName,
-      clinicName: clinic.name,
-      doctorName: doctor.full_name,
-      appointmentDate: input.dateFormatted || new Date(startsAt).toLocaleDateString(),
-      appointmentTime: input.timeFormatted || new Date(startsAt).toLocaleTimeString(),
       kind: 'confirmation',
+      message: buildConfirmationMessage({
+        patientName: cleanFullName,
+        clinicName: clinic.name,
+        doctorName: doctor.full_name,
+        date: input.dateFormatted || fallback.date,
+        time: input.timeFormatted || fallback.time,
+      }),
     });
 
     return {
       success: true,
       appointment,
-      clinic,
+      clinic: { id: clinic.id, name: clinic.name, phone: clinic.phone, created_at: clinic.created_at },
       doctor,
       patient: {
         full_name: cleanFullName,

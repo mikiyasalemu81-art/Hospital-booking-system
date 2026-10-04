@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { sendAndLogSms, formatAppointmentDateTime } from '@/lib/sms';
 
 /**
  * GET/POST /api/send-reminders
  *
  * Finds all appointments with status='booked' where:
- * - starts_at is ~24h away and reminder_24h_sent=false -> logs to sms_log with kind='reminder_24h', status='pending_sms_provider'
- * - starts_at is ~2h away and reminder_2h_sent=false -> logs to sms_log with kind='reminder_2h', status='pending_sms_provider'
+ * - starts_at is ~24h away and reminder_24h_sent=false -> sends SMS via Afro Message, logs to sms_log with kind='reminder_24h'
+ * - starts_at is ~2h away and reminder_2h_sent=false -> sends SMS via Afro Message, logs to sms_log with kind='reminder_2h'
+ *
+ * Every attempt (success or failure) is logged in sms_log with the provider's response.
+ * The reminder_*_sent flag is only set when the SMS was accepted by the provider, so a
+ * failed reminder is retried on the next run while the appointment is still in the window.
  *
  * Protected with a secret key passed as a header:
  * - x-reminder-secret: <SECRET> OR Authorization: Bearer <SECRET>
@@ -17,6 +22,86 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   return handleReminders(request);
+}
+
+type ReminderKind = 'reminder_24h' | 'reminder_2h';
+
+interface ReminderResult {
+  appointmentId: string;
+  kind: ReminderKind;
+  phone: string;
+  message: string;
+  success: boolean;
+  error?: string;
+}
+
+async function processReminders(
+  kind: ReminderKind,
+  windowStart: string,
+  windowEnd: string
+): Promise<{ processed: number; results: ReminderResult[] }> {
+  const sentFlag = kind === 'reminder_24h' ? 'reminder_24h_sent' : 'reminder_2h_sent';
+
+  const { data: appts, error } = await supabaseAdmin
+    .from('appointments')
+    .select('*, doctor:doctors(*), patient:patients(*), clinic:clinics(*)')
+    .eq('status', 'booked')
+    .eq(sentFlag, false)
+    .gte('starts_at', windowStart)
+    .lte('starts_at', windowEnd);
+
+  if (error) {
+    console.error(`Error querying ${kind} reminder appointments:`, error);
+    return { processed: 0, results: [] };
+  }
+
+  const results: ReminderResult[] = [];
+
+  for (const appt of appts || []) {
+    const patientPhone: string = appt.patient?.phone || '';
+    const patientName = appt.patient?.full_name || 'Patient';
+    const doctorName = appt.doctor?.full_name || 'Doctor';
+    const clinicName = appt.clinic?.name || 'Clinic';
+    const { date: dateStr, time: timeStr } = formatAppointmentDateTime(
+      appt.starts_at,
+      appt.clinic?.timezone
+    );
+
+    const message =
+      kind === 'reminder_24h'
+        ? `Reminder: Dear ${patientName}, your appointment at ${clinicName} with Dr. ${doctorName} is tomorrow (${dateStr}) at ${timeStr}.`
+        : `Reminder: Dear ${patientName}, your appointment at ${clinicName} with Dr. ${doctorName} is in 2 hours today at ${timeStr}.`;
+
+    // Sends via Afro Message and logs the attempt to sms_log (never throws)
+    const sms = await sendAndLogSms({
+      clinicId: appt.clinic_id,
+      appointmentId: appt.id,
+      phone: patientPhone,
+      message,
+      kind,
+    });
+
+    if (sms.success) {
+      const { error: flagError } = await supabaseAdmin
+        .from('appointments')
+        .update({ [sentFlag]: true })
+        .eq('id', appt.id);
+      if (flagError) {
+        console.error(`Failed to set ${sentFlag} for appointment ${appt.id}:`, flagError.message);
+      }
+    }
+
+    results.push({
+      appointmentId: appt.id,
+      kind,
+      phone: patientPhone,
+      message,
+      success: sms.success,
+      error: sms.error,
+    });
+  }
+
+  return { processed: (appts || []).length, results };
 }
 
 async function handleReminders(request: NextRequest) {
@@ -39,11 +124,9 @@ async function handleReminders(request: NextRequest) {
       );
     }
 
-    const now = new Date();
-    const nowMs = now.getTime();
+    const nowMs = Date.now();
 
     // 24-hour reminder window: appointments starting ~23h to ~25h from now
-    // (Also accepts query param ?force=true or window adjustments if testing)
     const window24hStart = new Date(nowMs + 23 * 60 * 60 * 1000).toISOString();
     const window24hEnd = new Date(nowMs + 25 * 60 * 60 * 1000).toISOString();
 
@@ -51,141 +134,24 @@ async function handleReminders(request: NextRequest) {
     const window2hStart = new Date(nowMs + 90 * 60 * 1000).toISOString();
     const window2hEnd = new Date(nowMs + 150 * 60 * 1000).toISOString();
 
-    const loggedReminders: Array<{
-      appointmentId: string;
-      kind: 'reminder_24h' | 'reminder_2h';
-      phone: string;
-      message: string;
-    }> = [];
-
-    // ==========================================
     // 2. Process 24h Reminders
-    // ==========================================
-    const { data: appts24h, error: err24h } = await supabaseAdmin
-      .from('appointments')
-      .select('*, doctor:doctors(*), patient:patients(*), clinic:clinics(*)')
-      .eq('status', 'booked')
-      .eq('reminder_24h_sent', false)
-      .gte('starts_at', window24hStart)
-      .lte('starts_at', window24hEnd);
+    const r24 = await processReminders('reminder_24h', window24hStart, window24hEnd);
 
-    if (err24h) {
-      console.error('Error querying 24h reminder appointments:', err24h);
-    } else if (appts24h && appts24h.length > 0) {
-      for (const appt of appts24h) {
-        const patientPhone = appt.patient?.phone || 'Unknown';
-        const patientName = appt.patient?.full_name || 'Patient';
-        const doctorName = appt.doctor?.full_name || 'Doctor';
-        const clinicName = appt.clinic?.name || 'Clinic';
-        const timeStr = new Date(appt.starts_at).toLocaleTimeString(undefined, {
-          hour: '2-digit',
-          minute: '2-digit',
-        });
-        const dateStr = new Date(appt.starts_at).toLocaleDateString(undefined, {
-          weekday: 'short',
-          month: 'short',
-          day: 'numeric',
-        });
-
-        const reminderMessage = `Reminder: Dear ${patientName}, your appointment at ${clinicName} with Dr. ${doctorName} is tomorrow (${dateStr}) at ${timeStr}.`;
-
-        // Log into sms_log table with kind='reminder_24h' and status='pending_sms_provider'
-        await supabaseAdmin.from('sms_log').insert({
-          clinic_id: appt.clinic_id,
-          appointment_id: appt.id,
-          phone: patientPhone,
-          message: reminderMessage,
-          kind: 'reminder_24h',
-          status: 'pending_sms_provider',
-          provider_response: JSON.stringify({
-            note: 'Pending SMS provider integration',
-            scheduledFor: appt.starts_at,
-            loggedAt: new Date().toISOString(),
-          }),
-          created_at: new Date().toISOString(),
-        });
-
-        // Mark reminder_24h_sent=true on the appointment
-        await supabaseAdmin
-          .from('appointments')
-          .update({ reminder_24h_sent: true })
-          .eq('id', appt.id);
-
-        loggedReminders.push({
-          appointmentId: appt.id,
-          kind: 'reminder_24h',
-          phone: patientPhone,
-          message: reminderMessage,
-        });
-      }
-    }
-
-    // ==========================================
     // 3. Process 2h Reminders
-    // ==========================================
-    const { data: appts2h, error: err2h } = await supabaseAdmin
-      .from('appointments')
-      .select('*, doctor:doctors(*), patient:patients(*), clinic:clinics(*)')
-      .eq('status', 'booked')
-      .eq('reminder_2h_sent', false)
-      .gte('starts_at', window2hStart)
-      .lte('starts_at', window2hEnd);
+    const r2 = await processReminders('reminder_2h', window2hStart, window2hEnd);
 
-    if (err2h) {
-      console.error('Error querying 2h reminder appointments:', err2h);
-    } else if (appts2h && appts2h.length > 0) {
-      for (const appt of appts2h) {
-        const patientPhone = appt.patient?.phone || 'Unknown';
-        const patientName = appt.patient?.full_name || 'Patient';
-        const doctorName = appt.doctor?.full_name || 'Doctor';
-        const clinicName = appt.clinic?.name || 'Clinic';
-        const timeStr = new Date(appt.starts_at).toLocaleTimeString(undefined, {
-          hour: '2-digit',
-          minute: '2-digit',
-        });
-
-        const reminderMessage = `Reminder: Dear ${patientName}, your appointment at ${clinicName} with Dr. ${doctorName} is in 2 hours today at ${timeStr}.`;
-
-        // Log into sms_log table with kind='reminder_2h' and status='pending_sms_provider'
-        await supabaseAdmin.from('sms_log').insert({
-          clinic_id: appt.clinic_id,
-          appointment_id: appt.id,
-          phone: patientPhone,
-          message: reminderMessage,
-          kind: 'reminder_2h',
-          status: 'pending_sms_provider',
-          provider_response: JSON.stringify({
-            note: 'Pending SMS provider integration',
-            scheduledFor: appt.starts_at,
-            loggedAt: new Date().toISOString(),
-          }),
-          created_at: new Date().toISOString(),
-        });
-
-        // Mark reminder_2h_sent=true on the appointment
-        await supabaseAdmin
-          .from('appointments')
-          .update({ reminder_2h_sent: true })
-          .eq('id', appt.id);
-
-        loggedReminders.push({
-          appointmentId: appt.id,
-          kind: 'reminder_2h',
-          phone: patientPhone,
-          message: reminderMessage,
-        });
-      }
-    }
+    const all = [...r24.results, ...r2.results];
 
     return NextResponse.json({
       success: true,
       timestamp: new Date().toISOString(),
       summary: {
-        reminders_24h_processed: (appts24h || []).length,
-        reminders_2h_processed: (appts2h || []).length,
-        total_logged: loggedReminders.length,
+        reminders_24h_processed: r24.processed,
+        reminders_2h_processed: r2.processed,
+        total_sent: all.filter((r) => r.success).length,
+        total_failed: all.filter((r) => !r.success).length,
       },
-      reminders: loggedReminders,
+      reminders: all,
     });
   } catch (error: any) {
     console.error('Server error in /api/send-reminders:', error);

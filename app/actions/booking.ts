@@ -2,7 +2,12 @@
 
 import { getAuthenticatedStaff } from '@/lib/auth-server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { sendAppointmentSms } from '@/lib/sms';
+import {
+  sendAppointmentSms,
+  sendAndLogSms,
+  buildConfirmationMessage,
+  formatAppointmentDateTime,
+} from '@/lib/sms';
 
 export interface BookAppointmentInput {
   doctorId: string;
@@ -143,17 +148,21 @@ export async function bookAppointmentAction(
       return { success: false, error: insertError?.message || 'Failed to book appointment' };
     }
 
-    // 5. Empty placeholder call for SMS-sending
-    await sendAppointmentSms({
+    // 5. Send confirmation SMS via Afro Message (logged to sms_log).
+    // sendAndLogSms never throws; an SMS failure must not fail the booking.
+    const fallback = formatAppointmentDateTime(appointment.starts_at, clinic.timezone);
+    await sendAndLogSms({
       clinicId,
       appointmentId: appointment.id,
       phone: patientPhone,
-      patientName,
-      clinicName: clinic.name,
-      doctorName: doctor.full_name,
-      appointmentDate: input.appointmentDateFormatted,
-      appointmentTime: input.appointmentTimeFormatted,
       kind: 'confirmation',
+      message: buildConfirmationMessage({
+        patientName,
+        clinicName: clinic.name,
+        doctorName: doctor.full_name,
+        date: input.appointmentDateFormatted || fallback.date,
+        time: input.appointmentTimeFormatted || fallback.time,
+      }),
     });
 
     return {
