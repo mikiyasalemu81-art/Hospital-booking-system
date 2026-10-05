@@ -18,28 +18,50 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>('light');
   const [mounted, setMounted] = useState(false);
 
-  // Read persisted preference on mount
+  // Read persisted preference on mount and apply immediately
   useEffect(() => {
-    const stored = typeof window !== 'undefined'
-      ? (localStorage.getItem('clinic-theme') as Theme | null)
-      : null;
-    const resolved = stored ?? 'light';
-    Promise.resolve().then(() => {
-      setTheme(resolved);
-      setMounted(true);
-    });
+    let resolved: Theme = 'light';
+    try {
+      const stored = localStorage.getItem('clinic-theme') as Theme | null;
+      if (stored === 'dark' || stored === 'light') {
+        resolved = stored;
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        resolved = 'dark';
+      }
+    } catch {
+      // localStorage may fail in restricted iframe / private browsing
+    }
+
+    setTheme(resolved);
+    const root = document.documentElement;
+    const body = document.body;
+    if (resolved === 'dark') {
+      root.classList.add('dark');
+      body?.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+      body?.classList.remove('dark');
+    }
+    setMounted(true);
   }, []);
 
-  // Apply / remove "dark" class on <html> whenever theme changes
+  // Apply / remove "dark" class on <html> and <body> whenever theme changes
   useEffect(() => {
     if (!mounted) return;
     const root = document.documentElement;
+    const body = document.body;
     if (theme === 'dark') {
       root.classList.add('dark');
+      body?.classList.add('dark');
     } else {
       root.classList.remove('dark');
+      body?.classList.remove('dark');
     }
-    localStorage.setItem('clinic-theme', theme);
+    try {
+      localStorage.setItem('clinic-theme', theme);
+    } catch {
+      // ignore
+    }
   }, [theme, mounted]);
 
   const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));

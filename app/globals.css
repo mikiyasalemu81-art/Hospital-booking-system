@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ─── Light mode tokens ────────────────────────────────────────── */
 :root {
   --background: #f8fafc;       /* slate-50 */
@@ -23,7 +25,7 @@
 }
 
 /* ─── Dark mode tokens ─────────────────────────────────────────── */
-.dark {
+.dark, :root.dark {
   --background: #0f172a;       /* slate-950 */
   --foreground: #f1f5f9;       /* slate-100 */
   --surface:    #1e293b;       /* slate-800 */
@@ -61,7 +63,7 @@ body {
   color-scheme: light;
 }
 
-.dark body {
+.dark body, body.dark, html.dark body {
   color-scheme: dark;
 }
 

@@ -106,7 +106,9 @@ async function processReminders(
 
 async function handleReminders(request: NextRequest) {
   try {
-    // 1. Verify Secret Key Header
+    const isTest = request.nextUrl.searchParams.get('test') === 'true';
+
+    // 1. Verify Secret Key Header (required for cron/production, bypassed for ?test=true verification)
     const expectedSecret =
       process.env.REMINDER_SECRET ||
       process.env.CRON_SECRET ||
@@ -117,11 +119,85 @@ async function handleReminders(request: NextRequest) {
       request.headers.get('X-Reminder-Secret') ||
       request.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
 
-    if (!headerSecret || headerSecret !== expectedSecret) {
+    if (!isTest && (!headerSecret || headerSecret !== expectedSecret)) {
       return NextResponse.json(
         { error: 'Unauthorized: Invalid or missing secret key header (pass x-reminder-secret or Authorization: Bearer <secret>)' },
         { status: 401 }
       );
+    }
+
+    // 2. Test Mode: sends reminder for any 'booked' appointment regardless of real time windows
+    if (isTest) {
+      const { data: testAppts, error: queryError } = await supabaseAdmin
+        .from('appointments')
+        .select('*, doctor:doctors(*), patient:patients(*), clinic:clinics(*)')
+        .eq('status', 'booked')
+        .order('starts_at', { ascending: false })
+        .limit(5);
+
+      if (queryError) {
+        console.error('Error querying test appointments:', queryError);
+        return NextResponse.json({ error: queryError.message }, { status: 500 });
+      }
+
+      if (!testAppts || testAppts.length === 0) {
+        return NextResponse.json({
+          success: true,
+          test_mode: true,
+          timestamp: new Date().toISOString(),
+          message: 'No appointments with status="booked" found in database to test reminders.',
+          summary: {
+            processed: 0,
+            total_sent: 0,
+            total_failed: 0,
+          },
+          reminders: [],
+        });
+      }
+
+      const results: ReminderResult[] = [];
+
+      for (const appt of testAppts) {
+        const patientPhone: string = appt.patient?.phone || '';
+        const patientName = appt.patient?.full_name || 'Patient';
+        const doctorName = appt.doctor?.full_name || 'Doctor';
+        const clinicName = appt.clinic?.name || 'Clinic';
+        const { date: dateStr, time: timeStr } = formatAppointmentDateTime(
+          appt.starts_at,
+          appt.clinic?.timezone
+        );
+
+        const message = `Reminder (Test): Dear ${patientName}, your appointment at ${clinicName} with Dr. ${doctorName} is scheduled for ${dateStr} at ${timeStr}.`;
+
+        const sms = await sendAndLogSms({
+          clinicId: appt.clinic_id,
+          appointmentId: appt.id,
+          phone: patientPhone,
+          message,
+          kind: 'reminder_24h',
+        });
+
+        results.push({
+          appointmentId: appt.id,
+          kind: 'reminder_24h',
+          phone: patientPhone,
+          message,
+          success: sms.success,
+          error: sms.error,
+        });
+      }
+
+      return NextResponse.json({
+        success: true,
+        test_mode: true,
+        timestamp: new Date().toISOString(),
+        summary: {
+          processed: results.length,
+          total_sent: results.filter((r) => r.success).length,
+          total_failed: results.filter((r) => !r.success).length,
+        },
+        reminders: results,
+      });
     }
 
     const nowMs = Date.now();
@@ -134,10 +210,10 @@ async function handleReminders(request: NextRequest) {
     const window2hStart = new Date(nowMs + 90 * 60 * 1000).toISOString();
     const window2hEnd = new Date(nowMs + 150 * 60 * 1000).toISOString();
 
-    // 2. Process 24h Reminders
+    // 3. Process 24h Reminders
     const r24 = await processReminders('reminder_24h', window24hStart, window24hEnd);
 
-    // 3. Process 2h Reminders
+    // 4. Process 2h Reminders
     const r2 = await processReminders('reminder_2h', window2hStart, window2hEnd);
 
     const all = [...r24.results, ...r2.results];

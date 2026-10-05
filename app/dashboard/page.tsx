@@ -93,14 +93,14 @@ export default function DashboardPage() {
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border border-sky-100 dark:border-sky-900">
                 Staff Dashboard
               </span>
-              <span className="text-xs text-slate-500">
-                Clinic: <strong className="text-slate-800">{clinic?.name || 'Clinic'}</strong>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                Clinic: <strong className="text-slate-800 dark:text-slate-200">{clinic?.name || 'Clinic'}</strong>
               </span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
               {clinic?.name ? `${clinic.name}` : `Hello, ${staff?.full_name || 'Staff Member'}!`}
             </h2>
-            <p className="text-sm text-slate-500 leading-relaxed">
+            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
               Welcome back, {staff?.full_name || 'Staff'}. Manage doctors, consultation slots, patient profiles, and records for {clinic?.name || 'your clinic'}.
             </p>
           </div>
@@ -117,18 +117,18 @@ export default function DashboardPage() {
             </Link>
             <Link
               href="/doctors"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold shadow-2xs transition"
             >
-              <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <svg className="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
               Add Doctor
             </Link>
             <Link
               href="/patients"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-2xs transition"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold shadow-2xs transition"
             >
-              <svg className="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <svg className="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
               Add Patient
@@ -146,14 +146,14 @@ export default function DashboardPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                   </svg>
                 </span>
-                <h3 className="text-base font-bold text-slate-900">Your Booking Link</h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Your Booking Link</h3>
                 <span className="text-[11px] font-semibold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 px-2.5 py-0.5 rounded-full border border-teal-200 dark:border-teal-900">
                   Permanent • Never Expires
                 </span>
               </div>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                 Share this public booking link with your patients via SMS, email, or website. Patients can schedule appointments directly with{' '}
-                <strong className="text-slate-700">{clinic?.name || 'your clinic'}</strong> without an account.
+                <strong className="text-slate-700 dark:text-slate-200">{clinic?.name || 'your clinic'}</strong> without an account.
               </p>
             </div>
 
@@ -218,7 +218,7 @@ export default function DashboardPage() {
                     href={bookingUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium shadow-xs transition"
+                    className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-medium shadow-xs transition"
                     title="Open booking link in new tab"
                   >
                     <svg className="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -242,7 +242,7 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Total Doctors
               </span>
               <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
@@ -252,19 +252,19 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-slate-900">{doctors.length}</span>
-              <span className="text-xs text-emerald-600 font-medium">
+              <span className="text-3xl font-extrabold text-slate-900 dark:text-white">{doctors.length}</span>
+              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
                 {activeDoctorsCount} active
               </span>
             </div>
-            <p className="mt-1.5 text-xs text-slate-400">
+            <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
               Assigned to {clinic?.name || 'this clinic'}
             </p>
           </div>
 
           <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Total Patients
               </span>
               <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
@@ -274,38 +274,38 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-slate-900">{patients.length}</span>
-              <span className="text-xs text-sky-600 font-medium">Registered</span>
+              <span className="text-3xl font-extrabold text-slate-900 dark:text-white">{patients.length}</span>
+              <span className="text-xs text-sky-600 dark:text-sky-400 font-medium">Registered</span>
             </div>
-            <p className="mt-1.5 text-xs text-slate-400">
+            <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
               Filtered by clinic records
             </p>
           </div>
 
           <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Clinic Phone
               </span>
-              <div className="p-2 rounded-xl bg-slate-100 text-slate-600">
+              <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-base font-bold text-slate-900 truncate block font-mono">
+              <span className="text-base font-bold text-slate-900 dark:text-white truncate block font-mono">
                 {clinic?.phone || 'Not set'}
               </span>
             </div>
-            <p className="mt-1.5 text-xs text-slate-400">
+            <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
               Primary contact line
             </p>
           </div>
 
           <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                 Clinic Timezone
               </span>
               <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
@@ -315,11 +315,11 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="mt-3">
-              <span className="text-base font-bold text-slate-900 truncate block">
+              <span className="text-base font-bold text-slate-900 dark:text-white truncate block">
                 {clinic?.timezone || 'UTC'}
               </span>
             </div>
-            <p className="mt-1.5 text-xs text-slate-400">
+            <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
               Schedule synchronization zone
             </p>
           </div>
@@ -331,8 +331,8 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs p-5 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-base font-bold text-slate-900">Doctors Overview</h3>
-                <p className="text-xs text-slate-500">Active medical personnel & schedules</p>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Doctors Overview</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Active medical personnel & schedules</p>
               </div>
               <Link
                 href="/doctors"
@@ -363,11 +363,11 @@ export default function DashboardPage() {
                 {doctors.slice(0, 4).map((doc) => (
                   <div key={doc.id} className="py-3 flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <h4 className="text-sm font-semibold text-slate-900 truncate">{doc.full_name}</h4>
-                      <p className="text-xs text-slate-500 truncate">
+                      <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate">{doc.full_name}</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                         {doc.department || 'General Medicine'} • {doc.slot_minutes} min slots
                       </p>
-                      <p className="text-[11px] text-slate-400 mt-0.5 truncate">
+                      <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5 truncate">
                         {formatWorkDays(doc.work_days)} ({formatTime(doc.start_time)} - {formatTime(doc.end_time)})
                       </p>
                     </div>
@@ -376,7 +376,7 @@ export default function DashboardPage() {
                         className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium ${
                           doc.active
                             ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900'
-                            : 'bg-slate-100 text-slate-500'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                         }`}
                       >
                         {doc.active ? 'Active' : 'Inactive'}
@@ -392,8 +392,8 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs p-5 sm:p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-base font-bold text-slate-900">Patients Directory</h3>
-                <p className="text-xs text-slate-500">Registered patients for this clinic</p>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">Patients Directory</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Registered patients for this clinic</p>
               </div>
               <Link
                 href="/patients"
@@ -407,11 +407,11 @@ export default function DashboardPage() {
             </div>
 
             {loading ? (
-              <div className="py-8 text-center text-slate-400 text-sm">Loading patients...</div>
+              <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-sm">Loading patients...</div>
             ) : patients.length === 0 ? (
-              <div className="text-center py-8 px-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
-                <p className="text-sm font-medium text-slate-600">No patients registered yet</p>
-                <p className="text-xs text-slate-400 mt-1">Register new patients to schedule visits</p>
+              <div className="text-center py-8 px-4 bg-slate-50/50 dark:bg-slate-800/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">No patients registered yet</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Register new patients to schedule visits</p>
                 <Link
                   href="/patients"
                   className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-500 text-white rounded-lg text-xs font-semibold hover:bg-sky-600 transition"
@@ -424,8 +424,8 @@ export default function DashboardPage() {
                 {patients.slice(0, 4).map((patient) => (
                   <div key={patient.id} className="py-3 flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <h4 className="text-sm font-semibold text-slate-900 truncate">{patient.full_name}</h4>
-                      <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5 font-mono truncate">
+                      <h4 className="text-sm font-semibold text-slate-900 dark:text-white truncate">{patient.full_name}</h4>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 font-mono truncate">
                         <svg className="w-3.5 h-3.5 text-slate-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>

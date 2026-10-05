@@ -34,14 +34,24 @@ export function formatPhoneNumber(phone: string): string {
  * Never throws — failures are returned as `{ success: false, ... }`.
  */
 export async function sendSms(phone: string, message: string): Promise<SendSmsResult> {
-  const apiKey = process.env.AFRO_MESSAGE_API_KEY;
-  const senderId = process.env.AFRO_MESSAGE_SENDER_ID;
+  const apiKey =
+    process.env.AFRO_MESSAGE_API_KEY ||
+    process.env.AFROMESSAGE_API_KEY;
+  const senderId =
+    process.env.AFRO_MESSAGE_SENDER_ID ||
+    process.env.AFROMESSAGE_SENDER_ID ||
+    process.env.AFROMESSAGE_FROM_ID ||
+    process.env.AFROMESSAGE_SENDER_NAME;
 
   if (!apiKey) {
+    console.error('[sms] AFRO_MESSAGE_API_KEY is not configured in environment variables');
     return {
       success: false,
       error: 'AFRO_MESSAGE_API_KEY is not configured',
-      providerResponse: { error: 'AFRO_MESSAGE_API_KEY is not configured' },
+      providerResponse: {
+        error: 'AFRO_MESSAGE_API_KEY is not configured',
+        checkedEnv: ['AFRO_MESSAGE_API_KEY', 'AFROMESSAGE_API_KEY'],
+      },
     };
   }
 
@@ -50,7 +60,7 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
     return {
       success: false,
       error: 'Missing recipient phone number',
-      providerResponse: { error: 'Missing recipient phone number' },
+      providerResponse: { error: 'Missing recipient phone number', phoneInput: phone },
     };
   }
   if (!message?.trim()) {
@@ -64,6 +74,8 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
   try {
     const body: Record<string, string> = { to, message };
     if (senderId) body.from = senderId;
+
+    console.log(`[sms] Sending Afro Message SMS to ${to} (senderId: ${senderId || 'default'})`);
 
     const res = await fetch(AFRO_MESSAGE_SEND_URL, {
       method: 'POST',
@@ -89,8 +101,15 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
     const acknowledged =
       parsed && typeof parsed === 'object' && String(parsed.acknowledge).toLowerCase() === 'success';
 
+    // Build complete provider response capturing all fields returned by Afro Message
+    const fullProviderResponse =
+      typeof parsed === 'object' && parsed !== null
+        ? { httpStatus: res.status, ...parsed }
+        : { httpStatus: res.status, rawText: String(parsed) };
+
     if (res.ok && acknowledged) {
-      return { success: true, providerResponse: parsed };
+      console.log(`[sms] Afro Message accepted SMS for ${to}:`, JSON.stringify(fullProviderResponse));
+      return { success: true, providerResponse: fullProviderResponse };
     }
 
     const providerErrors =
@@ -98,22 +117,33 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
         ? parsed?.response?.errors ?? parsed?.response?.message ?? parsed?.message
         : undefined;
 
+    const detailedError = `Afro Message rejected the request (HTTP ${res.status})${
+      providerErrors ? `: ${typeof providerErrors === 'string' ? providerErrors : JSON.stringify(providerErrors)}` : ''
+    }`;
+
+    console.error(`[sms] Afro Message rejection details for ${to}:`, JSON.stringify(fullProviderResponse));
+
     return {
       success: false,
-      error: `Afro Message rejected the request (HTTP ${res.status})${
-        providerErrors ? `: ${typeof providerErrors === 'string' ? providerErrors : JSON.stringify(providerErrors)}` : ''
-      }`,
-      providerResponse: { httpStatus: res.status, body: parsed },
+      error: detailedError,
+      providerResponse: fullProviderResponse,
     };
   } catch (err: any) {
     const isTimeout = err?.name === 'TimeoutError' || err?.name === 'AbortError';
     const errorMessage = isTimeout
       ? `Afro Message request timed out after ${REQUEST_TIMEOUT_MS}ms`
       : err?.message || 'Network error while calling Afro Message';
+
+    console.error(`[sms] Network/call error to Afro Message for ${to}:`, errorMessage);
+
     return {
       success: false,
       error: errorMessage,
-      providerResponse: { error: errorMessage },
+      providerResponse: {
+        error: errorMessage,
+        exceptionName: err?.name,
+        stack: err?.stack,
+      },
     };
   }
 }

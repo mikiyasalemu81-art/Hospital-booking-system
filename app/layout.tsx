@@ -25,7 +25,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('clinic-theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');if(document.body)document.body.classList.add('dark');}else{document.documentElement.classList.remove('dark');if(document.body)document.body.classList.remove('dark');}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-full font-sans bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-200`}
       >
