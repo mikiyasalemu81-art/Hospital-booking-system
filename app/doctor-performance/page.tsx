@@ -102,7 +102,7 @@ function StatCard({
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-4">
       <div className="flex items-center justify-between">
-        <p className="text-xs font-medium text-slate-500">{label}</p>
+        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
         <span className={`w-2 h-2 rounded-full ${dotClass}`}></span>
       </div>
       <p className={`text-2xl font-extrabold mt-1 ${valueClass}`}>{value}</p>
@@ -204,9 +204,9 @@ export default function DoctorPerformancePage() {
   })} – ${range.to.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`;
 
   const noShowTone = (rate: number) => {
-    if (rate >= 25) return 'text-rose-700 bg-rose-50 border-rose-200';
-    if (rate >= 10) return 'text-amber-700 bg-amber-50 border-amber-200';
-    return 'text-emerald-700 bg-emerald-50 border-emerald-200';
+    if (rate >= 25) return 'text-rose-700 bg-rose-50 border-rose-200 dark:bg-rose-950/30 dark:border-rose-900 dark:text-rose-300';
+    if (rate >= 10) return 'text-amber-700 bg-amber-50 border-amber-200 dark:bg-amber-950/30 dark:border-amber-900 dark:text-amber-300';
+    return 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:bg-emerald-950/30 dark:border-emerald-900 dark:text-emerald-300';
   };
 
   const presets: { key: RangePreset; label: string }[] = [
@@ -222,21 +222,21 @@ export default function DoctorPerformancePage() {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-sky-100 text-sky-800">
+              <span className="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300">
                 Staff Only
               </span>
-              <span className="text-xs text-slate-500">
-                Clinic: <strong className="text-slate-700">{clinic?.name || 'Your Clinic'}</strong>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                Clinic: <strong className="text-slate-700 dark:text-slate-200">{clinic?.name || 'Your Clinic'}</strong>
               </span>
             </div>
-            <h2 className="text-2xl font-bold tracking-tight text-slate-900">Doctor Performance</h2>
-            <p className="text-sm text-slate-500 mt-1">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Doctor Performance</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
               Appointment breakdown and no-show rates per doctor for the selected period.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold self-start">
+            <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold self-start">
               {presets.map((p) => (
                 <button
                   key={p.key}
@@ -244,8 +244,8 @@ export default function DoctorPerformancePage() {
                   onClick={() => handlePresetChange(p.key)}
                   className={`px-3.5 py-1.5 rounded-lg transition ${
                     preset === p.key
-                      ? 'bg-white text-slate-900 shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   {p.label}
@@ -260,53 +260,53 @@ export default function DoctorPerformancePage() {
                   value={customFrom}
                   max={customTo}
                   onChange={(e) => handleCustomFromChange(e.target.value)}
-                  className="px-3 py-2 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-sky-500 bg-white"
+                  className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-sky-500 bg-white dark:bg-slate-800"
                 />
-                <span className="text-slate-400">to</span>
+                <span className="text-slate-400 dark:text-slate-500">to</span>
                 <input
                   type="date"
                   value={customTo}
                   min={customFrom}
                   onChange={(e) => handleCustomToChange(e.target.value)}
-                  className="px-3 py-2 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-sky-500 bg-white"
+                  className="px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-sky-500 bg-white dark:bg-slate-800"
                 />
               </div>
             )}
           </div>
         </div>
 
-        <p className="text-xs text-slate-400 -mt-3">Selected range: {rangeLabel}</p>
+        <p className="text-xs text-slate-400 dark:text-slate-500 -mt-3">Selected range: {rangeLabel}</p>
 
         {/* Summary cards */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
           <StatCard
             label="Total Appointments"
             value={totals?.total ?? 0}
-            valueClass="text-slate-900"
+            valueClass="text-slate-900 dark:text-white"
             dotClass="bg-slate-400"
           />
           <StatCard
             label="Attended"
             value={totals?.attended ?? 0}
-            valueClass="text-emerald-700"
+            valueClass="text-emerald-700 dark:text-emerald-400"
             dotClass="bg-emerald-500"
           />
           <StatCard
             label="Missed"
             value={totals?.missed ?? 0}
-            valueClass="text-amber-700"
+            valueClass="text-amber-700 dark:text-amber-400"
             dotClass="bg-amber-500"
           />
           <StatCard
             label="Cancelled"
             value={totals?.cancelled ?? 0}
-            valueClass="text-rose-700"
+            valueClass="text-rose-700 dark:text-rose-400"
             dotClass="bg-rose-500"
           />
           <StatCard
             label="No-show Rate"
             value={`${totals?.noShowRate ?? 0}%`}
-            valueClass="text-slate-900"
+            valueClass="text-slate-900 dark:text-white"
             dotClass="bg-blue-500"
           />
         </div>
@@ -315,8 +315,8 @@ export default function DoctorPerformancePage() {
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between gap-3">
             <div>
-              <h3 className="text-base font-bold text-slate-900">Per-Doctor Breakdown</h3>
-              <p className="text-xs text-slate-500">
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Per-Doctor Breakdown</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 No-show rate percentage = missed &divide; total booked appointments.
               </p>
             </div>
@@ -324,7 +324,7 @@ export default function DoctorPerformancePage() {
               type="button"
               onClick={handleRefresh}
               disabled={loading}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 hover:text-sky-700 transition disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-sky-700 dark:hover:text-sky-400 transition disabled:opacity-50"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h5M20 20v-5h-5M5.07 9A7.5 7.5 0 0118.93 9M18.93 15A7.5 7.5 0 015.07 15" />
@@ -334,8 +334,8 @@ export default function DoctorPerformancePage() {
           </div>
 
           {loading ? (
-            <div className="py-16 text-center text-slate-400 text-sm flex items-center justify-center gap-2">
-              <svg className="animate-spin h-5 w-5 text-sky-600" viewBox="0 0 24 24" fill="none">
+            <div className="py-16 text-center text-slate-400 dark:text-slate-500 text-sm flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5 text-sky-600 dark:text-sky-400" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
@@ -343,8 +343,8 @@ export default function DoctorPerformancePage() {
             </div>
           ) : error ? (
             <div className="py-16 text-center px-4">
-              <p className="text-sm font-semibold text-rose-700">Could not load performance data</p>
-              <p className="text-xs text-slate-500 mt-1">{error}</p>
+              <p className="text-sm font-semibold text-rose-700 dark:text-rose-400">Could not load performance data</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{error}</p>
               <button
                 type="button"
                 onClick={handleRefresh}
@@ -355,13 +355,13 @@ export default function DoctorPerformancePage() {
             </div>
           ) : sortedRows.length === 0 ? (
             <div className="py-16 text-center px-4">
-              <div className="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-2">
+              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-full flex items-center justify-center mx-auto mb-2">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <p className="text-sm font-semibold text-slate-700">No doctors found</p>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">No doctors found</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                 Add doctors to your clinic to see their performance here.
               </p>
             </div>
@@ -369,7 +369,7 @@ export default function DoctorPerformancePage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200/80 bg-slate-50/70 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
                     <th className="py-3.5 px-4 sm:px-6">Doctor</th>
                     <th className="py-3.5 px-4">Department</th>
                     <th className="py-3.5 px-4 text-center">Total Booked</th>
@@ -381,37 +381,37 @@ export default function DoctorPerformancePage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                   {sortedRows.map((row) => (
-                    <tr key={row.doctor_id} className="hover:bg-slate-50/60 transition">
+                    <tr key={row.doctor_id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
                       <td className="py-3.5 px-4 sm:px-6">
                         <div className="flex items-center gap-2.5">
                           <div className="w-8 h-8 rounded-full bg-sky-500 text-white text-xs font-bold flex items-center justify-center shrink-0">
                             {row.doctor_name.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold text-slate-900 truncate">
+                            <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
                               {row.doctor_name}
                             </p>
                             {!row.active && (
-                              <span className="text-[10px] font-medium text-slate-400">
+                              <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
                                 Inactive
                               </span>
                             )}
                           </div>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 text-xs text-slate-600">
+                      <td className="py-3.5 px-4 text-xs text-slate-600 dark:text-slate-300">
                         {row.department || '—'}
                       </td>
-                      <td className="py-3.5 px-4 text-center text-sm font-bold text-slate-900">
+                      <td className="py-3.5 px-4 text-center text-sm font-bold text-slate-900 dark:text-white">
                         {row.total}
                       </td>
-                      <td className="py-3.5 px-4 text-center text-sm font-semibold text-emerald-700">
+                      <td className="py-3.5 px-4 text-center text-sm font-semibold text-emerald-700 dark:text-emerald-400">
                         {row.attended}
                       </td>
-                      <td className="py-3.5 px-4 text-center text-sm font-semibold text-amber-700">
+                      <td className="py-3.5 px-4 text-center text-sm font-semibold text-amber-700 dark:text-amber-400">
                         {row.missed}
                       </td>
-                      <td className="py-3.5 px-4 text-center text-sm font-semibold text-rose-700">
+                      <td className="py-3.5 px-4 text-center text-sm font-semibold text-rose-700 dark:text-rose-400">
                         {row.cancelled}
                       </td>
                       <td className="py-3.5 px-4 text-center">
@@ -428,20 +428,20 @@ export default function DoctorPerformancePage() {
                 </tbody>
                 {totals && (
                   <tfoot>
-                    <tr className="border-t-2 border-slate-200 bg-slate-50/80 font-bold text-slate-900">
+                    <tr className="border-t-2 border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
                       <td className="py-3.5 px-4 sm:px-6 text-sm" colSpan={2}>
                         Clinic Totals
                       </td>
                       <td className="py-3.5 px-4 text-center text-sm">
                         {totals.total}
                       </td>
-                      <td className="py-3.5 px-4 text-center text-sm text-emerald-700">
+                      <td className="py-3.5 px-4 text-center text-sm text-emerald-700 dark:text-emerald-400">
                         {totals.attended}
                       </td>
-                      <td className="py-3.5 px-4 text-center text-sm text-amber-700">
+                      <td className="py-3.5 px-4 text-center text-sm text-amber-700 dark:text-amber-400">
                         {totals.missed}
                       </td>
-                      <td className="py-3.5 px-4 text-center text-sm text-rose-700">
+                      <td className="py-3.5 px-4 text-center text-sm text-rose-700 dark:text-rose-400">
                         {totals.cancelled}
                       </td>
                       <td className="py-3.5 px-4 text-center">
@@ -457,7 +457,7 @@ export default function DoctorPerformancePage() {
                   </tfoot>
                 )}
               </table>
-              <p className="px-5 py-3 text-[11px] text-slate-400 border-t border-slate-100 dark:border-slate-800">
+              <p className="px-5 py-3 text-[11px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800">
                 Total Booked includes all appointments in the range. Doctors with no appointments in the period are displayed with zero counts.
               </p>
             </div>

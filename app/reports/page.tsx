@@ -95,18 +95,18 @@ export default function ReportsPage() {
     <DashboardLayout>
       <div className="space-y-6 max-w-7xl mx-auto pb-12">
         {/* Page Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 pb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200/80 dark:border-slate-800 pb-5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800 font-semibold">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/60 text-sky-800 dark:text-sky-300 font-semibold">
                 Daily Operations
               </span>
-              <span className="text-xs text-slate-500">• {clinic?.name}</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">• {clinic?.name}</span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 mt-1">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white mt-1">
               Appointments Daily Report
             </h1>
-            <p className="text-sm text-slate-500 mt-0.5">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
               Review and track appointments by status (booked, attended, missed, cancelled) and manage patient attendance.
             </p>
           </div>
@@ -117,13 +117,13 @@ export default function ReportsPage() {
               type="date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="px-3.5 py-2 border border-slate-300 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
+              className="px-3.5 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-900 dark:text-white focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white dark:bg-slate-800"
             />
             {!isToday && (
               <button
                 type="button"
                 onClick={() => setSelectedDate(new Date().toISOString().split('T')[0])}
-                className="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 transition"
+                className="px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition"
               >
                 Today
               </button>
@@ -131,7 +131,7 @@ export default function ReportsPage() {
             <button
               type="button"
               onClick={() => fetchAppointments(selectedDate)}
-              className="px-3 py-2 text-xs font-semibold rounded-xl border border-sky-200 bg-sky-50 hover:bg-sky-100 text-sky-700 transition"
+              className="px-3 py-2 text-xs font-semibold rounded-xl border border-sky-200 dark:border-sky-800 bg-sky-50 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/60 text-sky-700 dark:text-sky-300 transition"
             >
               ↻
             </button>
@@ -140,14 +140,14 @@ export default function ReportsPage() {
 
         {/* Action Success Toast */}
         {actionSuccess && (
-          <div className="p-3.5 rounded-xl bg-emerald-50 border border-teal-200 dark:border-teal-900 text-emerald-900 text-xs flex items-center justify-between shadow-xs">
+          <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-teal-200 dark:border-teal-900 text-emerald-900 dark:text-emerald-200 text-xs flex items-center justify-between shadow-xs">
             <div className="flex items-center gap-2">
-              <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
               </svg>
               <span>{actionSuccess}</span>
             </div>
-            <button onClick={() => setActionSuccess(null)} className="font-bold text-emerald-700">
+            <button onClick={() => setActionSuccess(null)} className="font-bold text-emerald-700 dark:text-emerald-300">
               ✕
             </button>
           </div>
@@ -155,9 +155,9 @@ export default function ReportsPage() {
 
         {/* Error Alert */}
         {error && (
-          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-900 text-xs flex items-center justify-between">
+          <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 text-red-900 dark:text-red-200 text-xs flex items-center justify-between">
             <span>{error}</span>
-            <button onClick={() => setError(null)} className="font-bold text-red-700">
+            <button onClick={() => setError(null)} className="font-bold text-red-700 dark:text-red-300">
               ✕
             </button>
           </div>
@@ -171,10 +171,10 @@ export default function ReportsPage() {
             className={`p-4 rounded-2xl border cursor-pointer transition select-none ${
               activeTab === 'all'
                 ? 'bg-slate-900 text-white border-slate-900 shadow-sm'
-                : 'bg-white text-slate-900 border-slate-200/80 hover:border-slate-300'
+                : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-slate-200/80 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
             }`}
           >
-            <p className={`text-xs font-medium ${activeTab === 'all' ? 'text-slate-300' : 'text-slate-500'}`}>
+            <p className={`text-xs font-medium ${activeTab === 'all' ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'}`}>
               Total {isToday ? "Today's" : ''}
             </p>
             <p className="text-2xl font-extrabold mt-1">{counts.total}</p>
@@ -186,11 +186,11 @@ export default function ReportsPage() {
             className={`p-4 rounded-2xl border cursor-pointer transition select-none ${
               activeTab === 'booked'
                 ? 'bg-sky-500 text-white border-sky-500 shadow-sm'
-                : 'bg-white text-slate-900 border-slate-200/80 hover:border-blue-300'
+                : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-slate-200/80 dark:border-slate-700 hover:border-blue-300 dark:hover:border-sky-500'
             }`}
           >
             <div className="flex items-center justify-between">
-              <p className={`text-xs font-medium ${activeTab === 'booked' ? 'text-blue-100' : 'text-sky-600'}`}>
+              <p className={`text-xs font-medium ${activeTab === 'booked' ? 'text-blue-100' : 'text-sky-600 dark:text-sky-400'}`}>
                 Booked
               </p>
               <span className={`w-2 h-2 rounded-full ${activeTab === 'booked' ? 'bg-white' : 'bg-blue-500'}`}></span>
@@ -204,11 +204,11 @@ export default function ReportsPage() {
             className={`p-4 rounded-2xl border cursor-pointer transition select-none ${
               activeTab === 'attended'
                 ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                : 'bg-white text-slate-900 border-slate-200/80 hover:border-emerald-300'
+                : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-slate-200/80 dark:border-slate-700 hover:border-emerald-300 dark:hover:border-emerald-500'
             }`}
           >
             <div className="flex items-center justify-between">
-              <p className={`text-xs font-medium ${activeTab === 'attended' ? 'text-emerald-100' : 'text-emerald-600'}`}>
+              <p className={`text-xs font-medium ${activeTab === 'attended' ? 'text-emerald-100' : 'text-emerald-600 dark:text-emerald-400'}`}>
                 Attended
               </p>
               <span className={`w-2 h-2 rounded-full ${activeTab === 'attended' ? 'bg-white' : 'bg-emerald-500'}`}></span>
@@ -222,11 +222,11 @@ export default function ReportsPage() {
             className={`p-4 rounded-2xl border cursor-pointer transition select-none ${
               activeTab === 'missed'
                 ? 'bg-amber-600 text-white border-amber-600 shadow-sm'
-                : 'bg-white text-slate-900 border-slate-200/80 hover:border-amber-300'
+                : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-slate-200/80 dark:border-slate-700 hover:border-amber-300 dark:hover:border-amber-500'
             }`}
           >
             <div className="flex items-center justify-between">
-              <p className={`text-xs font-medium ${activeTab === 'missed' ? 'text-amber-100' : 'text-amber-600'}`}>
+              <p className={`text-xs font-medium ${activeTab === 'missed' ? 'text-amber-100' : 'text-amber-600 dark:text-amber-400'}`}>
                 Missed
               </p>
               <span className={`w-2 h-2 rounded-full ${activeTab === 'missed' ? 'bg-white' : 'bg-amber-500'}`}></span>
@@ -240,11 +240,11 @@ export default function ReportsPage() {
             className={`p-4 rounded-2xl border cursor-pointer transition select-none ${
               activeTab === 'cancelled'
                 ? 'bg-rose-600 text-white border-rose-600 shadow-sm'
-                : 'bg-white text-slate-900 border-slate-200/80 hover:border-rose-300'
+                : 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-slate-200/80 dark:border-slate-700 hover:border-rose-300 dark:hover:border-rose-500'
             }`}
           >
             <div className="flex items-center justify-between">
-              <p className={`text-xs font-medium ${activeTab === 'cancelled' ? 'text-rose-100' : 'text-rose-600'}`}>
+              <p className={`text-xs font-medium ${activeTab === 'cancelled' ? 'text-rose-100' : 'text-rose-600 dark:text-rose-400'}`}>
                 Cancelled
               </p>
               <span className={`w-2 h-2 rounded-full ${activeTab === 'cancelled' ? 'bg-white' : 'bg-rose-500'}`}></span>
@@ -258,21 +258,23 @@ export default function ReportsPage() {
           {/* Table Header & Status Pills */}
           <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="text-base font-bold text-slate-900">
+              <h2 className="text-base font-bold text-slate-900 dark:text-white">
                 Appointments on {new Date(selectedDate).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 Mark active booked appointments as &apos;attended&apos; upon arrival, or &apos;missed&apos; if no-show.
               </p>
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex items-center bg-slate-100 p-1 rounded-xl text-xs font-semibold self-start sm:self-center">
+            <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold self-start sm:self-center">
               <button
                 type="button"
                 onClick={() => setActiveTab('all')}
                 className={`px-3 py-1.5 rounded-lg transition ${
-                  activeTab === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                  activeTab === 'all'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 All ({counts.total})
@@ -281,7 +283,9 @@ export default function ReportsPage() {
                 type="button"
                 onClick={() => setActiveTab('booked')}
                 className={`px-3 py-1.5 rounded-lg transition ${
-                  activeTab === 'booked' ? 'bg-white text-sky-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                  activeTab === 'booked'
+                    ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Booked ({counts.booked})
@@ -290,7 +294,9 @@ export default function ReportsPage() {
                 type="button"
                 onClick={() => setActiveTab('attended')}
                 className={`px-3 py-1.5 rounded-lg transition ${
-                  activeTab === 'attended' ? 'bg-white text-emerald-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                  activeTab === 'attended'
+                    ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Attended ({counts.attended})
@@ -299,7 +305,9 @@ export default function ReportsPage() {
                 type="button"
                 onClick={() => setActiveTab('missed')}
                 className={`px-3 py-1.5 rounded-lg transition ${
-                  activeTab === 'missed' ? 'bg-white text-amber-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                  activeTab === 'missed'
+                    ? 'bg-white dark:bg-slate-700 text-amber-700 dark:text-amber-300 shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Missed ({counts.missed})
@@ -308,7 +316,9 @@ export default function ReportsPage() {
                 type="button"
                 onClick={() => setActiveTab('cancelled')}
                 className={`px-3 py-1.5 rounded-lg transition ${
-                  activeTab === 'cancelled' ? 'bg-white text-rose-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
+                  activeTab === 'cancelled'
+                    ? 'bg-white dark:bg-slate-700 text-rose-700 dark:text-rose-300 shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Cancelled ({counts.cancelled})
@@ -317,8 +327,8 @@ export default function ReportsPage() {
           </div>
 
           {loading ? (
-            <div className="py-16 text-center text-slate-400 text-sm flex items-center justify-center gap-2">
-              <svg className="animate-spin h-5 w-5 text-sky-600" viewBox="0 0 24 24" fill="none">
+            <div className="py-16 text-center text-slate-400 dark:text-slate-500 text-sm flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5 text-sky-600 dark:text-sky-400" viewBox="0 0 24 24" fill="none">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
@@ -326,13 +336,13 @@ export default function ReportsPage() {
             </div>
           ) : displayedAppointments.length === 0 ? (
             <div className="py-16 text-center px-4">
-              <div className="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-2">
+              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-full flex items-center justify-center mx-auto mb-2">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                 </svg>
               </div>
-              <p className="text-sm font-semibold text-slate-700">No appointments in this group</p>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">No appointments in this group</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
                 {activeTab === 'all'
                   ? 'No appointments scheduled on this date.'
                   : `No appointments with status "${activeTab}".`}
@@ -342,7 +352,7 @@ export default function ReportsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200/80 bg-slate-50/70 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
                     <th className="py-3.5 px-4 sm:px-6">Patient</th>
                     <th className="py-3.5 px-4">Doctor</th>
                     <th className="py-3.5 px-4">Time Slot</th>
@@ -368,15 +378,15 @@ export default function ReportsPage() {
                     })}`;
 
                     return (
-                      <tr key={appt.id} className="hover:bg-slate-50/60 transition">
+                      <tr key={appt.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
                         <td className="py-4 px-4 sm:px-6">
                           <div>
-                            <div className="font-semibold text-slate-900">
+                            <div className="font-semibold text-slate-900 dark:text-white">
                               {appt.patient?.full_name || 'Patient'}
                             </div>
                             <a
                               href={`tel:${appt.patient?.phone}`}
-                              className="text-xs text-sky-700 hover:underline flex items-center gap-1 mt-0.5 font-mono"
+                              className="text-xs text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1 mt-0.5 font-mono"
                             >
                               📞 {appt.patient?.phone}
                             </a>
@@ -385,31 +395,31 @@ export default function ReportsPage() {
 
                         <td className="py-4 px-4">
                           <div>
-                            <div className="font-semibold text-slate-800">
+                            <div className="font-semibold text-slate-800 dark:text-white">
                               {appt.doctor?.full_name || 'Doctor'}
                             </div>
-                            <div className="text-xs text-slate-500">
+                            <div className="text-xs text-slate-500 dark:text-slate-400">
                               {appt.doctor?.department || 'General Practice'}
                             </div>
                           </div>
                         </td>
 
                         <td className="py-4 px-4">
-                          <span className="font-medium text-slate-800">{timeDisplay}</span>
+                          <span className="font-medium text-slate-800 dark:text-slate-200">{timeDisplay}</span>
                         </td>
 
                         <td className="py-4 px-4">
                           <span
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${
                               isBooked
-                                ? 'bg-sky-50 text-sky-700 border border-sky-200'
+                                ? 'bg-sky-50 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-900'
                                 : isAttended
                                 ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
                                 : isMissed
-                                ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900'
                                 : isCancelled
-                                ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                                : 'bg-slate-100 text-slate-700'
+                                ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                             }`}
                           >
                             <span
@@ -427,7 +437,7 @@ export default function ReportsPage() {
                           </span>
                         </td>
 
-                        <td className="py-4 px-4 text-xs text-slate-500 max-w-xs truncate" title={appt.notes || ''}>
+                        <td className="py-4 px-4 text-xs text-slate-500 dark:text-slate-400 max-w-xs truncate" title={appt.notes || ''}>
                           {appt.notes || '—'}
                         </td>
 
@@ -438,7 +448,7 @@ export default function ReportsPage() {
                                 type="button"
                                 disabled={isProcessing}
                                 onClick={() => handleUpdateStatus(appt.id, 'attended')}
-                                className="px-3 py-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 text-xs font-semibold shadow-2xs transition disabled:opacity-50"
+                                className="px-3 py-1.5 rounded-lg border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-xs font-semibold shadow-2xs transition disabled:opacity-50"
                               >
                                 {isProcessing ? 'Saving...' : '✓ Mark Attended'}
                               </button>
@@ -446,28 +456,28 @@ export default function ReportsPage() {
                                 type="button"
                                 disabled={isProcessing}
                                 onClick={() => handleUpdateStatus(appt.id, 'missed')}
-                                className="px-3 py-1.5 rounded-lg border border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100 text-xs font-semibold shadow-2xs transition disabled:opacity-50"
+                                className="px-3 py-1.5 rounded-lg border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-xs font-semibold shadow-2xs transition disabled:opacity-50"
                               >
                                 {isProcessing ? 'Saving...' : '✕ Mark Missed'}
                               </button>
                             </div>
                           ) : isAttended || isMissed ? (
                             <div className="flex items-center justify-end gap-2">
-                              <span className="text-xs text-slate-400 mr-1">
+                              <span className="text-xs text-slate-400 dark:text-slate-500 mr-1">
                                 {isAttended ? 'Patient arrived' : 'No-show'}
                               </span>
                               <button
                                 type="button"
                                 disabled={isProcessing}
                                 onClick={() => handleUpdateStatus(appt.id, 'booked')}
-                                className="px-2 py-1 rounded text-[11px] text-slate-500 hover:text-slate-800 hover:bg-slate-100 border border-slate-200 transition"
+                                className="px-2 py-1 rounded text-[11px] text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition"
                                 title="Revert back to booked"
                               >
                                 Revert
                               </button>
                             </div>
                           ) : (
-                            <span className="text-xs text-slate-400 italic">No action</span>
+                            <span className="text-xs text-slate-400 dark:text-slate-500 italic">No action</span>
                           )}
                         </td>
                       </tr>

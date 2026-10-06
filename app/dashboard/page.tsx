@@ -348,9 +348,9 @@ export default function DashboardPage() {
             {loading ? (
               <div className="py-8 text-center text-slate-400 text-sm">Loading doctors...</div>
             ) : doctors.length === 0 ? (
-              <div className="text-center py-8 px-4 bg-slate-50/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
-                <p className="text-sm font-medium text-slate-600">No doctors registered yet</p>
-                <p className="text-xs text-slate-400 mt-1">Get started by adding your first doctor</p>
+              <div className="text-center py-8 px-4 bg-slate-50/50 dark:bg-slate-800/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                <p className="text-sm font-medium text-slate-600 dark:text-slate-300">No doctors registered yet</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Get started by adding your first doctor</p>
                 <Link
                   href="/doctors"
                   className="mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-500 text-white rounded-lg text-xs font-semibold hover:bg-sky-600 transition"

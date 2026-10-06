@@ -526,33 +526,33 @@ export default function BookingPage() {
                         }}
                         className={`p-3.5 rounded-xl border cursor-pointer transition flex items-start gap-3 select-none ${
                           isSelected
-                            ? 'border-sky-500 bg-sky-50/60 shadow-xs ring-2 ring-blue-600/20'
-                            : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/60'
+                            ? 'border-sky-500 bg-sky-50/60 dark:bg-sky-950/50 shadow-xs ring-2 ring-blue-600/20'
+                            : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/60 dark:hover:bg-slate-800/60 bg-white dark:bg-slate-900'
                         }`}
                       >
                         <div
                           className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
-                            isSelected ? 'bg-sky-500 text-white' : 'bg-slate-100 text-slate-700'
+                            isSelected ? 'bg-sky-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200'
                           }`}
                         >
                           {doc.full_name.charAt(0).toUpperCase()}
                         </div>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center justify-between">
-                            <h3 className="text-sm font-bold text-slate-900 truncate">
+                            <h3 className="text-sm font-bold text-slate-900 dark:text-white truncate">
                               {doc.full_name}
                             </h3>
                             {isSelected && (
-                              <span className="text-sky-600 text-xs font-bold shrink-0">✓</span>
+                              <span className="text-sky-600 dark:text-sky-400 text-xs font-bold shrink-0">✓</span>
                             )}
                           </div>
-                          <p className="text-xs text-sky-700 font-medium truncate">
+                          <p className="text-xs text-sky-700 dark:text-sky-400 font-medium truncate">
                             {doc.department || 'General Practice'}
                           </p>
-                          <p className="text-[11px] text-slate-500 mt-1">
+                          <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
                             ⏱️ {doc.slot_minutes} min slots • {formatTime(doc.start_time)} - {formatTime(doc.end_time)}
                           </p>
-                          <p className="text-[10px] text-slate-500 mt-0.5 truncate">
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                             📅 {formatWorkDays(doc.work_days)}
                           </p>
                         </div>
@@ -585,25 +585,25 @@ export default function BookingPage() {
               <div className="space-y-3 mb-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Consultation Date
                     </label>
                     <input
                       type="date"
                       value={selectedDate}
                       onChange={(e) => setSelectedDate(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
+                      className="w-full px-3.5 py-2.5 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white dark:bg-slate-800"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Quick Shortcuts
                     </label>
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         onClick={() => setSelectedDate(new Date().toISOString().split('T')[0])}
-                        className="px-3 py-2 text-xs rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 font-medium text-slate-700 transition"
+                        className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 font-medium text-slate-700 dark:text-slate-200 transition"
                       >
                         Today
                       </button>
@@ -614,7 +614,7 @@ export default function BookingPage() {
                           tmrw.setDate(tmrw.getDate() + 1);
                           setSelectedDate(tmrw.toISOString().split('T')[0]);
                         }}
-                        className="px-3 py-2 text-xs rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 font-medium text-slate-700 transition"
+                        className="px-3 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 font-medium text-slate-700 dark:text-slate-200 transition"
                       >
                         Tomorrow
                       </button>
@@ -623,16 +623,16 @@ export default function BookingPage() {
                 </div>
 
                 {selectedDoctor && (
-                  <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
-                    <div className="text-slate-600">
+                  <div className="p-3 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1.5">
+                    <div className="text-slate-600 dark:text-slate-300">
                       Dr. {selectedDoctor.full_name} clinic hours:{' '}
-                      <strong className="text-slate-800">
+                      <strong className="text-slate-800 dark:text-white">
                         {formatTime(selectedDoctor.start_time)} - {formatTime(selectedDoctor.end_time)}
                       </strong>{' '}
                       ({selectedDoctor.slot_minutes} min slots)
                     </div>
-                    <div className="text-[11px] text-slate-500">
-                      Working Days: <strong className="text-slate-700">{formatWorkDays(selectedDoctor.work_days)}</strong>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                      Working Days: <strong className="text-slate-700 dark:text-slate-200">{formatWorkDays(selectedDoctor.work_days)}</strong>
                     </div>
                   </div>
                 )}
@@ -684,7 +684,7 @@ export default function BookingPage() {
                           className={`py-2 px-2.5 rounded-xl text-xs font-semibold border transition text-center ${
                             isChosen
                               ? 'bg-sky-500 text-white border-sky-500 shadow-xs ring-2 ring-blue-600/20'
-                              : 'bg-white text-slate-700 border-slate-200 hover:border-blue-500 hover:bg-sky-50/40'
+                              : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-sky-400 hover:bg-sky-50/40 dark:hover:bg-slate-700/60'
                           }`}
                         >
                           <span className="block font-bold">{formatTime(slot.startTime)}</span>
@@ -704,20 +704,20 @@ export default function BookingPage() {
                   <span className="w-6 h-6 rounded-full bg-sky-500 text-white text-xs font-bold flex items-center justify-center">
                     3
                   </span>
-                  <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                  <h2 className="text-sm font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                     Pick or Add Patient
                   </h2>
                 </div>
 
                 {/* Inline Toggle */}
-                <div className="flex bg-slate-100 p-0.5 rounded-lg text-xs font-medium">
+                <div className="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg text-xs font-medium">
                   <button
                     type="button"
                     onClick={() => setPatientMode('existing')}
                     className={`px-3 py-1 rounded-md transition ${
                       patientMode === 'existing'
-                        ? 'bg-white text-slate-900 font-semibold shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-semibold shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     Search Existing
@@ -727,8 +727,8 @@ export default function BookingPage() {
                     onClick={() => setPatientMode('new')}
                     className={`px-3 py-1 rounded-md transition ${
                       patientMode === 'new'
-                        ? 'bg-white text-slate-900 font-semibold shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white font-semibold shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
                     + Add New Inline
@@ -772,8 +772,8 @@ export default function BookingPage() {
                             {selectedPatient.full_name.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <p className="font-bold text-slate-900">{selectedPatient.full_name}</p>
-                            <p className="text-sky-800 font-mono text-[11px]">{selectedPatient.phone}</p>
+                            <p className="font-bold text-slate-900 dark:text-white">{selectedPatient.full_name}</p>
+                            <p className="text-sky-800 dark:text-sky-300 font-mono text-[11px]">{selectedPatient.phone}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -828,8 +828,8 @@ export default function BookingPage() {
                             }`}
                           >
                             <div>
-                              <span className="font-medium text-slate-900">{p.full_name}</span>
-                              <span className="text-slate-400 ml-2 font-mono text-[11px]">{p.phone}</span>
+                              <span className="font-medium text-slate-900 dark:text-white">{p.full_name}</span>
+                              <span className="text-slate-400 dark:text-slate-500 ml-2 font-mono text-[11px]">{p.phone}</span>
                               {p.notes && (
                                 <p
                                   className="text-[10px] text-amber-700 truncate max-w-[220px]"
@@ -854,7 +854,7 @@ export default function BookingPage() {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Patient Full Name *
                     </label>
                     <input
@@ -863,11 +863,11 @@ export default function BookingPage() {
                       value={newPatientName}
                       onChange={(e) => setNewPatientName(e.target.value)}
                       placeholder="e.g. Almaz Ayana"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 bg-white"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sky-500 bg-white dark:bg-slate-800"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                       Phone Number *
                     </label>
                     <input
@@ -876,7 +876,7 @@ export default function BookingPage() {
                       value={newPatientPhone}
                       onChange={(e) => setNewPatientPhone(e.target.value)}
                       placeholder="e.g. +251911223344"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 bg-white"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sky-500 bg-white dark:bg-slate-800"
                     />
                   </div>
                 </div>
@@ -884,7 +884,7 @@ export default function BookingPage() {
 
               {/* Optional Notes */}
               <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   Appointment Notes / Reason (Optional)
                 </label>
                 <input
@@ -892,7 +892,7 @@ export default function BookingPage() {
                   value={notes}
                   onChange={(e) => setNotes(e.target.value)}
                   placeholder="e.g. Routine checkup, throat irritation"
-                  className="w-full px-3 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 bg-white"
+                  className="w-full px-3 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sky-500 bg-white dark:bg-slate-800"
                 />
               </div>
             </div>
@@ -908,29 +908,29 @@ export default function BookingPage() {
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-base font-bold text-slate-900">Confirm Slot</h2>
-                  <p className="text-xs text-slate-500">Review appointment details</p>
+                  <h2 className="text-base font-bold text-slate-900 dark:text-white">Confirm Slot</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">Review appointment details</p>
                 </div>
               </div>
 
-              <div className="py-4 space-y-3 text-xs text-slate-700">
+              <div className="py-4 space-y-3 text-xs text-slate-700 dark:text-slate-300">
                 <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
-                  <span className="text-slate-400 font-medium">Doctor</span>
-                  <span className="font-bold text-slate-900">
+                  <span className="text-slate-400 dark:text-slate-400 font-medium">Doctor</span>
+                  <span className="font-bold text-slate-900 dark:text-white">
                     {selectedDoctor ? selectedDoctor.full_name : 'None selected'}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
-                  <span className="text-slate-400 font-medium">Department</span>
-                  <span className="font-medium text-slate-700">
+                  <span className="text-slate-400 dark:text-slate-400 font-medium">Department</span>
+                  <span className="font-medium text-slate-700 dark:text-slate-300">
                     {selectedDoctor?.department || 'General Practice'}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
-                  <span className="text-slate-400 font-medium">Date</span>
-                  <span className="font-bold text-sky-800">
+                  <span className="text-slate-400 dark:text-slate-400 font-medium">Date</span>
+                  <span className="font-bold text-sky-800 dark:text-sky-300">
                     {selectedDate
                       ? new Date(selectedDate).toLocaleDateString(undefined, {
                           weekday: 'short',
@@ -943,15 +943,15 @@ export default function BookingPage() {
                 </div>
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
-                  <span className="text-slate-400 font-medium">Time Slot</span>
-                  <span className="font-bold text-sky-800">
+                  <span className="text-slate-400 dark:text-slate-400 font-medium">Time Slot</span>
+                  <span className="font-bold text-sky-800 dark:text-sky-300">
                     {selectedSlot ? selectedSlot.displayLabel : 'No slot picked yet'}
                   </span>
                 </div>
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
-                  <span className="text-slate-400 font-medium">Patient</span>
-                  <span className="font-bold text-slate-900">
+                  <span className="text-slate-400 dark:text-slate-400 font-medium">Patient</span>
+                  <span className="font-bold text-slate-900 dark:text-white">
                     {patientMode === 'existing'
                       ? selectedPatient?.full_name || 'None selected'
                       : newPatientName || 'New Patient'}
@@ -959,8 +959,8 @@ export default function BookingPage() {
                 </div>
 
                 <div className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800">
-                  <span className="text-slate-400 font-medium">Phone</span>
-                  <span className="font-mono text-slate-800">
+                  <span className="text-slate-400 dark:text-slate-400 font-medium">Phone</span>
+                  <span className="font-mono text-slate-800 dark:text-slate-200">
                     {patientMode === 'existing'
                       ? selectedPatient?.phone || '--'
                       : newPatientPhone || '--'}
@@ -969,14 +969,14 @@ export default function BookingPage() {
 
                 {patientMode === 'existing' && selectedPatient?.notes && (
                   <div className="flex justify-between items-start py-1 border-b border-slate-100 dark:border-slate-800 gap-3">
-                    <span className="text-slate-400 font-medium shrink-0">Patient Note</span>
-                    <span className="text-amber-800 text-right">{selectedPatient.notes}</span>
+                    <span className="text-slate-400 dark:text-slate-400 font-medium shrink-0">Patient Note</span>
+                    <span className="text-amber-800 dark:text-amber-300 text-right">{selectedPatient.notes}</span>
                   </div>
                 )}
 
                 <div className="flex justify-between items-center py-1">
-                  <span className="text-slate-400 font-medium">Initial Status</span>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold text-[11px]">
+                  <span className="text-slate-400 dark:text-slate-400 font-medium">Initial Status</span>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 font-semibold text-[11px] border border-transparent dark:border-emerald-900">
                     booked
                   </span>
                 </div>
@@ -1019,14 +1019,14 @@ export default function BookingPage() {
           <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base font-bold text-slate-900">
+                <h2 className="text-base font-bold text-slate-900 dark:text-white">
                   Upcoming Appointments for the Clinic
                 </h2>
-                <span className="px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 text-xs font-semibold">
+                <span className="px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/50 text-sky-800 dark:text-sky-300 text-xs font-semibold border border-transparent dark:border-sky-800">
                   {upcomingCount} Upcoming
                 </span>
               </div>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 Staff can Cancel (sets status to &apos;cancelled&apos;) or Reschedule (pick a new free slot to update starts_at/ends_at).
               </p>
             </div>
@@ -1048,19 +1048,19 @@ export default function BookingPage() {
                   value={apptSearchQuery}
                   onChange={(e) => setApptSearchQuery(e.target.value)}
                   placeholder="Search patient, phone, doctor..."
-                  className="pl-9 pr-3 py-1.5 text-xs border border-slate-300 rounded-xl text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 bg-white"
+                  className="pl-9 pr-3 py-1.5 text-xs border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sky-500 bg-white dark:bg-slate-800"
                 />
               </div>
 
               {/* View filter buttons */}
-              <div className="flex bg-slate-100 p-0.5 rounded-xl text-xs font-medium">
+              <div className="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl text-xs font-medium">
                 <button
                   type="button"
                   onClick={() => setApptViewFilter('upcoming')}
                   className={`px-3 py-1.5 rounded-lg transition ${
                     apptViewFilter === 'upcoming'
-                      ? 'bg-white text-sky-700 font-bold shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 font-bold shadow-xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Upcoming ({upcomingCount})
@@ -1070,8 +1070,8 @@ export default function BookingPage() {
                   onClick={() => setApptViewFilter('all')}
                   className={`px-3 py-1.5 rounded-lg transition ${
                     apptViewFilter === 'all'
-                      ? 'bg-white text-sky-700 font-bold shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 font-bold shadow-xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   All ({appointments.length})
@@ -1081,8 +1081,8 @@ export default function BookingPage() {
                   onClick={() => setApptViewFilter('cancelled')}
                   className={`px-3 py-1.5 rounded-lg transition ${
                     apptViewFilter === 'cancelled'
-                      ? 'bg-white text-sky-700 font-bold shadow-xs'
-                      : 'text-slate-600 hover:text-slate-900'
+                      ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 font-bold shadow-xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                   }`}
                 >
                   Cancelled
@@ -1092,7 +1092,7 @@ export default function BookingPage() {
               <button
                 type="button"
                 onClick={fetchAppointments}
-                className="px-3 py-1.5 text-xs font-semibold text-sky-600 hover:text-sky-800 border border-sky-200 rounded-xl hover:bg-sky-50 transition"
+                className="px-3 py-1.5 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 border border-sky-200 dark:border-sky-800 rounded-xl hover:bg-sky-50 dark:hover:bg-sky-950/50 transition"
               >
                 ↻ Refresh
               </button>
@@ -1123,7 +1123,7 @@ export default function BookingPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200/80 bg-slate-50/70 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
                     <th className="py-3.5 px-4 sm:px-6">Patient</th>
                     <th className="py-3.5 px-4">Doctor</th>
                     <th className="py-3.5 px-4">Scheduled Date & Time</th>
@@ -1137,15 +1137,15 @@ export default function BookingPage() {
                     const isBooked = appt.status === 'booked';
                     const isCancelled = appt.status === 'cancelled';
                     return (
-                      <tr key={appt.id} className="hover:bg-slate-50/60 transition">
+                      <tr key={appt.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
                         <td className="py-4 px-4 sm:px-6">
                           <div>
-                            <div className="font-semibold text-slate-900">
+                            <div className="font-semibold text-slate-900 dark:text-white">
                               {appt.patient?.full_name || 'Patient'}
                             </div>
                             <a
                               href={`tel:${appt.patient?.phone}`}
-                              className="text-xs text-sky-700 hover:underline flex items-center gap-1 mt-0.5 font-mono"
+                              className="text-xs text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1 mt-0.5 font-mono"
                             >
                               📞 {appt.patient?.phone}
                             </a>
@@ -1153,17 +1153,17 @@ export default function BookingPage() {
                         </td>
                         <td className="py-4 px-4">
                           <div>
-                            <div className="font-semibold text-slate-800">
+                            <div className="font-semibold text-slate-800 dark:text-white">
                               {appt.doctor?.full_name || 'Doctor'}
                             </div>
-                            <div className="text-xs text-slate-500">
+                            <div className="text-xs text-slate-500 dark:text-slate-400">
                               {appt.doctor?.department || 'General Practice'}
                             </div>
                           </div>
                         </td>
                         <td className="py-4 px-4">
                           <div>
-                            <div className="font-medium text-slate-900">
+                            <div className="font-medium text-slate-900 dark:text-white">
                               {new Date(appt.starts_at).toLocaleDateString(undefined, {
                                 weekday: 'short',
                                 month: 'short',
@@ -1171,7 +1171,7 @@ export default function BookingPage() {
                                 year: 'numeric',
                               })}
                             </div>
-                            <div className="text-xs text-slate-500">
+                            <div className="text-xs text-slate-500 dark:text-slate-400">
                               {new Date(appt.starts_at).toLocaleTimeString(undefined, {
                                 hour: '2-digit',
                                 minute: '2-digit',
@@ -1190,14 +1190,14 @@ export default function BookingPage() {
                               isBooked
                                 ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
                                 : isCancelled
-                                ? 'bg-rose-50 text-rose-700 border border-rose-200'
-                                : 'bg-slate-100 text-slate-700'
+                                ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                             }`}
                           >
                             {appt.status}
                           </span>
                         </td>
-                        <td className="py-4 px-4 text-xs text-slate-500 max-w-xs truncate" title={appt.notes || ''}>
+                        <td className="py-4 px-4 text-xs text-slate-500 dark:text-slate-400 max-w-xs truncate" title={appt.notes || ''}>
                           {appt.notes || '—'}
                         </td>
                         <td className="py-4 px-4 sm:px-6 text-right whitespace-nowrap">
@@ -1206,20 +1206,20 @@ export default function BookingPage() {
                               <button
                                 type="button"
                                 onClick={() => openRescheduleModal(appt)}
-                                className="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-100 hover:border-slate-300 transition"
+                                className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition"
                               >
                                 Reschedule
                               </button>
                               <button
                                 type="button"
                                 onClick={() => handleOpenCancelModal(appt)}
-                                className="px-3 py-1.5 rounded-lg border border-rose-200 bg-rose-50 text-rose-700 text-xs font-semibold hover:bg-rose-100 transition"
+                                className="px-3 py-1.5 rounded-lg border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/60 transition"
                               >
                                 Cancel
                               </button>
                             </div>
                           ) : (
-                            <span className="text-xs text-slate-400 italic">Cancelled</span>
+                            <span className="text-xs text-slate-400 dark:text-slate-500 italic">Cancelled</span>
                           )}
                         </td>
                       </tr>
@@ -1239,9 +1239,9 @@ export default function BookingPage() {
             <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
               <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">Reschedule Appointment</h3>
-                  <p className="text-xs text-slate-500">
-                    Patient: <strong className="text-slate-800">{reschedulingAppt.patient?.full_name}</strong> • Dr. {reschedulingAppt.doctor?.full_name}
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Reschedule Appointment</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Patient: <strong className="text-slate-800 dark:text-white">{reschedulingAppt.patient?.full_name}</strong> • Dr. {reschedulingAppt.doctor?.full_name}
                   </p>
                 </div>
                 <button
@@ -1350,13 +1350,13 @@ export default function BookingPage() {
                 </div>
 
                 <div className="text-center space-y-1">
-                  <h3 className="text-base font-bold text-slate-900">Cancel Appointment?</h3>
-                  <p className="text-xs text-slate-500">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">Cancel Appointment?</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
                     Are you sure you want to cancel the appointment for{' '}
-                    <strong className="text-slate-800">{cancellingAppt.patient?.full_name}</strong> with{' '}
-                    <strong className="text-slate-800">Dr. {cancellingAppt.doctor?.full_name}</strong>?
+                    <strong className="text-slate-800 dark:text-white">{cancellingAppt.patient?.full_name}</strong> with{' '}
+                    <strong className="text-slate-800 dark:text-white">Dr. {cancellingAppt.doctor?.full_name}</strong>?
                   </p>
-                  <p className="text-[11px] text-slate-400">
+                  <p className="text-[11px] text-slate-400 dark:text-slate-500">
                     Status will be updated to &apos;cancelled&apos; and the time slot will be made available for booking.
                   </p>
                 </div>

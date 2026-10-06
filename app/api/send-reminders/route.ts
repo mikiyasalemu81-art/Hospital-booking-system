@@ -60,8 +60,11 @@ async function processReminders(
   for (const appt of appts || []) {
     const patientPhone: string = appt.patient?.phone || '';
     const patientName = appt.patient?.full_name || 'Patient';
-    const doctorName = appt.doctor?.full_name || 'Doctor';
+    const rawDocName = appt.doctor?.full_name || 'Doctor';
+    const doctorName = rawDocName.startsWith('Dr.') ? rawDocName : `Dr. ${rawDocName}`;
     const clinicName = appt.clinic?.name || 'Clinic';
+    const careType = appt.notes?.trim() || appt.doctor?.department?.trim() || 'Medical Consultation';
+    const phoneNotice = appt.clinic?.phone ? ` Questions: call ${appt.clinic.phone}.` : '';
     const { date: dateStr, time: timeStr } = formatAppointmentDateTime(
       appt.starts_at,
       appt.clinic?.timezone
@@ -69,8 +72,8 @@ async function processReminders(
 
     const message =
       kind === 'reminder_24h'
-        ? `Reminder: Dear ${patientName}, your appointment at ${clinicName} with Dr. ${doctorName} is tomorrow (${dateStr}) at ${timeStr}.`
-        : `Reminder: Dear ${patientName}, your appointment at ${clinicName} with Dr. ${doctorName} is in 2 hours today at ${timeStr}.`;
+        ? `Reminder: Dear ${patientName}, your ${careType} appointment at ${clinicName} with ${doctorName} is tomorrow (${dateStr}) at ${timeStr}. Please arrive 10 min early.${phoneNotice}`
+        : `Reminder: Dear ${patientName}, your ${careType} appointment at ${clinicName} with ${doctorName} is in 2 hours today at ${timeStr}. Please arrive 10 min early.${phoneNotice}`;
 
     // Sends via Afro Message and logs the attempt to sms_log (never throws)
     const sms = await sendAndLogSms({
@@ -160,14 +163,17 @@ async function handleReminders(request: NextRequest) {
       for (const appt of testAppts) {
         const patientPhone: string = appt.patient?.phone || '';
         const patientName = appt.patient?.full_name || 'Patient';
-        const doctorName = appt.doctor?.full_name || 'Doctor';
+        const rawDocName = appt.doctor?.full_name || 'Doctor';
+        const doctorName = rawDocName.startsWith('Dr.') ? rawDocName : `Dr. ${rawDocName}`;
         const clinicName = appt.clinic?.name || 'Clinic';
+        const careType = appt.notes?.trim() || appt.doctor?.department?.trim() || 'Medical Consultation';
+        const phoneNotice = appt.clinic?.phone ? ` Questions: call ${appt.clinic.phone}.` : '';
         const { date: dateStr, time: timeStr } = formatAppointmentDateTime(
           appt.starts_at,
           appt.clinic?.timezone
         );
 
-        const message = `Reminder (Test): Dear ${patientName}, your appointment at ${clinicName} with Dr. ${doctorName} is scheduled for ${dateStr} at ${timeStr}.`;
+        const message = `Reminder (Test): Dear ${patientName}, your ${careType} appointment at ${clinicName} with ${doctorName} is scheduled for ${dateStr} at ${timeStr}. Please arrive 10 min early.${phoneNotice}`;
 
         const sms = await sendAndLogSms({
           clinicId: appt.clinic_id,

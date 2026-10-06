@@ -271,19 +271,19 @@ export default function DoctorsPage() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search doctors by name or department..."
-              className="w-full pl-10 pr-4 py-2 border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white shadow-2xs"
+              className="w-full pl-10 pr-4 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white dark:bg-slate-800 shadow-2xs"
             />
           </div>
 
           <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
-            <span className="text-xs text-slate-500 font-medium">Status:</span>
-            <div className="inline-flex rounded-xl bg-slate-100 p-1 text-xs font-medium">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Status:</span>
+            <div className="inline-flex rounded-xl bg-slate-100 dark:bg-slate-800 p-1 text-xs font-medium">
               <button
                 onClick={() => setStatusFilter('all')}
                 className={`px-3 py-1.5 rounded-lg transition ${
                   statusFilter === 'all'
-                    ? 'bg-white text-slate-900 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 All ({doctors.length})
@@ -292,8 +292,8 @@ export default function DoctorsPage() {
                 onClick={() => setStatusFilter('active')}
                 className={`px-3 py-1.5 rounded-lg transition ${
                   statusFilter === 'active'
-                    ? 'bg-white text-sky-700 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Active ({doctors.filter((d) => d.active).length})
@@ -302,8 +302,8 @@ export default function DoctorsPage() {
                 onClick={() => setStatusFilter('inactive')}
                 className={`px-3 py-1.5 rounded-lg transition ${
                   statusFilter === 'inactive'
-                    ? 'bg-white text-slate-700 shadow-2xs font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 shadow-2xs font-semibold'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 Inactive ({doctors.filter((d) => !d.active).length})
@@ -324,13 +324,13 @@ export default function DoctorsPage() {
             </div>
           ) : filteredDoctors.length === 0 ? (
             <div className="py-16 text-center px-4">
-              <div className="w-12 h-12 bg-sky-50 text-sky-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h3 className="text-sm font-semibold text-slate-900">No doctors found</h3>
-              <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1">
+              <h3 className="text-sm font-semibold text-slate-900 dark:text-white">No doctors found</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto mt-1">
                 {searchTerm
                   ? `No doctors match the search "${searchTerm}".`
                   : 'Get started by registering a doctor for this clinic.'}
@@ -348,7 +348,7 @@ export default function DoctorsPage() {
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200/80 bg-slate-50/70 text-slate-500 text-xs font-semibold uppercase tracking-wider">
+                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
                     <th className="py-3.5 px-4 sm:px-6">Doctor Details</th>
                     <th className="py-3.5 px-4">Department</th>
                     <th className="py-3.5 px-4">Slot Time</th>
@@ -360,24 +360,24 @@ export default function DoctorsPage() {
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
                   {filteredDoctors.map((doc) => (
-                    <tr key={doc.id} className="hover:bg-slate-50/60 transition">
+                    <tr key={doc.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
                       <td className="py-3.5 px-4 sm:px-6">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-xs shrink-0">
+                          <div className="w-8 h-8 rounded-full bg-sky-100 dark:bg-sky-900/60 text-sky-700 dark:text-sky-300 flex items-center justify-center font-bold text-xs shrink-0">
                             {doc.full_name.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <div className="font-semibold text-slate-900 text-sm">{doc.full_name}</div>
-                            <div className="text-[11px] text-slate-400 font-mono">ID: {doc.id.slice(0, 8)}...</div>
+                            <div className="font-semibold text-slate-900 dark:text-white text-sm">{doc.full_name}</div>
+                            <div className="text-[11px] text-slate-400 dark:text-slate-500 font-mono">ID: {doc.id.slice(0, 8)}...</div>
                           </div>
                         </div>
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-700">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-transparent dark:border-slate-700">
                           {doc.department || 'General Medicine'}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-600 font-medium text-xs">
+                      <td className="py-3.5 px-4 text-slate-600 dark:text-slate-300 font-medium text-xs">
                         <span className="inline-flex items-center gap-1">
                           <svg className="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -386,11 +386,11 @@ export default function DoctorsPage() {
                         </span>
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="text-xs text-slate-700 font-medium bg-slate-50 border border-slate-200/70 dark:border-slate-800 px-2 py-1 rounded-lg">
+                        <span className="text-xs text-slate-700 dark:text-slate-300 font-medium bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-800 px-2 py-1 rounded-lg">
                           {formatWorkDays(doc.work_days)}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-xs text-slate-600 whitespace-nowrap">
+                      <td className="py-3.5 px-4 text-xs text-slate-600 dark:text-slate-400 whitespace-nowrap">
                         {formatTime(doc.start_time)} - {formatTime(doc.end_time)}
                       </td>
                       <td className="py-3.5 px-4">
@@ -398,7 +398,7 @@ export default function DoctorsPage() {
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             doc.active
                               ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
-                              : 'bg-slate-100 text-slate-500'
+                              : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'
                           }`}
                         >
                           {doc.active ? 'Active' : 'Inactive'}
@@ -408,7 +408,7 @@ export default function DoctorsPage() {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => openEditModal(doc)}
-                            className="p-1.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 rounded-lg transition"
+                            className="p-1.5 text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 dark:hover:text-sky-400 rounded-lg transition"
                             title="Edit Doctor"
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -417,7 +417,7 @@ export default function DoctorsPage() {
                           </button>
                           <button
                             onClick={() => handleDeleteDoctor(doc.id, doc.full_name)}
-                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                            className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-slate-800 dark:hover:text-red-400 rounded-lg transition"
                             title="Delete Doctor"
                           >
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -437,20 +437,20 @@ export default function DoctorsPage() {
         {/* Add/Edit Doctor Modal */}
         {(isAddModalOpen || editingDoctor) && (
           <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 overflow-hidden transform transition-all">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-xl w-full shadow-xl border border-slate-200 dark:border-slate-800 overflow-hidden transform transition-all">
               {/* Modal Header */}
-              <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50">
+              <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
                 <div>
-                  <h3 className="text-base font-bold text-slate-900">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">
                     {editingDoctor ? 'Edit Doctor Profile' : 'Add New Doctor'}
                   </h3>
-                  <p className="text-xs text-slate-500">
-                    Clinic: <strong className="text-slate-700">{clinic?.name}</strong>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Clinic: <strong className="text-slate-700 dark:text-slate-200">{clinic?.name}</strong>
                   </p>
                 </div>
                 <button
                   onClick={closeModals}
-                  className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg"
+                  className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -461,14 +461,14 @@ export default function DoctorsPage() {
               {/* Form Content */}
               <form onSubmit={handleSaveDoctor} className="p-6 space-y-4">
                 {formError && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700">
+                  <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl text-xs text-red-700 dark:text-red-300">
                     {formError}
                   </div>
                 )}
 
                 {/* Name */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                     Doctor Name *
                   </label>
                   <input
@@ -477,13 +477,13 @@ export default function DoctorsPage() {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="e.g. Dr. Sarah Jenkins"
-                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white dark:bg-slate-800"
                   />
                 </div>
 
                 {/* Department */}
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                     Department
                   </label>
                   <input
@@ -491,17 +491,17 @@ export default function DoctorsPage() {
                     value={department}
                     onChange={(e) => setDepartment(e.target.value)}
                     placeholder="e.g. Cardiology, Pediatrics, General Medicine"
-                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
+                    className="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white dark:bg-slate-800"
                   />
                 </div>
 
                 {/* Slot Minutes */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                       Consultation Slot Duration (Minutes) *
                     </label>
-                    <span className="text-xs text-sky-600 font-semibold">{slotMinutes} mins</span>
+                    <span className="text-xs text-sky-600 dark:text-sky-400 font-semibold">{slotMinutes} mins</span>
                   </div>
                   <div className="flex items-center gap-2">
                     {[15, 20, 30, 45, 60].map((mins) => (
@@ -512,7 +512,7 @@ export default function DoctorsPage() {
                         className={`flex-1 py-1.5 text-xs font-semibold rounded-lg border transition ${
                           slotMinutes === mins
                             ? 'bg-sky-500 text-white border-sky-500 shadow-xs'
-                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                            : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
                         }`}
                       >
                         {mins}m
@@ -524,21 +524,21 @@ export default function DoctorsPage() {
                 {/* Working Days */}
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                       Working Days *
                     </label>
                     <div className="flex gap-2">
                       <button
                         type="button"
                         onClick={setWeekdayPreset}
-                        className="text-[11px] text-sky-600 hover:text-sky-800 font-medium underline"
+                        className="text-[11px] text-sky-600 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 font-medium underline"
                       >
                         Mon-Fri
                       </button>
                       <button
                         type="button"
                         onClick={setAllDaysPreset}
-                        className="text-[11px] text-sky-600 hover:text-sky-800 font-medium underline"
+                        className="text-[11px] text-sky-600 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 font-medium underline"
                       >
                         All 7 Days
                       </button>
@@ -555,7 +555,7 @@ export default function DoctorsPage() {
                           className={`py-2 px-1 text-center text-xs font-semibold rounded-xl border transition ${
                             isSelected
                               ? 'bg-sky-500 text-white border-sky-500 shadow-xs'
-                              : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                              : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                           }`}
                         >
                           <div>{day.short}</div>
@@ -568,7 +568,7 @@ export default function DoctorsPage() {
                 {/* Start Time & End Time */}
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                       Daily Start Time *
                     </label>
                     <input
@@ -576,11 +576,11 @@ export default function DoctorsPage() {
                       required
                       value={startTime}
                       onChange={(e) => setStartTime(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
+                      className="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white dark:bg-slate-800"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                       Daily End Time *
                     </label>
                     <input
@@ -588,7 +588,7 @@ export default function DoctorsPage() {
                       required
                       value={endTime}
                       onChange={(e) => setEndTime(e.target.value)}
-                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
+                      className="w-full px-3.5 py-2.5 border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white dark:bg-slate-800"
                     />
                   </div>
                 </div>
@@ -596,14 +596,14 @@ export default function DoctorsPage() {
                 {/* Active Toggle */}
                 <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">
                   <div>
-                    <span className="text-sm font-semibold text-slate-800">Doctor Active Status</span>
-                    <p className="text-xs text-slate-500">Available to receive patient appointment bookings</p>
+                    <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">Doctor Active Status</span>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Available to receive patient appointment bookings</p>
                   </div>
                   <button
                     type="button"
                     onClick={() => setActive(!active)}
                     className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                      active ? 'bg-sky-500' : 'bg-slate-200'
+                      active ? 'bg-sky-500' : 'bg-slate-200 dark:bg-slate-700'
                     }`}
                   >
                     <span
@@ -619,7 +619,7 @@ export default function DoctorsPage() {
                   <button
                     type="button"
                     onClick={closeModals}
-                    className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-800"
+                    className="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                   >
                     Cancel
                   </button>

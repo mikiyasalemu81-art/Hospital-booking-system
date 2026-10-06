@@ -196,15 +196,24 @@ export async function sendAndLogSms(params: {
   return result;
 }
 
-export function buildConfirmationMessage(p: {
+export interface ConfirmationMessageParams {
   patientName?: string;
   clinicName: string;
   doctorName: string;
+  department?: string | null;
+  careType?: string | null;
   date: string;
   time: string;
-}): string {
-  const greeting = p.patientName ? `Dear ${p.patientName}, your` : 'Your';
-  return `${greeting} appointment at ${p.clinicName} with Dr. ${p.doctorName} is confirmed for ${p.date} at ${p.time}.`;
+  clinicPhone?: string | null;
+}
+
+export function buildConfirmationMessage(p: ConfirmationMessageParams): string {
+  const patient = p.patientName?.trim() || 'Valued Patient';
+  const doctor = p.doctorName.startsWith('Dr.') ? p.doctorName : `Dr. ${p.doctorName}`;
+  const care = p.careType?.trim() || p.department?.trim() || 'Medical Consultation';
+  const phoneNotice = p.clinicPhone?.trim() ? ` Questions: call ${p.clinicPhone.trim()}.` : '';
+
+  return `Dear ${patient}, your ${care} appointment at ${p.clinicName} with ${doctor} is confirmed for ${p.date} at ${p.time}. Please arrive 10 min early.${phoneNotice}`;
 }
 
 /**
@@ -269,6 +278,9 @@ export async function sendAppointmentSms(params: {
         patientName: params.patientName,
         clinicName: params.clinicName || 'the clinic',
         doctorName: params.doctorName || 'your doctor',
+        department: params.department,
+        careType: params.careType || params.department,
+        clinicPhone: params.clinicPhone,
         date: params.appointmentDate || '',
         time: params.appointmentTime || '',
       }),

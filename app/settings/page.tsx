@@ -61,32 +61,32 @@ export default function SettingsPage() {
     <DashboardLayout>
       <div className="space-y-6 max-w-3xl mx-auto">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900">Account Settings</h2>
-          <p className="text-sm text-slate-500 mt-0.5">Manage your staff account security.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Account Settings</h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Manage your staff account security.</p>
         </div>
 
         {/* Account summary */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
           <div>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</p>
-            <p className="mt-1 font-semibold text-slate-900 truncate">{staff?.full_name || '—'}</p>
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Name</p>
+            <p className="mt-1 font-semibold text-slate-900 dark:text-white truncate">{staff?.full_name || '—'}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</p>
-            <p className="mt-1 font-medium text-slate-800 truncate">{user?.email || '—'}</p>
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Email</p>
+            <p className="mt-1 font-medium text-slate-800 dark:text-slate-200 truncate">{user?.email || '—'}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Clinic</p>
-            <p className="mt-1 font-medium text-slate-800 truncate">{clinic?.name || '—'}</p>
+            <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Clinic</p>
+            <p className="mt-1 font-medium text-slate-800 dark:text-slate-200 truncate">{clinic?.name || '—'}</p>
           </div>
         </div>
 
         {/* Change password */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50">
+          <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50">
             <div>
-              <h3 className="text-base font-bold text-slate-900">Change Password</h3>
-              <p className="text-xs text-slate-500">You&apos;ll need your current password to set a new one.</p>
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">Change Password</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400">You&apos;ll need your current password to set a new one.</p>
             </div>
             <button
               type="button"
