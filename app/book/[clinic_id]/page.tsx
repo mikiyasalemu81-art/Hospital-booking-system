@@ -190,27 +190,27 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
   // If Booking is confirmed, render confirmation receipt screen
   if (confirmedBooking) {
     return (
-      <div className="min-h-screen bg-slate-50 py-10 px-4 sm:px-6 flex flex-col justify-center">
-        <div className="max-w-xl mx-auto w-full bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-6 sm:py-10 px-3 sm:px-6 flex flex-col justify-center">
+        <div className="max-w-xl mx-auto w-full bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl overflow-hidden">
           {/* Header Banner */}
-          <div className="bg-emerald-600 text-white p-6 sm:p-8 text-center space-y-2">
-            <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 text-white shadow-inner">
-              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+          <div className="bg-emerald-600 text-white p-5 sm:p-8 text-center space-y-2">
+            <div className="w-12 h-12 sm:w-14 sm:h-14 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2 text-white shadow-inner">
+              <svg className="w-7 h-7 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
             <span className="text-xs uppercase tracking-wider font-bold bg-emerald-700/80 px-3 py-1 rounded-full inline-block">
               Appointment Confirmed
             </span>
-            <h2 className="text-2xl font-bold tracking-tight">Booking Successful!</h2>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Booking Successful!</h2>
             <p className="text-emerald-100 text-xs sm:text-sm">
               Your appointment has been reserved in the clinic schedule with status &apos;booked&apos;.
             </p>
           </div>
 
           {/* Details Card */}
-          <div className="p-6 sm:p-8 space-y-5 text-sm text-slate-700">
-            <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4.5 space-y-3">
+          <div className="p-5 sm:p-8 space-y-5 text-sm text-slate-700 dark:text-slate-300">
+            <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-4 sm:p-4.5 space-y-3">
               <div className="flex justify-between items-center pb-2.5 border-b border-slate-200/60 dark:border-slate-700/60">
                 <span className="text-slate-400 dark:text-slate-400 text-xs font-medium">Clinic</span>
                 <span className="font-bold text-slate-900 dark:text-white">{confirmedBooking.clinic.name}</span>
@@ -241,7 +241,7 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
             </div>
 
             {confirmedBooking.clinic.phone && (
-              <div className="p-3 bg-sky-50/70 border border-sky-200/70 rounded-xl text-xs text-sky-900 flex items-center justify-between">
+              <div className="p-3 bg-sky-50/70 dark:bg-sky-950/40 border border-sky-200/70 dark:border-sky-900 rounded-xl text-xs text-sky-900 dark:text-sky-200 flex items-center justify-between">
                 <span>Clinic Contact Phone:</span>
                 <a href={`tel:${confirmedBooking.clinic.phone}`} className="font-mono font-bold hover:underline">
                   📞 {confirmedBooking.clinic.phone}
@@ -272,38 +272,38 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col">
       {/* Top Navbar - Dedicated Clinic Brand */}
       <header className="bg-white dark:bg-slate-900 border-b border-slate-200/80 dark:border-slate-800 sticky top-0 z-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-red-500 flex items-center justify-center text-white font-bold shadow-md shadow-red-500/25 text-base">
+        <div className="max-w-5xl mx-auto px-3.5 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-red-500 flex items-center justify-center text-white font-bold shadow-md shadow-red-500/25 text-sm sm:text-base shrink-0">
               {clinic?.name ? clinic.name.charAt(0).toUpperCase() : '🏥'}
             </div>
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="text-base font-bold text-slate-900 dark:text-white leading-tight">
+                <h1 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-tight truncate">
                   {clinic?.name || 'Clinic Booking'}
                 </h1>
-                <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-900 hidden sm:inline-block">
+                <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200 dark:border-emerald-900 hidden sm:inline-block shrink-0">
                   Verified Clinic
                 </span>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400">
+              <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                 {clinic?.phone ? `📞 ${clinic.phone} • ` : ''}Public Patient Scheduling
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {clinic?.phone && (
               <a
                 href={`tel:${clinic.phone}`}
-                className="text-xs font-semibold text-sky-700 dark:text-sky-300 hover:text-sky-900 dark:hover:text-sky-200 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100/70 dark:hover:bg-sky-900/60 px-3.5 py-1.5 rounded-xl border border-sky-200/60 dark:border-sky-800 transition"
+                className="text-xs font-semibold text-sky-700 dark:text-sky-300 hover:text-sky-900 dark:hover:text-sky-200 bg-sky-50 dark:bg-sky-950/50 hover:bg-sky-100/70 dark:hover:bg-sky-900/60 px-2.5 sm:px-3.5 py-1.5 rounded-xl border border-sky-200/60 dark:border-sky-800 transition"
               >
                 📞 <span className="hidden sm:inline">Call Clinic</span>
               </a>
             )}
             <Link
               href="/login"
-              className="text-xs font-medium text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 transition"
+              className="text-xs font-medium text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 transition"
             >
               Staff Portal
             </Link>

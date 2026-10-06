@@ -1,17 +1,77 @@
 import 'server-only';
 
+import fs from 'node:fs';
+import path from 'node:path';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 
 /**
  * Afro Message SMS integration (server-only).
  *
- * Required environment variables (never prefix with NEXT_PUBLIC_):
+ * Reads configuration from:
+ * 1. process.env
+ * 2. Root .env / .env.local file (outside the published build folder)
+ * 3. Project .env / .env.local
+ *
+ * Required environment variables:
  * - AFRO_MESSAGE_API_KEY   : API token from the Afro Message dashboard
  * - AFRO_MESSAGE_SENDER_ID : Identifier ID (sent as the `from` field)
- *
- * The `server-only` import above makes the build fail if this module is ever
- * imported from a Client Component, so the API key can't leak to the browser.
  */
+
+function loadRootEnvIfMissing(): void {
+  if (process.env.AFRO_MESSAGE_API_KEY || process.env.AFROMESSAGE_API_KEY) {
+    return;
+  }
+
+  // Look for .env in parent directories (root outside project) and current project directory
+  const candidateDirs = [
+    path.resolve(process.cwd(), '..'), // root outside clinic-booking
+    process.cwd(),
+    path.resolve(__dirname, '..'),
+    path.resolve(__dirname, '..', '..'),
+    path.resolve(__dirname, '..', '..', '..'),
+  ];
+
+  const candidateFiles = ['.env', '.env.local', '.env.production'];
+
+  for (const dir of candidateDirs) {
+    for (const file of candidateFiles) {
+      try {
+        const fullPath = path.join(/*turbopackIgnore: true*/ dir, file);
+        if (fs.existsSync(/*turbopackIgnore: true*/ fullPath)) {
+          const content = fs.readFileSync(/*turbopackIgnore: true*/ fullPath, 'utf8');
+          const lines = content.split(/\r?\n/);
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith('#')) continue;
+            const eqIdx = trimmed.indexOf('=');
+            if (eqIdx > 0) {
+              const key = trimmed.slice(0, eqIdx).trim();
+              let val = trimmed.slice(eqIdx + 1).trim();
+              if (
+                (val.startsWith('"') && val.endsWith('"')) ||
+                (val.startsWith("'") && val.endsWith("'"))
+              ) {
+                val = val.slice(1, -1);
+              }
+              if (!process.env[key] && val) {
+                process.env[key] = val;
+              }
+            }
+          }
+          if (process.env.AFRO_MESSAGE_API_KEY || process.env.AFROMESSAGE_API_KEY) {
+            console.log(`[sms] Successfully loaded Afro Message config from ${fullPath}`);
+            return;
+          }
+        }
+      } catch {
+        // Ignore read errors and check next candidate
+      }
+    }
+  }
+}
+
+// Auto-run once on module import
+loadRootEnvIfMissing();
 
 const AFRO_MESSAGE_SEND_URL = 'https://api.afromessage.com/api/send';
 const REQUEST_TIMEOUT_MS = 15_000;
@@ -26,7 +86,14 @@ export interface SendSmsResult {
 }
 
 export function formatPhoneNumber(phone: string): string {
-  return phone.replace(/[\s\-\(\)]/g, '');
+  let cleaned = (phone || '').replace(/[\s\-\(\)]/g, '');
+  // Format Ethiopian local 09... / 07... to international +2519... / +2517...
+  if (/^0[97]\d{8}$/.test(cleaned)) {
+    cleaned = '+251' + cleaned.slice(1);
+  } else if (/^251[97]\d{8}$/.test(cleaned)) {
+    cleaned = '+' + cleaned;
+  }
+  return cleaned;
 }
 
 /**
@@ -34,6 +101,8 @@ export function formatPhoneNumber(phone: string): string {
  * Never throws — failures are returned as `{ success: false, ... }`.
  */
 export async function sendSms(phone: string, message: string): Promise<SendSmsResult> {
+  loadRootEnvIfMissing();
+
   const apiKey =
     process.env.AFRO_MESSAGE_API_KEY ||
     process.env.AFROMESSAGE_API_KEY;
@@ -101,10 +170,24 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
     const acknowledged =
       parsed && typeof parsed === 'object' && String(parsed.acknowledge).toLowerCase() === 'success';
 
+    const providerErrors =
+      parsed && typeof parsed === 'object'
+        ? parsed?.response?.errors ?? parsed?.response?.message ?? parsed?.message
+        : undefined;
+
+    let errorDetail = '';
+    if (Array.isArray(providerErrors)) {
+      errorDetail = providerErrors.join('; ');
+    } else if (typeof providerErrors === 'string') {
+      errorDetail = providerErrors;
+    } else if (providerErrors) {
+      errorDetail = JSON.stringify(providerErrors);
+    }
+
     // Build complete provider response capturing all fields returned by Afro Message
     const fullProviderResponse =
       typeof parsed === 'object' && parsed !== null
-        ? { httpStatus: res.status, ...parsed }
+        ? { httpStatus: res.status, errorDetail: errorDetail || undefined, ...parsed }
         : { httpStatus: res.status, rawText: String(parsed) };
 
     if (res.ok && acknowledged) {
@@ -112,13 +195,8 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
       return { success: true, providerResponse: fullProviderResponse };
     }
 
-    const providerErrors =
-      parsed && typeof parsed === 'object'
-        ? parsed?.response?.errors ?? parsed?.response?.message ?? parsed?.message
-        : undefined;
-
     const detailedError = `Afro Message rejected the request (HTTP ${res.status})${
-      providerErrors ? `: ${typeof providerErrors === 'string' ? providerErrors : JSON.stringify(providerErrors)}` : ''
+      errorDetail ? `: ${errorDetail}` : ''
     }`;
 
     console.error(`[sms] Afro Message rejection details for ${to}:`, JSON.stringify(fullProviderResponse));

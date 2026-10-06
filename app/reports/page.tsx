@@ -287,11 +287,11 @@ export default function ReportsPage() {
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold self-start sm:self-center">
+            <div className="flex items-center overflow-x-auto max-w-full pb-1 sm:pb-0 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => setActiveTab('all')}
-                className={`px-3 py-1.5 rounded-lg transition ${
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
                   activeTab === 'all'
                     ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -302,7 +302,7 @@ export default function ReportsPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab('booked')}
-                className={`px-3 py-1.5 rounded-lg transition ${
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
                   activeTab === 'booked'
                     ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -313,7 +313,7 @@ export default function ReportsPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab('attended')}
-                className={`px-3 py-1.5 rounded-lg transition ${
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
                   activeTab === 'attended'
                     ? 'bg-white dark:bg-slate-700 text-emerald-700 dark:text-emerald-300 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -324,7 +324,7 @@ export default function ReportsPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab('missed')}
-                className={`px-3 py-1.5 rounded-lg transition ${
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
                   activeTab === 'missed'
                     ? 'bg-white dark:bg-slate-700 text-amber-700 dark:text-amber-300 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -335,7 +335,7 @@ export default function ReportsPage() {
               <button
                 type="button"
                 onClick={() => setActiveTab('cancelled')}
-                className={`px-3 py-1.5 rounded-lg transition ${
+                className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
                   activeTab === 'cancelled'
                     ? 'bg-white dark:bg-slate-700 text-rose-700 dark:text-rose-300 shadow-xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
@@ -347,48 +347,69 @@ export default function ReportsPage() {
           </div>
 
           {loading ? (
-            <div className="overflow-x-auto animate-pulse">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-4 sm:px-6">Patient</th>
-                    <th className="py-3.5 px-4">Doctor</th>
-                    <th className="py-3.5 px-4">Time Slot</th>
-                    <th className="py-3.5 px-4">Status</th>
-                    <th className="py-3.5 px-4">Notes</th>
-                    <th className="py-3.5 px-4 sm:px-6 text-right">Attendance Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
-                      <td className="py-4 px-4 sm:px-6">
-                        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded mb-1.5" />
-                        <div className="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded mb-1.5" />
-                        <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full" />
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="h-4 w-36 bg-gray-200 dark:bg-gray-700 rounded" />
-                      </td>
-                      <td className="py-4 px-4 sm:px-6 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded-lg" />
-                          <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded-lg" />
-                        </div>
-                      </td>
+            <div>
+              {/* Mobile Skeleton Cards */}
+              <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800 p-4 space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="pt-3 first:pt-0 space-y-2.5 animate-pulse">
+                    <div className="flex items-center justify-between">
+                      <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                    </div>
+                    <div className="h-3.5 w-40 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="h-3 w-28 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="flex gap-2 pt-1">
+                      <div className="h-8 flex-1 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                      <div className="h-8 flex-1 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Skeleton Table */}
+              <div className="hidden md:block overflow-x-auto animate-pulse">
+                <table className="w-full min-w-[680px] text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <th className="py-3.5 px-4 sm:px-6">Patient</th>
+                      <th className="py-3.5 px-4">Doctor</th>
+                      <th className="py-3.5 px-4">Time Slot</th>
+                      <th className="py-3.5 px-4">Status</th>
+                      <th className="py-3.5 px-4">Notes</th>
+                      <th className="py-3.5 px-4 sm:px-6 text-right">Attendance Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
+                        <td className="py-4 px-4 sm:px-6">
+                          <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded mb-1.5" />
+                          <div className="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded mb-1.5" />
+                          <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full" />
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="h-4 w-36 bg-gray-200 dark:bg-gray-700 rounded" />
+                        </td>
+                        <td className="py-4 px-4 sm:px-6 text-right">
+                          <div className="flex items-center justify-end gap-1.5">
+                            <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+                            <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           ) : displayedAppointments.length === 0 ? (
             <div className="py-16 text-center px-4">
@@ -405,142 +426,266 @@ export default function ReportsPage() {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-4 sm:px-6">Patient</th>
-                    <th className="py-3.5 px-4">Doctor</th>
-                    <th className="py-3.5 px-4">Time Slot</th>
-                    <th className="py-3.5 px-4">Status</th>
-                    <th className="py-3.5 px-4">Notes</th>
-                    <th className="py-3.5 px-4 sm:px-6 text-right">Attendance Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
-                  {displayedAppointments.map((appt) => {
-                    const isProcessing = processingId === appt.id;
-                    const isBooked = appt.status === 'booked';
-                    const isAttended = appt.status === 'attended';
-                    const isMissed = appt.status === 'missed';
-                    const isCancelled = appt.status === 'cancelled';
+            <div>
+              {/* Mobile Card View (Optimized for phones) */}
+              <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800">
+                {displayedAppointments.map((appt) => {
+                  const isProcessing = processingId === appt.id;
+                  const isBooked = appt.status === 'booked';
+                  const isAttended = appt.status === 'attended';
+                  const isMissed = appt.status === 'missed';
+                  const isCancelled = appt.status === 'cancelled';
 
-                    const timeDisplay = `${new Date(appt.starts_at).toLocaleTimeString(undefined, {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })} - ${new Date(appt.ends_at).toLocaleTimeString(undefined, {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}`;
+                  const timeDisplay = `${new Date(appt.starts_at).toLocaleTimeString(undefined, {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })} - ${new Date(appt.ends_at).toLocaleTimeString(undefined, {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}`;
 
-                    return (
-                      <tr key={appt.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
-                        <td className="py-4 px-4 sm:px-6">
-                          <div>
-                            <div className="font-semibold text-slate-900 dark:text-white">
-                              {appt.patient?.full_name || 'Patient'}
-                            </div>
-                            <a
-                              href={`tel:${appt.patient?.phone}`}
-                              className="text-xs text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1 mt-0.5 font-mono"
-                            >
-                              📞 {appt.patient?.phone}
-                            </a>
-                          </div>
-                        </td>
-
-                        <td className="py-4 px-4">
-                          <div>
-                            <div className="font-semibold text-slate-800 dark:text-white">
-                              {appt.doctor?.full_name || 'Doctor'}
-                            </div>
-                            <div className="text-xs text-slate-500 dark:text-slate-400">
-                              {appt.doctor?.department || 'General Practice'}
-                            </div>
-                          </div>
-                        </td>
-
-                        <td className="py-4 px-4">
-                          <span className="font-medium text-slate-800 dark:text-slate-200">{timeDisplay}</span>
-                        </td>
-
-                        <td className="py-4 px-4">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${
-                              isBooked
-                                ? 'bg-sky-50 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-900'
-                                : isAttended
-                                ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
-                                : isMissed
-                                ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900'
-                                : isCancelled
-                                ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
-                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
-                            }`}
+                  return (
+                    <div key={appt.id} className="p-4 space-y-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <h4 className="font-bold text-sm text-slate-900 dark:text-white">
+                            {appt.patient?.full_name || 'Patient'}
+                          </h4>
+                          <a
+                            href={`tel:${appt.patient?.phone}`}
+                            className="text-xs text-sky-600 dark:text-sky-400 hover:underline inline-flex items-center gap-1 font-mono mt-0.5"
                           >
-                            <span
-                              className={`w-1.5 h-1.5 rounded-full ${
-                                isBooked
-                                  ? 'bg-blue-500'
-                                  : isAttended
-                                  ? 'bg-emerald-500'
-                                  : isMissed
-                                  ? 'bg-amber-500'
-                                  : 'bg-rose-500'
-                              }`}
-                            ></span>
-                            {appt.status}
+                            📞 {appt.patient?.phone}
+                          </a>
+                        </div>
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize shrink-0 ${
+                            isBooked
+                              ? 'bg-sky-50 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-900'
+                              : isAttended
+                              ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
+                              : isMissed
+                              ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900'
+                              : isCancelled
+                              ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
+                              : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                          }`}
+                        >
+                          <span
+                            className={`w-1.5 h-1.5 rounded-full ${
+                              isBooked
+                                ? 'bg-blue-500'
+                                : isAttended
+                                ? 'bg-emerald-500'
+                                : isMissed
+                                ? 'bg-amber-500'
+                                : 'bg-rose-500'
+                            }`}
+                          ></span>
+                          {appt.status}
+                        </span>
+                      </div>
+
+                      <div className="text-xs text-slate-600 dark:text-slate-300 space-y-1 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400 dark:text-slate-500 font-medium">Doctor:</span>
+                          <span className="font-semibold text-slate-800 dark:text-white">
+                            Dr. {appt.doctor?.full_name || 'Doctor'}
+                            <span className="text-slate-400 font-normal ml-1">({appt.doctor?.department || 'General'})</span>
                           </span>
-                        </td>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400 dark:text-slate-500 font-medium">Time:</span>
+                          <span className="font-semibold text-slate-800 dark:text-slate-200">{timeDisplay}</span>
+                        </div>
+                        {appt.notes && (
+                          <div className="pt-1 border-t border-slate-200/50 dark:border-slate-700/50 text-[11px] text-slate-500 dark:text-slate-400">
+                            <strong>Note:</strong> {appt.notes}
+                          </div>
+                        )}
+                      </div>
 
-                        <td className="py-4 px-4 text-xs text-slate-500 dark:text-slate-400 max-w-xs truncate" title={appt.notes || ''}>
-                          {appt.notes || '—'}
-                        </td>
+                      {isBooked ? (
+                        <div className="grid grid-cols-2 gap-2 pt-1">
+                          <button
+                            type="button"
+                            disabled={isProcessing}
+                            onClick={() => handleUpdateStatus(appt.id, 'attended')}
+                            className="py-2 px-3 rounded-xl border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-xs font-semibold shadow-2xs text-center transition disabled:opacity-50"
+                          >
+                            {isProcessing ? 'Saving...' : '✓ Mark Attended'}
+                          </button>
+                          <button
+                            type="button"
+                            disabled={isProcessing}
+                            onClick={() => handleUpdateStatus(appt.id, 'missed')}
+                            className="py-2 px-3 rounded-xl border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-xs font-semibold shadow-2xs text-center transition disabled:opacity-50"
+                          >
+                            {isProcessing ? 'Saving...' : '✕ Mark Missed'}
+                          </button>
+                        </div>
+                      ) : isAttended || isMissed ? (
+                        <div className="flex items-center justify-between pt-1">
+                          <span className="text-xs text-slate-400 dark:text-slate-500">
+                            {isAttended ? 'Patient arrived' : 'No-show recorded'}
+                          </span>
+                          <button
+                            type="button"
+                            disabled={isProcessing}
+                            onClick={() => handleUpdateStatus(appt.id, 'booked')}
+                            className="px-3 py-1.5 rounded-lg text-xs text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition"
+                          >
+                            Revert
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="text-right">
+                          <span className="text-xs text-slate-400 dark:text-slate-500 italic">No action</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
 
-                        <td className="py-4 px-4 sm:px-6 text-right whitespace-nowrap">
-                          {isBooked ? (
-                            <div className="flex items-center justify-end gap-2">
-                              <button
-                                type="button"
-                                disabled={isProcessing}
-                                onClick={() => handleUpdateStatus(appt.id, 'attended')}
-                                className="px-3 py-1.5 rounded-lg border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-xs font-semibold shadow-2xs transition disabled:opacity-50"
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full min-w-[680px] text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <th className="py-3.5 px-4 sm:px-6">Patient</th>
+                      <th className="py-3.5 px-4">Doctor</th>
+                      <th className="py-3.5 px-4">Time Slot</th>
+                      <th className="py-3.5 px-4">Status</th>
+                      <th className="py-3.5 px-4">Notes</th>
+                      <th className="py-3.5 px-4 sm:px-6 text-right">Attendance Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                    {displayedAppointments.map((appt) => {
+                      const isProcessing = processingId === appt.id;
+                      const isBooked = appt.status === 'booked';
+                      const isAttended = appt.status === 'attended';
+                      const isMissed = appt.status === 'missed';
+                      const isCancelled = appt.status === 'cancelled';
+
+                      const timeDisplay = `${new Date(appt.starts_at).toLocaleTimeString(undefined, {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })} - ${new Date(appt.ends_at).toLocaleTimeString(undefined, {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}`;
+
+                      return (
+                        <tr key={appt.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
+                          <td className="py-4 px-4 sm:px-6">
+                            <div>
+                              <div className="font-semibold text-slate-900 dark:text-white">
+                                {appt.patient?.full_name || 'Patient'}
+                              </div>
+                              <a
+                                href={`tel:${appt.patient?.phone}`}
+                                className="text-xs text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1 mt-0.5 font-mono"
                               >
-                                {isProcessing ? 'Saving...' : '✓ Mark Attended'}
-                              </button>
-                              <button
-                                type="button"
-                                disabled={isProcessing}
-                                onClick={() => handleUpdateStatus(appt.id, 'missed')}
-                                className="px-3 py-1.5 rounded-lg border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-xs font-semibold shadow-2xs transition disabled:opacity-50"
-                              >
-                                {isProcessing ? 'Saving...' : '✕ Mark Missed'}
-                              </button>
+                                📞 {appt.patient?.phone}
+                              </a>
                             </div>
-                          ) : isAttended || isMissed ? (
-                            <div className="flex items-center justify-end gap-2">
-                              <span className="text-xs text-slate-400 dark:text-slate-500 mr-1">
-                                {isAttended ? 'Patient arrived' : 'No-show'}
-                              </span>
-                              <button
-                                type="button"
-                                disabled={isProcessing}
-                                onClick={() => handleUpdateStatus(appt.id, 'booked')}
-                                className="px-2 py-1 rounded text-[11px] text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition"
-                                title="Revert back to booked"
-                              >
-                                Revert
-                              </button>
+                          </td>
+
+                          <td className="py-4 px-4">
+                            <div>
+                              <div className="font-semibold text-slate-800 dark:text-white">
+                                {appt.doctor?.full_name || 'Doctor'}
+                              </div>
+                              <div className="text-xs text-slate-500 dark:text-slate-400">
+                                {appt.doctor?.department || 'General Practice'}
+                              </div>
                             </div>
-                          ) : (
-                            <span className="text-xs text-slate-400 dark:text-slate-500 italic">No action</span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                          </td>
+
+                          <td className="py-4 px-4">
+                            <span className="font-medium text-slate-800 dark:text-slate-200">{timeDisplay}</span>
+                          </td>
+
+                          <td className="py-4 px-4">
+                            <span
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${
+                                isBooked
+                                  ? 'bg-sky-50 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-900'
+                                  : isAttended
+                                  ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
+                                  : isMissed
+                                  ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-900'
+                                  : isCancelled
+                                  ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
+                                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                              }`}
+                            >
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full ${
+                                  isBooked
+                                    ? 'bg-blue-500'
+                                    : isAttended
+                                    ? 'bg-emerald-500'
+                                    : isMissed
+                                    ? 'bg-amber-500'
+                                    : 'bg-rose-500'
+                                }`}
+                              ></span>
+                              {appt.status}
+                            </span>
+                          </td>
+
+                          <td className="py-4 px-4 text-xs text-slate-500 dark:text-slate-400 max-w-xs truncate" title={appt.notes || ''}>
+                            {appt.notes || '—'}
+                          </td>
+
+                          <td className="py-4 px-4 sm:px-6 text-right whitespace-nowrap">
+                            {isBooked ? (
+                              <div className="flex items-center justify-end gap-2">
+                                <button
+                                  type="button"
+                                  disabled={isProcessing}
+                                  onClick={() => handleUpdateStatus(appt.id, 'attended')}
+                                  className="px-3 py-1.5 rounded-lg border border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 text-xs font-semibold shadow-2xs transition disabled:opacity-50"
+                                >
+                                  {isProcessing ? 'Saving...' : '✓ Mark Attended'}
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={isProcessing}
+                                  onClick={() => handleUpdateStatus(appt.id, 'missed')}
+                                  className="px-3 py-1.5 rounded-lg border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-amber-900/60 text-xs font-semibold shadow-2xs transition disabled:opacity-50"
+                                >
+                                  {isProcessing ? 'Saving...' : '✕ Mark Missed'}
+                                </button>
+                              </div>
+                            ) : isAttended || isMissed ? (
+                              <div className="flex items-center justify-end gap-2">
+                                <span className="text-xs text-slate-400 dark:text-slate-500 mr-1">
+                                  {isAttended ? 'Patient arrived' : 'No-show'}
+                                </span>
+                                <button
+                                  type="button"
+                                  disabled={isProcessing}
+                                  onClick={() => handleUpdateStatus(appt.id, 'booked')}
+                                  className="px-2 py-1 rounded text-[11px] text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 transition"
+                                  title="Revert back to booked"
+                                >
+                                  Revert
+                                </button>
+                              </div>
+                            ) : (
+                              <span className="text-xs text-slate-400 dark:text-slate-500 italic">No action</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>

@@ -260,7 +260,7 @@ export default function DoctorPerformancePage() {
             </div>
 
             {preset === 'custom' && (
-              <div className="flex items-center gap-2 text-xs">
+              <div className="flex flex-wrap items-center gap-2 text-xs">
                 <input
                   type="date"
                   value={customFrom}
@@ -345,50 +345,73 @@ export default function DoctorPerformancePage() {
           </div>
 
           {loading ? (
-            <div className="overflow-x-auto animate-pulse">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-4 sm:px-6">Doctor</th>
-                    <th className="py-3.5 px-4">Department</th>
-                    <th className="py-3.5 px-4 text-center">Total Booked</th>
-                    <th className="py-3.5 px-4 text-center">Attended</th>
-                    <th className="py-3.5 px-4 text-center">Missed</th>
-                    <th className="py-3.5 px-4 text-center">Cancelled</th>
-                    <th className="py-3.5 px-4 text-center">No-show Rate</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
-                      <td className="py-3.5 px-4 sm:px-6">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0" />
-                          <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
-                        </div>
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <div className="h-6 w-14 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full" />
-                      </td>
+            <div>
+              {/* Mobile Skeleton Cards */}
+              <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800 p-4 space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="pt-3 first:pt-0 space-y-3 animate-pulse">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      </div>
+                      <div className="h-6 w-14 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                    </div>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[1, 2, 3, 4].map((j) => (
+                        <div key={j} className="h-10 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Skeleton Table */}
+              <div className="hidden md:block overflow-x-auto animate-pulse">
+                <table className="w-full min-w-[650px] text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <th className="py-3.5 px-4 sm:px-6">Doctor</th>
+                      <th className="py-3.5 px-4">Department</th>
+                      <th className="py-3.5 px-4 text-center">Total Booked</th>
+                      <th className="py-3.5 px-4 text-center">Attended</th>
+                      <th className="py-3.5 px-4 text-center">Missed</th>
+                      <th className="py-3.5 px-4 text-center">Cancelled</th>
+                      <th className="py-3.5 px-4 text-center">No-show Rate</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
+                        <td className="py-3.5 px-4 sm:px-6">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0" />
+                            <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
+                        </td>
+                        <td className="py-3.5 px-4 text-center">
+                          <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
+                        </td>
+                        <td className="py-3.5 px-4 text-center">
+                          <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
+                        </td>
+                        <td className="py-3.5 px-4 text-center">
+                          <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
+                        </td>
+                        <td className="py-3.5 px-4 text-center">
+                          <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
+                        </td>
+                        <td className="py-3.5 px-4 text-center">
+                          <div className="h-6 w-14 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full" />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           ) : error ? (
             <div className="py-16 text-center px-4">
@@ -415,97 +438,149 @@ export default function DoctorPerformancePage() {
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-4 sm:px-6">Doctor</th>
-                    <th className="py-3.5 px-4">Department</th>
-                    <th className="py-3.5 px-4 text-center">Total Booked</th>
-                    <th className="py-3.5 px-4 text-center">Attended</th>
-                    <th className="py-3.5 px-4 text-center">Missed</th>
-                    <th className="py-3.5 px-4 text-center">Cancelled</th>
-                    <th className="py-3.5 px-4 text-center">No-show Rate</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {sortedRows.map((row) => (
-                    <tr key={row.doctor_id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
-                      <td className="py-3.5 px-4 sm:px-6">
-                        <div className="flex items-center gap-2.5">
-                          <div className="w-8 h-8 rounded-full bg-sky-500 text-white text-xs font-bold flex items-center justify-center shrink-0">
-                            {row.doctor_name.charAt(0).toUpperCase()}
-                          </div>
-                          <div className="min-w-0">
-                            <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                              {row.doctor_name}
-                            </p>
-                            {!row.active && (
-                              <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
-                                Inactive
-                              </span>
-                            )}
-                          </div>
+            <div>
+              {/* Mobile Card View */}
+              <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800">
+                {sortedRows.map((row) => (
+                  <div key={row.doctor_id} className="p-4 space-y-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-9 h-9 rounded-full bg-sky-500 text-white text-xs font-bold flex items-center justify-center shrink-0">
+                          {row.doctor_name.charAt(0).toUpperCase()}
                         </div>
-                      </td>
-                      <td className="py-3.5 px-4 text-xs text-slate-600 dark:text-slate-300">
-                        {row.department || '—'}
-                      </td>
-                      <td className="py-3.5 px-4 text-center text-sm font-bold text-slate-900 dark:text-white">
-                        {row.total}
-                      </td>
-                      <td className="py-3.5 px-4 text-center text-sm font-semibold text-emerald-700 dark:text-emerald-400">
-                        {row.attended}
-                      </td>
-                      <td className="py-3.5 px-4 text-center text-sm font-semibold text-amber-700 dark:text-amber-400">
-                        {row.missed}
-                      </td>
-                      <td className="py-3.5 px-4 text-center text-sm font-semibold text-rose-700 dark:text-rose-400">
-                        {row.cancelled}
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border ${noShowTone(
-                            row.noShowRate
-                          )}`}
-                        >
-                          {row.noShowRate}%
-                        </span>
-                      </td>
+                        <div>
+                          <p className="text-sm font-bold text-slate-900 dark:text-white">
+                            {row.doctor_name}
+                          </p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400">
+                            {row.department || 'General Practice'}
+                          </p>
+                        </div>
+                      </div>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border shrink-0 ${noShowTone(
+                          row.noShowRate
+                        )}`}
+                      >
+                        {row.noShowRate}% no-show
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-4 gap-2 text-center text-xs">
+                      <div className="bg-slate-50 dark:bg-slate-800/60 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <span className="block text-[10px] text-slate-400 font-medium">Total</span>
+                        <span className="font-bold text-slate-900 dark:text-white text-sm">{row.total}</span>
+                      </div>
+                      <div className="bg-emerald-50/60 dark:bg-emerald-950/30 p-2 rounded-xl border border-emerald-100 dark:border-emerald-900/40">
+                        <span className="block text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">Attended</span>
+                        <span className="font-bold text-emerald-700 dark:text-emerald-300 text-sm">{row.attended}</span>
+                      </div>
+                      <div className="bg-amber-50/60 dark:bg-amber-950/30 p-2 rounded-xl border border-amber-100 dark:border-amber-900/40">
+                        <span className="block text-[10px] text-amber-600 dark:text-amber-400 font-medium">Missed</span>
+                        <span className="font-bold text-amber-700 dark:text-amber-300 text-sm">{row.missed}</span>
+                      </div>
+                      <div className="bg-rose-50/60 dark:bg-rose-950/30 p-2 rounded-xl border border-rose-100 dark:border-rose-900/40">
+                        <span className="block text-[10px] text-rose-600 dark:text-rose-400 font-medium">Cancelled</span>
+                        <span className="font-bold text-rose-700 dark:text-rose-300 text-sm">{row.cancelled}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full min-w-[650px] text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <th className="py-3.5 px-4 sm:px-6">Doctor</th>
+                      <th className="py-3.5 px-4">Department</th>
+                      <th className="py-3.5 px-4 text-center">Total Booked</th>
+                      <th className="py-3.5 px-4 text-center">Attended</th>
+                      <th className="py-3.5 px-4 text-center">Missed</th>
+                      <th className="py-3.5 px-4 text-center">Cancelled</th>
+                      <th className="py-3.5 px-4 text-center">No-show Rate</th>
                     </tr>
-                  ))}
-                </tbody>
-                {totals && (
-                  <tfoot>
-                    <tr className="border-t-2 border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
-                      <td className="py-3.5 px-4 sm:px-6 text-sm" colSpan={2}>
-                        Clinic Totals
-                      </td>
-                      <td className="py-3.5 px-4 text-center text-sm">
-                        {totals.total}
-                      </td>
-                      <td className="py-3.5 px-4 text-center text-sm text-emerald-700 dark:text-emerald-400">
-                        {totals.attended}
-                      </td>
-                      <td className="py-3.5 px-4 text-center text-sm text-amber-700 dark:text-amber-400">
-                        {totals.missed}
-                      </td>
-                      <td className="py-3.5 px-4 text-center text-sm text-rose-700 dark:text-rose-400">
-                        {totals.cancelled}
-                      </td>
-                      <td className="py-3.5 px-4 text-center">
-                        <span
-                          className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border ${noShowTone(
-                            totals.noShowRate
-                          )}`}
-                        >
-                          {totals.noShowRate}%
-                        </span>
-                      </td>
-                    </tr>
-                  </tfoot>
-                )}
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {sortedRows.map((row) => (
+                      <tr key={row.doctor_id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
+                        <td className="py-3.5 px-4 sm:px-6">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-full bg-sky-500 text-white text-xs font-bold flex items-center justify-center shrink-0">
+                              {row.doctor_name.charAt(0).toUpperCase()}
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                                {row.doctor_name}
+                              </p>
+                              {!row.active && (
+                                <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">
+                                  Inactive
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4 text-xs text-slate-600 dark:text-slate-300">
+                          {row.department || '—'}
+                        </td>
+                        <td className="py-3.5 px-4 text-center text-sm font-bold text-slate-900 dark:text-white">
+                          {row.total}
+                        </td>
+                        <td className="py-3.5 px-4 text-center text-sm font-semibold text-emerald-700 dark:text-emerald-400">
+                          {row.attended}
+                        </td>
+                        <td className="py-3.5 px-4 text-center text-sm font-semibold text-amber-700 dark:text-amber-400">
+                          {row.missed}
+                        </td>
+                        <td className="py-3.5 px-4 text-center text-sm font-semibold text-rose-700 dark:text-rose-400">
+                          {row.cancelled}
+                        </td>
+                        <td className="py-3.5 px-4 text-center">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border ${noShowTone(
+                              row.noShowRate
+                            )}`}
+                          >
+                            {row.noShowRate}%
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  {totals && (
+                    <tfoot>
+                      <tr className="border-t-2 border-slate-200 dark:border-slate-700 bg-slate-50/80 dark:bg-slate-800/80 font-bold text-slate-900 dark:text-white">
+                        <td className="py-3.5 px-4 sm:px-6 text-sm" colSpan={2}>
+                          Clinic Totals
+                        </td>
+                        <td className="py-3.5 px-4 text-center text-sm">
+                          {totals.total}
+                        </td>
+                        <td className="py-3.5 px-4 text-center text-sm text-emerald-700 dark:text-emerald-400">
+                          {totals.attended}
+                        </td>
+                        <td className="py-3.5 px-4 text-center text-sm text-amber-700 dark:text-amber-400">
+                          {totals.missed}
+                        </td>
+                        <td className="py-3.5 px-4 text-center text-sm text-rose-700 dark:text-rose-400">
+                          {totals.cancelled}
+                        </td>
+                        <td className="py-3.5 px-4 text-center">
+                          <span
+                            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border ${noShowTone(
+                              totals.noShowRate
+                            )}`}
+                          >
+                            {totals.noShowRate}%
+                          </span>
+                        </td>
+                      </tr>
+                    </tfoot>
+                  )}
+                </table>
+              </div>
               <p className="px-5 py-3 text-[11px] text-slate-400 dark:text-slate-500 border-t border-slate-100 dark:border-slate-800">
                 Total Booked includes all appointments in the range. Doctors with no appointments in the period are displayed with zero counts.
               </p>

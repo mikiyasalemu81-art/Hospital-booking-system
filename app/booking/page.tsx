@@ -1018,9 +1018,9 @@ export default function BookingPage() {
         {/* SECTION 2: UPCOMING APPOINTMENTS LIST FOR THE CLINIC        */}
         {/* ============================================================ */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs overflow-hidden">
-          <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-4 sm:p-5 border-b border-slate-100 dark:border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-base font-bold text-slate-900 dark:text-white">
                   Upcoming Appointments for the Clinic
                 </h2>
@@ -1034,9 +1034,9 @@ export default function BookingPage() {
             </div>
 
             {/* Filter controls */}
-            <div className="flex flex-wrap items-center gap-2.5">
+            <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5">
               {/* Search query */}
-              <div className="relative">
+              <div className="relative min-w-[200px] flex-1 sm:flex-initial">
                 <svg
                   className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"
                   fill="none"
@@ -1050,222 +1050,336 @@ export default function BookingPage() {
                   value={apptSearchQuery}
                   onChange={(e) => setApptSearchQuery(e.target.value)}
                   placeholder="Search patient, phone, doctor..."
-                  className="pl-9 pr-3 py-1.5 text-xs border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sky-500 bg-white dark:bg-slate-800"
+                  className="w-full pl-9 pr-3 py-1.5 text-xs border border-slate-300 dark:border-slate-700 rounded-xl text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-sky-500 bg-white dark:bg-slate-800"
                 />
               </div>
 
               {/* View filter buttons */}
-              <div className="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl text-xs font-medium">
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+                <div className="flex bg-slate-100 dark:bg-slate-800 p-0.5 rounded-xl text-xs font-medium shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setApptViewFilter('upcoming')}
+                    className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
+                      apptViewFilter === 'upcoming'
+                        ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 font-bold shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Upcoming ({upcomingCount})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setApptViewFilter('all')}
+                    className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
+                      apptViewFilter === 'all'
+                        ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 font-bold shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    All ({appointments.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setApptViewFilter('cancelled')}
+                    className={`px-3 py-1.5 rounded-lg transition whitespace-nowrap ${
+                      apptViewFilter === 'cancelled'
+                        ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 font-bold shadow-xs'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    Cancelled
+                  </button>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => setApptViewFilter('upcoming')}
-                  className={`px-3 py-1.5 rounded-lg transition ${
-                    apptViewFilter === 'upcoming'
-                      ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 font-bold shadow-xs'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
+                  onClick={fetchAppointments}
+                  className="px-3 py-1.5 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 border border-sky-200 dark:border-sky-800 rounded-xl hover:bg-sky-50 dark:hover:bg-sky-950/50 transition shrink-0"
                 >
-                  Upcoming ({upcomingCount})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setApptViewFilter('all')}
-                  className={`px-3 py-1.5 rounded-lg transition ${
-                    apptViewFilter === 'all'
-                      ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 font-bold shadow-xs'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  All ({appointments.length})
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setApptViewFilter('cancelled')}
-                  className={`px-3 py-1.5 rounded-lg transition ${
-                    apptViewFilter === 'cancelled'
-                      ? 'bg-white dark:bg-slate-700 text-sky-700 dark:text-sky-300 font-bold shadow-xs'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  Cancelled
+                  ↻ Refresh
                 </button>
               </div>
-
-              <button
-                type="button"
-                onClick={fetchAppointments}
-                className="px-3 py-1.5 text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-sky-800 dark:hover:text-sky-300 border border-sky-200 dark:border-sky-800 rounded-xl hover:bg-sky-50 dark:hover:bg-sky-950/50 transition"
-              >
-                ↻ Refresh
-              </button>
             </div>
           </div>
 
           {loadingAppointments ? (
-            <div className="overflow-x-auto animate-pulse">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-4 sm:px-6">Patient</th>
-                    <th className="py-3.5 px-4">Doctor</th>
-                    <th className="py-3.5 px-4">Scheduled Date & Time</th>
-                    <th className="py-3.5 px-4">Status</th>
-                    <th className="py-3.5 px-4">Notes</th>
-                    <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <tr key={i}>
-                      <td className="py-4 px-4 sm:px-6">
-                        <div className="space-y-1.5">
-                          <div className="h-3.5 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-                          <div className="h-2.5 w-24 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="space-y-1.5">
-                          <div className="h-3.5 w-28 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-                          <div className="h-2.5 w-20 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-                        </div>
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="h-5 w-20 rounded-full bg-gray-200 dark:bg-gray-700"></div>
-                      </td>
-                      <td className="py-4 px-4">
-                        <div className="h-3.5 w-36 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
-                      </td>
-                      <td className="py-4 px-4 sm:px-6 text-right">
-                        <div className="h-6 w-16 rounded-lg bg-gray-200 dark:bg-gray-700 ml-auto"></div>
-                      </td>
+            <div>
+              {/* Mobile Skeleton Cards */}
+              <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800 p-4 space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="pt-3 first:pt-0 space-y-2.5 animate-pulse">
+                    <div className="flex items-center justify-between">
+                      <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="h-5 w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                    </div>
+                    <div className="h-3.5 w-44 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="h-3 w-36 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="flex gap-2 pt-1">
+                      <div className="h-8 flex-1 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                      <div className="h-8 flex-1 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Skeleton Table */}
+              <div className="hidden md:block overflow-x-auto animate-pulse">
+                <table className="w-full min-w-[700px] text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <th className="py-3.5 px-4 sm:px-6">Patient</th>
+                      <th className="py-3.5 px-4">Doctor</th>
+                      <th className="py-3.5 px-4">Scheduled Date & Time</th>
+                      <th className="py-3.5 px-4">Status</th>
+                      <th className="py-3.5 px-4">Notes</th>
+                      <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <tr key={i}>
+                        <td className="py-4 px-4 sm:px-6">
+                          <div className="space-y-1.5">
+                            <div className="h-3.5 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                            <div className="h-2.5 w-24 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="space-y-1.5">
+                            <div className="h-3.5 w-28 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                            <div className="h-2.5 w-20 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                          </div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="h-5 w-20 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                        </td>
+                        <td className="py-4 px-4">
+                          <div className="h-3.5 w-36 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                        </td>
+                        <td className="py-4 px-4 sm:px-6 text-right">
+                          <div className="h-6 w-16 rounded-lg bg-gray-200 dark:bg-gray-700 ml-auto"></div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           ) : displayedAppointments.length === 0 ? (
             <div className="py-16 text-center px-4">
-              <div className="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-2">
+              <div className="w-12 h-12 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-2">
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
-              <p className="text-sm font-semibold text-slate-700">No appointments found</p>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300">No appointments found</p>
+              <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
                 Book a consultation above to see it appear in the upcoming list.
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                    <th className="py-3.5 px-4 sm:px-6">Patient</th>
-                    <th className="py-3.5 px-4">Doctor</th>
-                    <th className="py-3.5 px-4">Scheduled Date & Time</th>
-                    <th className="py-3.5 px-4">Status</th>
-                    <th className="py-3.5 px-4">Notes</th>
-                    <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
-                  {displayedAppointments.map((appt) => {
-                    const isBooked = appt.status === 'booked';
-                    const isCancelled = appt.status === 'cancelled';
-                    return (
-                      <tr key={appt.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
-                        <td className="py-4 px-4 sm:px-6">
-                          <div>
-                            <div className="font-semibold text-slate-900 dark:text-white">
-                              {appt.patient?.full_name || 'Patient'}
-                            </div>
-                            <a
-                              href={`tel:${appt.patient?.phone}`}
-                              className="text-xs text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1 mt-0.5 font-mono"
-                            >
-                              📞 {appt.patient?.phone}
-                            </a>
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div>
-                            <div className="font-semibold text-slate-800 dark:text-white">
-                              {appt.doctor?.full_name || 'Doctor'}
-                            </div>
-                            <div className="text-xs text-slate-500 dark:text-slate-400">
-                              {appt.doctor?.department || 'General Practice'}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <div>
-                            <div className="font-medium text-slate-900 dark:text-white">
-                              {new Date(appt.starts_at).toLocaleDateString(undefined, {
-                                weekday: 'short',
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric',
-                              })}
-                            </div>
-                            <div className="text-xs text-slate-500 dark:text-slate-400">
-                              {new Date(appt.starts_at).toLocaleTimeString(undefined, {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}{' '}
-                              -{' '}
-                              {new Date(appt.ends_at).toLocaleTimeString(undefined, {
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
-                          <span
-                            className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
-                              isBooked
-                                ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
-                                : isCancelled
-                                ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
-                                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
-                            }`}
+            <div>
+              {/* Mobile Cards (Native responsive phone UX) */}
+              <div className="md:hidden divide-y divide-slate-100 dark:divide-slate-800">
+                {displayedAppointments.map((appt) => {
+                  const isBooked = appt.status === 'booked';
+                  const isCancelled = appt.status === 'cancelled';
+                  return (
+                    <div key={appt.id} className="p-4 space-y-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 transition">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <h4 className="font-bold text-sm text-slate-900 dark:text-white">
+                            {appt.patient?.full_name || 'Patient'}
+                          </h4>
+                          <a
+                            href={`tel:${appt.patient?.phone}`}
+                            className="text-xs text-sky-600 dark:text-sky-400 hover:underline inline-flex items-center gap-1 font-mono mt-0.5"
                           >
-                            {appt.status}
+                            📞 {appt.patient?.phone}
+                          </a>
+                        </div>
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold shrink-0 ${
+                            isBooked
+                              ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
+                              : isCancelled
+                              ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
+                              : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                          }`}
+                        >
+                          {appt.status}
+                        </span>
+                      </div>
+
+                      <div className="text-xs text-slate-600 dark:text-slate-300 space-y-1 bg-slate-50 dark:bg-slate-800/50 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400 dark:text-slate-500 font-medium">Doctor:</span>
+                          <span className="font-semibold text-slate-800 dark:text-white">
+                            Dr. {appt.doctor?.full_name || 'Doctor'}
+                            <span className="text-slate-400 font-normal ml-1">({appt.doctor?.department || 'General'})</span>
                           </span>
-                        </td>
-                        <td className="py-4 px-4 text-xs text-slate-500 dark:text-slate-400 max-w-xs truncate" title={appt.notes || ''}>
-                          {appt.notes || '—'}
-                        </td>
-                        <td className="py-4 px-4 sm:px-6 text-right whitespace-nowrap">
-                          {isBooked ? (
-                            <div className="flex items-center justify-end gap-2">
-                              <button
-                                type="button"
-                                onClick={() => openRescheduleModal(appt)}
-                                className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition"
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-400 dark:text-slate-500 font-medium">Time:</span>
+                          <span className="font-semibold text-sky-700 dark:text-sky-300">
+                            {new Date(appt.starts_at).toLocaleDateString(undefined, {
+                              weekday: 'short',
+                              month: 'short',
+                              day: 'numeric',
+                            })}{' '}
+                            {new Date(appt.starts_at).toLocaleTimeString(undefined, {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </span>
+                        </div>
+                        {appt.notes && (
+                          <div className="pt-1 border-t border-slate-200/50 dark:border-slate-700/50 text-[11px] text-slate-500 dark:text-slate-400">
+                            <strong>Note:</strong> {appt.notes}
+                          </div>
+                        )}
+                      </div>
+
+                      {isBooked ? (
+                        <div className="grid grid-cols-2 gap-2 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => openRescheduleModal(appt)}
+                            className="py-2 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 text-center transition shadow-2xs"
+                          >
+                            Reschedule
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleOpenCancelModal(appt)}
+                            className="py-2 px-3 rounded-xl border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/60 text-center transition"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="text-right">
+                          <span className="text-xs text-slate-400 dark:text-slate-500 italic">Cancelled</span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full min-w-[700px] text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                      <th className="py-3.5 px-4 sm:px-6">Patient</th>
+                      <th className="py-3.5 px-4">Doctor</th>
+                      <th className="py-3.5 px-4">Scheduled Date & Time</th>
+                      <th className="py-3.5 px-4">Status</th>
+                      <th className="py-3.5 px-4">Notes</th>
+                      <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+                    {displayedAppointments.map((appt) => {
+                      const isBooked = appt.status === 'booked';
+                      const isCancelled = appt.status === 'cancelled';
+                      return (
+                        <tr key={appt.id} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40 transition">
+                          <td className="py-4 px-4 sm:px-6">
+                            <div>
+                              <div className="font-semibold text-slate-900 dark:text-white">
+                                {appt.patient?.full_name || 'Patient'}
+                              </div>
+                              <a
+                                href={`tel:${appt.patient?.phone}`}
+                                className="text-xs text-sky-700 dark:text-sky-400 hover:underline flex items-center gap-1 mt-0.5 font-mono"
                               >
-                                Reschedule
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => handleOpenCancelModal(appt)}
-                                className="px-3 py-1.5 rounded-lg border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/60 transition"
-                              >
-                                Cancel
-                              </button>
+                                📞 {appt.patient?.phone}
+                              </a>
                             </div>
-                          ) : (
-                            <span className="text-xs text-slate-400 dark:text-slate-500 italic">Cancelled</span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div>
+                              <div className="font-semibold text-slate-800 dark:text-white">
+                                {appt.doctor?.full_name || 'Doctor'}
+                              </div>
+                              <div className="text-xs text-slate-500 dark:text-slate-400">
+                                {appt.doctor?.department || 'General Practice'}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <div>
+                              <div className="font-medium text-slate-900 dark:text-white">
+                                {new Date(appt.starts_at).toLocaleDateString(undefined, {
+                                  weekday: 'short',
+                                  month: 'short',
+                                  day: 'numeric',
+                                  year: 'numeric',
+                                })}
+                              </div>
+                              <div className="text-xs text-slate-500 dark:text-slate-400">
+                                {new Date(appt.starts_at).toLocaleTimeString(undefined, {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}{' '}
+                                -{' '}
+                                {new Date(appt.ends_at).toLocaleTimeString(undefined, {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-4">
+                            <span
+                              className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${
+                                isBooked
+                                  ? 'bg-teal-50 dark:bg-teal-950/30 text-teal-700 dark:text-teal-300 border border-teal-200 dark:border-teal-900'
+                                  : isCancelled
+                                  ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-900'
+                                  : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                              }`}
+                            >
+                              {appt.status}
+                            </span>
+                          </td>
+                          <td className="py-4 px-4 text-xs text-slate-500 dark:text-slate-400 max-w-xs truncate" title={appt.notes || ''}>
+                            {appt.notes || '—'}
+                          </td>
+                          <td className="py-4 px-4 sm:px-6 text-right whitespace-nowrap">
+                            {isBooked ? (
+                              <div className="flex items-center justify-end gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => openRescheduleModal(appt)}
+                                  className="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-100 dark:hover:bg-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition"
+                                >
+                                  Reschedule
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => handleOpenCancelModal(appt)}
+                                  className="px-3 py-1.5 rounded-lg border border-rose-200 dark:border-rose-900 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/60 transition"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            ) : (
+                              <span className="text-xs text-slate-400 dark:text-slate-500 italic">Cancelled</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
@@ -1274,9 +1388,9 @@ export default function BookingPage() {
         {/* MODAL: RESCHEDULE APPOINTMENT                                */}
         {/* ============================================================ */}
         {reschedulingAppt && (
-          <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50">
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden max-h-[90vh] flex flex-col">
+              <div className="px-5 sm:px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-800/50 shrink-0">
                 <div>
                   <h3 className="text-base font-bold text-slate-900 dark:text-white">Reschedule Appointment</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -1286,7 +1400,7 @@ export default function BookingPage() {
                 <button
                   type="button"
                   onClick={() => setReschedulingAppt(null)}
-                  className="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg"
+                  className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg"
                 >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -1294,15 +1408,15 @@ export default function BookingPage() {
                 </button>
               </div>
 
-              <form onSubmit={handleConfirmReschedule} className="p-6 space-y-4">
+              <form onSubmit={handleConfirmReschedule} className="p-5 sm:p-6 space-y-4 overflow-y-auto">
                 {rescheduleError && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700">
+                  <div className="p-3 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl text-xs text-red-700 dark:text-red-300">
                     {rescheduleError}
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                     Select New Date
                   </label>
                   <input
@@ -1310,12 +1424,12 @@ export default function BookingPage() {
                     required
                     value={rescheduleDate}
                     onChange={(e) => setRescheduleDate(e.target.value)}
-                    className="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-sky-500 bg-white"
+                    className="w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white focus:outline-none focus:border-sky-500 bg-white dark:bg-slate-800"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                  <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                     Pick a New Free Time Slot
                   </label>
 
@@ -1324,15 +1438,15 @@ export default function BookingPage() {
                   ) : !rescheduleSlotResult ? (
                     <p className="text-xs text-slate-400 py-3">Pick a date to generate free slots.</p>
                   ) : !rescheduleSlotResult.isWorkDay ? (
-                    <div className="p-3 bg-amber-50 text-amber-800 rounded-xl text-xs">
+                    <div className="p-3 bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-200 rounded-xl text-xs border border-amber-200 dark:border-amber-900">
                       {rescheduleSlotResult.reason}
                     </div>
                   ) : rescheduleSlotResult.freeSlots.length === 0 ? (
-                    <div className="p-3 bg-slate-100 text-slate-600 rounded-xl text-xs text-center">
+                    <div className="p-3 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 rounded-xl text-xs text-center">
                       No free slots available on this date.
                     </div>
                   ) : (
-                    <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto p-1">
                       {rescheduleSlotResult.freeSlots.map((slot) => {
                         const isChosen = rescheduleSlot?.startsAtIso === slot.startsAtIso;
                         return (
@@ -1343,7 +1457,7 @@ export default function BookingPage() {
                             className={`py-2 px-1 text-center rounded-lg border text-xs font-semibold transition ${
                               isChosen
                                 ? 'bg-sky-500 text-white border-sky-500 shadow-xs'
-                                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                                : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
                             }`}
                           >
                             {slot.displayLabel}
@@ -1354,11 +1468,11 @@ export default function BookingPage() {
                   )}
                 </div>
 
-                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3">
+                <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-3 shrink-0">
                   <button
                     type="button"
                     onClick={() => setReschedulingAppt(null)}
-                    className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-800"
+                    className="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
                   >
                     Cancel
                   </button>
@@ -1379,10 +1493,10 @@ export default function BookingPage() {
         {/* MODAL: CANCEL APPOINTMENT CONFIRMATION                       */}
         {/* ============================================================ */}
         {cancellingAppt && (
-          <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 overflow-hidden">
-              <div className="p-6 space-y-4">
-                <div className="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto">
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+              <div className="p-5 sm:p-6 space-y-4">
+                <div className="w-12 h-12 bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 rounded-2xl flex items-center justify-center mx-auto">
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                   </svg>
@@ -1405,7 +1519,7 @@ export default function BookingPage() {
                     type="button"
                     disabled={cancellingLoading}
                     onClick={() => setCancellingAppt(null)}
-                    className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 rounded-xl"
+                    className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 rounded-xl"
                   >
                     Keep Appointment
                   </button>
