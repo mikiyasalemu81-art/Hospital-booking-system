@@ -239,91 +239,109 @@ export default function DashboardPage() {
         )}
 
         {/* Stats Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Total Doctors
-              </span>
-              <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-pulse">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
+                <div className="flex items-center justify-between">
+                  <div className="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                  <div className="w-9 h-9 rounded-xl bg-gray-200 dark:bg-gray-700"></div>
+                </div>
+                <div className="mt-4 flex items-baseline gap-2">
+                  <div className="h-8 w-14 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
+                  <div className="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                </div>
+                <div className="mt-3 h-2.5 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
               </div>
-            </div>
-            <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-slate-900 dark:text-white">{doctors.length}</span>
-              <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                {activeDoctorsCount} active
-              </span>
-            </div>
-            <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
-              Assigned to {clinic?.name || 'this clinic'}
-            </p>
+            ))}
           </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Total Doctors
+                </span>
+                <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+              </div>
+              <div className="mt-3 flex items-baseline gap-2">
+                <span className="text-3xl font-extrabold text-slate-900 dark:text-white">{doctors.length}</span>
+                <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                  {activeDoctorsCount} active
+                </span>
+              </div>
+              <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
+                Assigned to {clinic?.name || 'this clinic'}
+              </p>
+            </div>
 
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Total Patients
-              </span>
-              <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Total Patients
+                </span>
+                <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                </div>
               </div>
+              <div className="mt-3 flex items-baseline gap-2">
+                <span className="text-3xl font-extrabold text-slate-900 dark:text-white">{patients.length}</span>
+                <span className="text-xs text-sky-600 dark:text-sky-400 font-medium">Registered</span>
+              </div>
+              <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
+                Filtered by clinic records
+              </p>
             </div>
-            <div className="mt-3 flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-slate-900 dark:text-white">{patients.length}</span>
-              <span className="text-xs text-sky-600 dark:text-sky-400 font-medium">Registered</span>
-            </div>
-            <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
-              Filtered by clinic records
-            </p>
-          </div>
 
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Clinic Phone
-              </span>
-              <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Clinic Phone
+                </span>
+                <div className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                </div>
               </div>
+              <div className="mt-3">
+                <span className="text-base font-bold text-slate-900 dark:text-white truncate block font-mono">
+                  {clinic?.phone || 'Not set'}
+                </span>
+              </div>
+              <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
+                Primary contact line
+              </p>
             </div>
-            <div className="mt-3">
-              <span className="text-base font-bold text-slate-900 dark:text-white truncate block font-mono">
-                {clinic?.phone || 'Not set'}
-              </span>
-            </div>
-            <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
-              Primary contact line
-            </p>
-          </div>
 
-          <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                Clinic Timezone
-              </span>
-              <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+            <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Clinic Timezone
+                </span>
+                <div className="p-2 rounded-xl bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
               </div>
+              <div className="mt-3">
+                <span className="text-base font-bold text-slate-900 dark:text-white truncate block">
+                  {clinic?.timezone || 'UTC'}
+                </span>
+              </div>
+              <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
+                Schedule synchronization zone
+              </p>
             </div>
-            <div className="mt-3">
-              <span className="text-base font-bold text-slate-900 dark:text-white truncate block">
-                {clinic?.timezone || 'UTC'}
-              </span>
-            </div>
-            <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
-              Schedule synchronization zone
-            </p>
           </div>
-        </div>
+        )}
 
         {/* Two-column preview: Recent Doctors & Recent Patients */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -346,7 +364,21 @@ export default function DashboardPage() {
             </div>
 
             {loading ? (
-              <div className="py-8 text-center text-slate-400 text-sm">Loading doctors...</div>
+              <div className="divide-y divide-slate-100 dark:divide-slate-800 animate-pulse">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="py-3.5 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                      <div className="space-y-1.5 min-w-0">
+                        <div className="h-3.5 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                        <div className="h-2.5 w-44 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                        <div className="h-2 w-28 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                      </div>
+                    </div>
+                    <div className="w-16 h-5 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                  </div>
+                ))}
+              </div>
             ) : doctors.length === 0 ? (
               <div className="text-center py-8 px-4 bg-slate-50/50 dark:bg-slate-800/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
                 <p className="text-sm font-medium text-slate-600 dark:text-slate-300">No doctors registered yet</p>
@@ -407,7 +439,20 @@ export default function DashboardPage() {
             </div>
 
             {loading ? (
-              <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-sm">Loading patients...</div>
+              <div className="divide-y divide-slate-100 dark:divide-slate-800 animate-pulse">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="py-3.5 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                      <div className="space-y-1.5 min-w-0">
+                        <div className="h-3.5 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                        <div className="h-2.5 w-28 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                      </div>
+                    </div>
+                    <div className="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded-md shrink-0"></div>
+                  </div>
+                ))}
+              </div>
             ) : patients.length === 0 ? (
               <div className="text-center py-8 px-4 bg-slate-50/50 dark:bg-slate-800/40 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
                 <p className="text-sm font-medium text-slate-600 dark:text-slate-300">No patients registered yet</p>

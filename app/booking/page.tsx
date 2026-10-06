@@ -645,12 +645,10 @@ export default function BookingPage() {
                 </label>
 
                 {loadingSlots ? (
-                  <div className="py-8 text-center text-slate-400 text-xs flex items-center justify-center gap-2">
-                    <svg className="animate-spin h-4 w-4 text-sky-600" viewBox="0 0 24 24" fill="none">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Generating free slots...
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 animate-pulse py-2">
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+                      <div key={i} className="h-10 rounded-xl bg-gray-200 dark:bg-gray-700"></div>
+                    ))}
                   </div>
                 ) : !slotCalculation ? (
                   <p className="text-xs text-slate-400 py-3 text-center">
@@ -754,14 +752,6 @@ export default function BookingPage() {
                       placeholder="Search patient by name or phone..."
                       className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 bg-white"
                     />
-                    {searchingPatients && (
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                        <svg className="animate-spin h-3.5 w-3.5 text-slate-400" viewBox="0 0 24 24" fill="none">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                      </div>
-                    )}
                   </div>
 
                   {selectedPatient && (
@@ -804,7 +794,19 @@ export default function BookingPage() {
                   )}
 
                   <div className="max-h-44 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 rounded-xl">
-                    {patients.length === 0 ? (
+                    {searchingPatients ? (
+                      <div className="p-3 space-y-2 animate-pulse">
+                        {[1, 2, 3].map((i) => (
+                          <div key={i} className="flex items-center justify-between py-1">
+                            <div className="space-y-1">
+                              <div className="h-3 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                              <div className="h-2.5 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                            </div>
+                            <div className="h-4 w-12 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : patients.length === 0 ? (
                       <div className="p-3 text-center text-xs text-slate-400">
                         No patients matched. Switch to &quot;+ Add New Inline&quot; to create one.
                       </div>
@@ -1100,12 +1102,49 @@ export default function BookingPage() {
           </div>
 
           {loadingAppointments ? (
-            <div className="py-16 text-center text-slate-400 text-sm flex items-center justify-center gap-2">
-              <svg className="animate-spin h-4 w-4 text-sky-600" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Loading appointments...
+            <div className="overflow-x-auto animate-pulse">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                    <th className="py-3.5 px-4 sm:px-6">Patient</th>
+                    <th className="py-3.5 px-4">Doctor</th>
+                    <th className="py-3.5 px-4">Scheduled Date & Time</th>
+                    <th className="py-3.5 px-4">Status</th>
+                    <th className="py-3.5 px-4">Notes</th>
+                    <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <tr key={i}>
+                      <td className="py-4 px-4 sm:px-6">
+                        <div className="space-y-1.5">
+                          <div className="h-3.5 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                          <div className="h-2.5 w-24 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="space-y-1.5">
+                          <div className="h-3.5 w-28 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                          <div className="h-2.5 w-20 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-5 w-20 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-3.5 w-36 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                      </td>
+                      <td className="py-4 px-4 sm:px-6 text-right">
+                        <div className="h-6 w-16 rounded-lg bg-gray-200 dark:bg-gray-700 ml-auto"></div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           ) : displayedAppointments.length === 0 ? (
             <div className="py-16 text-center px-4">

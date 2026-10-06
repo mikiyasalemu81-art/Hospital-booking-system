@@ -236,12 +236,49 @@ export default function PatientsPage() {
         {/* Patients Table */}
         <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/70 dark:border-slate-800 shadow-xs overflow-hidden">
           {loading ? (
-            <div className="py-16 text-center text-slate-500 dark:text-slate-400">
-              <svg className="animate-spin h-7 w-7 text-sky-600 mx-auto mb-2" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              <p className="text-xs">Searching patients...</p>
+            <div className="overflow-x-auto animate-pulse">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                    <th className="py-3.5 px-4 sm:px-6">Patient</th>
+                    <th className="py-3.5 px-4">Phone Number</th>
+                    <th className="py-3.5 px-4">Date of Birth</th>
+                    <th className="py-3.5 px-4">Registered</th>
+                    <th className="py-3.5 px-4">Notes</th>
+                    <th className="py-3.5 px-4 sm:px-6 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <tr key={i}>
+                      <td className="py-4 px-4 sm:px-6">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                          <div className="space-y-1.5">
+                            <div className="h-3.5 w-32 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                            <div className="h-2.5 w-16 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-4 w-28 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-4 w-20 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-4 w-20 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-3.5 w-40 rounded-md bg-gray-200 dark:bg-gray-700"></div>
+                      </td>
+                      <td className="py-4 px-4 sm:px-6 text-right">
+                        <div className="h-6 w-14 rounded-lg bg-gray-200 dark:bg-gray-700 ml-auto"></div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           ) : patients.length === 0 ? (
             <div className="py-16 text-center px-4">

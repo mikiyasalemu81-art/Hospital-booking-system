@@ -314,12 +314,63 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
       {/* Main Container */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8">
         {loadingClinic ? (
-          <div className="py-24 text-center text-slate-400 text-sm flex flex-col items-center justify-center gap-3">
-            <svg className="animate-spin h-7 w-7 text-sky-600" viewBox="0 0 24 24" fill="none">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <p>Loading clinic schedule...</p>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 animate-pulse">
+            {/* Left 7 Columns Skeleton */}
+            <div className="lg:col-span-7 space-y-6">
+              {/* Doctor picker skeleton */}
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs space-y-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="h-4 w-40 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {[1, 2].map((i) => (
+                    <div key={i} className="p-3.5 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2.5">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0"></div>
+                        <div className="space-y-1.5 flex-1">
+                          <div className="h-3.5 w-28 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                          <div className="h-2.5 w-20 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                        </div>
+                      </div>
+                      <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Date & Slots skeleton */}
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs space-y-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="h-4 w-36 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                </div>
+                <div className="h-10 w-full rounded-xl bg-gray-200 dark:bg-gray-700"></div>
+                <div className="h-3 w-44 bg-gray-200 dark:bg-gray-700 rounded-md mt-4"></div>
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 pt-2">
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                    <div key={i} className="h-11 rounded-xl bg-gray-200 dark:bg-gray-700"></div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right 5 Columns Skeleton */}
+            <div className="lg:col-span-5">
+              <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs space-y-4">
+                <div className="h-5 w-48 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                <div className="space-y-2.5 pt-2">
+                  <div className="h-3.5 w-full bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                  <div className="h-3.5 w-3/4 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                  <div className="h-3.5 w-5/6 bg-gray-200 dark:bg-gray-700 rounded-md"></div>
+                </div>
+                <div className="pt-4 space-y-3 border-t border-slate-100 dark:border-slate-800">
+                  <div className="h-10 rounded-xl bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="h-10 rounded-xl bg-gray-200 dark:bg-gray-700"></div>
+                  <div className="h-11 rounded-xl bg-gray-200 dark:bg-gray-700 mt-4"></div>
+                </div>
+              </div>
+            </div>
           </div>
         ) : error ? (
           <div className="p-6 bg-red-50 border border-red-200 rounded-2xl text-red-900 text-center space-y-3">
@@ -447,12 +498,15 @@ export default function PublicClinicBookingPage({ params }: PageProps) {
                   </label>
 
                   {loadingSlots ? (
-                    <div className="py-8 text-center text-slate-400 dark:text-slate-500 text-xs flex items-center justify-center gap-2">
-                      <svg className="animate-spin h-4 w-4 text-sky-600" viewBox="0 0 24 24" fill="none">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Checking available time slots...
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 animate-pulse py-1">
+                      {Array.from({ length: 8 }).map((_, i) => (
+                        <div
+                          key={i}
+                          className="h-10 rounded-xl bg-gray-200 dark:bg-gray-700 flex items-center justify-center"
+                        >
+                          <div className="h-3 w-16 bg-gray-300 dark:bg-gray-600 rounded"></div>
+                        </div>
+                      ))}
                     </div>
                   ) : !slotResult ? (
                     <p className="text-xs text-slate-400 dark:text-slate-500 py-3">Choose a doctor and date to view time slots.</p>

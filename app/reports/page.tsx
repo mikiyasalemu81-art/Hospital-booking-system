@@ -177,7 +177,11 @@ export default function ReportsPage() {
             <p className={`text-xs font-medium ${activeTab === 'all' ? 'text-slate-300' : 'text-slate-500 dark:text-slate-400'}`}>
               Total {isToday ? "Today's" : ''}
             </p>
-            <p className="text-2xl font-extrabold mt-1">{counts.total}</p>
+            {loading ? (
+              <div className="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mt-1" />
+            ) : (
+              <p className="text-2xl font-extrabold mt-1">{counts.total}</p>
+            )}
           </div>
 
           {/* Booked */}
@@ -195,7 +199,11 @@ export default function ReportsPage() {
               </p>
               <span className={`w-2 h-2 rounded-full ${activeTab === 'booked' ? 'bg-white' : 'bg-blue-500'}`}></span>
             </div>
-            <p className="text-2xl font-extrabold mt-1">{counts.booked}</p>
+            {loading ? (
+              <div className="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mt-1" />
+            ) : (
+              <p className="text-2xl font-extrabold mt-1">{counts.booked}</p>
+            )}
           </div>
 
           {/* Attended */}
@@ -213,7 +221,11 @@ export default function ReportsPage() {
               </p>
               <span className={`w-2 h-2 rounded-full ${activeTab === 'attended' ? 'bg-white' : 'bg-emerald-500'}`}></span>
             </div>
-            <p className="text-2xl font-extrabold mt-1">{counts.attended}</p>
+            {loading ? (
+              <div className="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mt-1" />
+            ) : (
+              <p className="text-2xl font-extrabold mt-1">{counts.attended}</p>
+            )}
           </div>
 
           {/* Missed */}
@@ -231,7 +243,11 @@ export default function ReportsPage() {
               </p>
               <span className={`w-2 h-2 rounded-full ${activeTab === 'missed' ? 'bg-white' : 'bg-amber-500'}`}></span>
             </div>
-            <p className="text-2xl font-extrabold mt-1">{counts.missed}</p>
+            {loading ? (
+              <div className="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mt-1" />
+            ) : (
+              <p className="text-2xl font-extrabold mt-1">{counts.missed}</p>
+            )}
           </div>
 
           {/* Cancelled */}
@@ -249,7 +265,11 @@ export default function ReportsPage() {
               </p>
               <span className={`w-2 h-2 rounded-full ${activeTab === 'cancelled' ? 'bg-white' : 'bg-rose-500'}`}></span>
             </div>
-            <p className="text-2xl font-extrabold mt-1">{counts.cancelled}</p>
+            {loading ? (
+              <div className="h-8 w-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mt-1" />
+            ) : (
+              <p className="text-2xl font-extrabold mt-1">{counts.cancelled}</p>
+            )}
           </div>
         </div>
 
@@ -327,12 +347,48 @@ export default function ReportsPage() {
           </div>
 
           {loading ? (
-            <div className="py-16 text-center text-slate-400 dark:text-slate-500 text-sm flex items-center justify-center gap-2">
-              <svg className="animate-spin h-5 w-5 text-sky-600 dark:text-sky-400" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Loading appointments...
+            <div className="overflow-x-auto animate-pulse">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                    <th className="py-3.5 px-4 sm:px-6">Patient</th>
+                    <th className="py-3.5 px-4">Doctor</th>
+                    <th className="py-3.5 px-4">Time Slot</th>
+                    <th className="py-3.5 px-4">Status</th>
+                    <th className="py-3.5 px-4">Notes</th>
+                    <th className="py-3.5 px-4 sm:px-6 text-right">Attendance Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
+                      <td className="py-4 px-4 sm:px-6">
+                        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded mb-1.5" />
+                        <div className="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded mb-1.5" />
+                        <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded" />
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full" />
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="h-4 w-36 bg-gray-200 dark:bg-gray-700 rounded" />
+                      </td>
+                      <td className="py-4 px-4 sm:px-6 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+                          <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded-lg" />
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           ) : displayedAppointments.length === 0 ? (
             <div className="py-16 text-center px-4">

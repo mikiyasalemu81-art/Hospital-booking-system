@@ -93,11 +93,13 @@ function StatCard({
   value,
   valueClass,
   dotClass,
+  loading,
 }: {
   label: string;
   value: React.ReactNode;
   valueClass: string;
   dotClass: string;
+  loading?: boolean;
 }) {
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs p-4">
@@ -105,7 +107,11 @@ function StatCard({
         <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
         <span className={`w-2 h-2 rounded-full ${dotClass}`}></span>
       </div>
-      <p className={`text-2xl font-extrabold mt-1 ${valueClass}`}>{value}</p>
+      {loading ? (
+        <div className="h-8 w-14 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mt-1" />
+      ) : (
+        <p className={`text-2xl font-extrabold mt-1 ${valueClass}`}>{value}</p>
+      )}
     </div>
   );
 }
@@ -284,30 +290,35 @@ export default function DoctorPerformancePage() {
             value={totals?.total ?? 0}
             valueClass="text-slate-900 dark:text-white"
             dotClass="bg-slate-400"
+            loading={loading}
           />
           <StatCard
             label="Attended"
             value={totals?.attended ?? 0}
             valueClass="text-emerald-700 dark:text-emerald-400"
             dotClass="bg-emerald-500"
+            loading={loading}
           />
           <StatCard
             label="Missed"
             value={totals?.missed ?? 0}
             valueClass="text-amber-700 dark:text-amber-400"
             dotClass="bg-amber-500"
+            loading={loading}
           />
           <StatCard
             label="Cancelled"
             value={totals?.cancelled ?? 0}
             valueClass="text-rose-700 dark:text-rose-400"
             dotClass="bg-rose-500"
+            loading={loading}
           />
           <StatCard
             label="No-show Rate"
             value={`${totals?.noShowRate ?? 0}%`}
             valueClass="text-slate-900 dark:text-white"
             dotClass="bg-blue-500"
+            loading={loading}
           />
         </div>
 
@@ -334,12 +345,50 @@ export default function DoctorPerformancePage() {
           </div>
 
           {loading ? (
-            <div className="py-16 text-center text-slate-400 dark:text-slate-500 text-sm flex items-center justify-center gap-2">
-              <svg className="animate-spin h-5 w-5 text-sky-600 dark:text-sky-400" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
-              Loading performance data...
+            <div className="overflow-x-auto animate-pulse">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-200/80 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                    <th className="py-3.5 px-4 sm:px-6">Doctor</th>
+                    <th className="py-3.5 px-4">Department</th>
+                    <th className="py-3.5 px-4 text-center">Total Booked</th>
+                    <th className="py-3.5 px-4 text-center">Attended</th>
+                    <th className="py-3.5 px-4 text-center">Missed</th>
+                    <th className="py-3.5 px-4 text-center">Cancelled</th>
+                    <th className="py-3.5 px-4 text-center">No-show Rate</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <tr key={i} className="hover:bg-slate-50/60 dark:hover:bg-slate-800/40">
+                      <td className="py-3.5 px-4 sm:px-6">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 shrink-0" />
+                          <div className="h-4 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
+                        </div>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <div className="h-4 w-8 mx-auto bg-gray-200 dark:bg-gray-700 rounded" />
+                      </td>
+                      <td className="py-3.5 px-4 text-center">
+                        <div className="h-6 w-14 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full" />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           ) : error ? (
             <div className="py-16 text-center px-4">
