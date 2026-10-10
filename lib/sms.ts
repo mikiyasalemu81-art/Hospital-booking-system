@@ -85,16 +85,31 @@ export interface SendSmsResult {
   error?: string;
 }
 
-export function formatPhoneNumber(phone: string): string {
-  let cleaned = (phone || '').replace(/[\s\-\(\)]/g, '');
-  // Format Ethiopian local 09... / 07... to international +2519... / +2517...
-  if (/^0[97]\d{8}$/.test(cleaned)) {
-    cleaned = '+251' + cleaned.slice(1);
-  } else if (/^251[97]\d{8}$/.test(cleaned)) {
-    cleaned = '+' + cleaned;
+export function normalizePhoneNumber(phone: string): string {
+  let cleaned = (phone || '').replace(/[\s\-\(\)\.]/g, '');
+  if (cleaned.startsWith('+')) {
+    cleaned = cleaned.slice(1);
   }
-  return cleaned;
+  // 09XXXXXXXX or 07XXXXXXXX (10 digits starting with 0)
+  if (/^0([97]\d{8})$/.test(cleaned)) {
+    return '+251' + cleaned.slice(1);
+  }
+  // 9XXXXXXXX or 7XXXXXXXX (9 digits starting with 9 or 7)
+  if (/^([97]\d{8})$/.test(cleaned)) {
+    return '+251' + cleaned;
+  }
+  // 2519XXXXXXXX or 2517XXXXXXXX (12 digits)
+  if (/^251([97]\d{8})$/.test(cleaned)) {
+    return '+' + cleaned;
+  }
+  // General international or standard digits fallback
+  if (/^\d{9,15}$/.test(cleaned)) {
+    return '+' + cleaned;
+  }
+  return cleaned ? (cleaned.startsWith('+') ? cleaned : '+' + cleaned) : '';
 }
+
+export const formatPhoneNumber = normalizePhoneNumber;
 
 /**
  * Sends a single SMS through Afro Message.
@@ -109,7 +124,9 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
   const senderId =
     process.env.AFRO_MESSAGE_SENDER_ID ||
     process.env.AFROMESSAGE_SENDER_ID ||
-    process.env.AFROMESSAGE_FROM_ID ||
+    process.env.AFROMESSAGE_FROM_ID;
+  const senderName =
+    process.env.AFRO_MESSAGE_SENDER_NAME ||
     process.env.AFROMESSAGE_SENDER_NAME;
 
   if (!apiKey) {
@@ -118,38 +135,45 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
       success: false,
       error: 'AFRO_MESSAGE_API_KEY is not configured',
       providerResponse: {
+        httpStatus: 0,
         error: 'AFRO_MESSAGE_API_KEY is not configured',
         checkedEnv: ['AFRO_MESSAGE_API_KEY', 'AFROMESSAGE_API_KEY'],
       },
     };
   }
 
-  const to = formatPhoneNumber(phone || '');
+  const to = normalizePhoneNumber(phone || '');
   if (!to) {
     return {
       success: false,
       error: 'Missing recipient phone number',
-      providerResponse: { error: 'Missing recipient phone number', phoneInput: phone },
+      providerResponse: { httpStatus: 0, error: 'Missing recipient phone number', phoneInput: phone },
     };
   }
   if (!message?.trim()) {
     return {
       success: false,
       error: 'Message is empty',
-      providerResponse: { error: 'Message is empty' },
+      providerResponse: { httpStatus: 0, error: 'Message is empty' },
     };
   }
 
   try {
-    const body: Record<string, string> = { to, message };
-    if (senderId) body.from = senderId;
+    const body: Record<string, string> = { to, message: message.trim() };
+    if (senderId && senderId.trim()) {
+      body.from = senderId.trim();
+    }
+    // Include sender (sender name) ONLY if approved on account / configured in env
+    if (senderName && senderName.trim()) {
+      body.sender = senderName.trim();
+    }
 
-    console.log(`[sms] Sending Afro Message SMS to ${to} (senderId: ${senderId || 'default'})`);
+    console.log(`[sms] Sending Afro Message SMS to ${to} (from: ${senderId || 'default'}, sender: ${senderName || 'none'})`);
 
     const res = await fetch(AFRO_MESSAGE_SEND_URL, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey.trim()}`,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -175,6 +199,16 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
         ? parsed?.response?.errors ?? parsed?.response?.message ?? parsed?.message
         : undefined;
 
+    let hasProviderError = false;
+    if (parsed && typeof parsed === 'object') {
+      if (String(parsed.acknowledge).toLowerCase() === 'error') {
+        hasProviderError = true;
+      }
+      if (parsed.error || parsed.errors || (parsed.response && (parsed.response.errors || parsed.response.error))) {
+        hasProviderError = true;
+      }
+    }
+
     let errorDetail = '';
     if (Array.isArray(providerErrors)) {
       errorDetail = providerErrors.join('; ');
@@ -184,13 +218,14 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
       errorDetail = JSON.stringify(providerErrors);
     }
 
-    // Build complete provider response capturing all fields returned by Afro Message
-    const fullProviderResponse =
-      typeof parsed === 'object' && parsed !== null
-        ? { httpStatus: res.status, errorDetail: errorDetail || undefined, ...parsed }
-        : { httpStatus: res.status, rawText: String(parsed) };
+    // Capture complete HTTP status and raw provider response
+    const fullProviderResponse = {
+      httpStatus: res.status,
+      errorDetail: errorDetail || undefined,
+      rawResponse: parsed,
+    };
 
-    if (res.ok && acknowledged) {
+    if (res.ok && acknowledged && !hasProviderError) {
       console.log(`[sms] Afro Message accepted SMS for ${to}:`, JSON.stringify(fullProviderResponse));
       return { success: true, providerResponse: fullProviderResponse };
     }
@@ -214,14 +249,17 @@ export async function sendSms(phone: string, message: string): Promise<SendSmsRe
 
     console.error(`[sms] Network/call error to Afro Message for ${to}:`, errorMessage);
 
+    const fullProviderResponse = {
+      httpStatus: 0,
+      error: errorMessage,
+      exceptionName: err?.name,
+      stack: err?.stack,
+    };
+
     return {
       success: false,
       error: errorMessage,
-      providerResponse: {
-        error: errorMessage,
-        exceptionName: err?.name,
-        stack: err?.stack,
-      },
+      providerResponse: fullProviderResponse,
     };
   }
 }
@@ -241,11 +279,10 @@ export async function sendAndLogSms(params: {
   try {
     result = await sendSms(params.phone, params.message);
   } catch (err: any) {
-    // sendSms shouldn't throw, but guard anyway
     result = {
       success: false,
       error: err?.message || 'Unexpected SMS error',
-      providerResponse: { error: err?.message || 'Unexpected SMS error' },
+      providerResponse: { httpStatus: 0, error: err?.message || 'Unexpected SMS error' },
     };
   }
 
@@ -254,14 +291,15 @@ export async function sendAndLogSms(params: {
   }
 
   try {
+    const providerResponseToStore = safeStringify(result.providerResponse);
     const { error: logError } = await supabaseAdmin.from('sms_log').insert({
       clinic_id: params.clinicId,
       appointment_id: params.appointmentId ?? null,
-      phone: params.phone || '',
+      phone: normalizePhoneNumber(params.phone || ''),
       message: params.message,
       kind: params.kind,
       status: result.success ? 'sent' : 'failed',
-      provider_response: safeStringify(result.providerResponse),
+      provider_response: providerResponseToStore,
       created_at: new Date().toISOString(),
     });
     if (logError) {

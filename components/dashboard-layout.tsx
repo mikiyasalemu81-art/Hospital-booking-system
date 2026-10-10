@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from './auth-provider';
 import { useTheme } from './theme-provider';
+import { ImakoCredit } from './imako-credit';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -373,6 +374,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </svg>
           Sign Out
         </button>
+
+        <div className="pt-2.5 mt-2.5 border-t border-slate-200/60 dark:border-slate-800 flex justify-center">
+          <ImakoCredit />
+        </div>
       </div>
     </div>
   );

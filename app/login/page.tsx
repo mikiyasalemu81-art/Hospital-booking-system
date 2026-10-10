@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/auth-provider';
 import { friendlyAuthError } from '@/lib/supabase/config';
 
+import { ImakoCredit } from '@/components/imako-credit';
+
 export default function LoginPage() {
   const router = useRouter();
   const { user, staff, signIn, loading: authLoading } = useAuth();
@@ -158,6 +160,9 @@ export default function LoginPage() {
               </p>
             </div>
           </form>
+        </div>
+        <div className="mt-8 flex justify-center">
+          <ImakoCredit />
         </div>
       </div>
     </div>
