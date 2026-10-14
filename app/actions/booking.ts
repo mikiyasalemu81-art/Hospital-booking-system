@@ -82,7 +82,8 @@ export async function bookAppointmentAction(
         .single();
 
       if (cpError || !createdPatient) {
-        return { success: false, error: cpError?.message || 'Failed to register new patient' };
+        console.error('Failed to register new patient:', cpError?.message);
+        return { success: false, error: "Couldn't save the patient. Please try again." };
       }
 
       patientId = createdPatient.id;

@@ -423,7 +423,8 @@ export async function bookPublicAppointmentAction(
         .single();
 
       if (pError || !newPatient) {
-        return { success: false, error: pError?.message || 'Failed to save patient profile' };
+        console.error('Failed to save patient in public booking:', pError?.message);
+        return { success: false, error: "Couldn't save patient profile. Please try again." };
       }
       patientId = newPatient.id;
     }

@@ -27,12 +27,14 @@ export async function GET(request: NextRequest) {
     const { data, error } = await dbQuery.order('created_at', { ascending: false });
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('Failed to list patients from database:', error.message);
+      return NextResponse.json({ error: "Couldn't load patients. Please try again." }, { status: 500 });
     }
 
     return NextResponse.json({ patients: data || [] });
   } catch (error: any) {
-    return NextResponse.json({ error: error?.message || 'Server error' }, { status: 500 });
+    console.error('Server error in GET /api/patients:', error);
+    return NextResponse.json({ error: "Couldn't load patients. Please try again." }, { status: 500 });
   }
 }
 
@@ -69,11 +71,19 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('Database error adding patient:', error.message);
+      return NextResponse.json(
+        { error: "Couldn't save the patient. Please try again." },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ patient: data }, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json({ error: error?.message || 'Server error' }, { status: 500 });
+    console.error('Server error in POST /api/patients:', error);
+    return NextResponse.json(
+      { error: "Couldn't save the patient. Please try again." },
+      { status: 500 }
+    );
   }
 }

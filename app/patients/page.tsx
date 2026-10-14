@@ -49,13 +49,23 @@ export default function PatientsPage() {
       const res = await fetch(url);
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error || 'Failed to fetch patients');
+        throw new Error(data.error || "Couldn't load patients. Please try again.");
       }
 
       const data = await res.json();
       setPatients(data.patients || []);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error loading patients');
+      console.error('Error loading patients:', err);
+      const rawMsg = err instanceof Error ? err.message : '';
+      const isDbError =
+        !rawMsg ||
+        rawMsg.toLowerCase().includes('schema cache') ||
+        rawMsg.toLowerCase().includes('column') ||
+        rawMsg.toLowerCase().includes('relation') ||
+        rawMsg.toLowerCase().includes('database') ||
+        rawMsg.toLowerCase().includes('failed to fetch');
+
+      setError(isDbError ? "Couldn't load patients. Please try again." : rawMsg);
     } finally {
       setLoading(false);
     }
@@ -93,7 +103,7 @@ export default function PatientsPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to add patient');
+        throw new Error(data.error || "Couldn't save the patient. Please try again.");
       }
 
       setSuccessMessage(`Patient ${fullName.trim()} registered successfully!`);
@@ -104,7 +114,18 @@ export default function PatientsPage() {
       await fetchPatients(debouncedQuery);
       setTimeout(() => setSuccessMessage(null), 4000);
     } catch (err: unknown) {
-      setFormError(err instanceof Error ? err.message : 'Error adding patient');
+      console.error('Error adding patient:', err);
+      const rawMsg = err instanceof Error ? err.message : '';
+      const isDbError =
+        !rawMsg ||
+        rawMsg.toLowerCase().includes('schema cache') ||
+        rawMsg.toLowerCase().includes('column') ||
+        rawMsg.toLowerCase().includes('relation') ||
+        rawMsg.toLowerCase().includes('database') ||
+        rawMsg.toLowerCase().includes('failed to add') ||
+        rawMsg.toLowerCase().includes('error adding');
+
+      setFormError(isDbError ? "Couldn't save the patient. Please try again." : rawMsg);
     } finally {
       setSubmitting(false);
     }
@@ -132,7 +153,7 @@ export default function PatientsPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || 'Failed to save notes');
+        throw new Error(data.error || "Couldn't save the patient. Please try again.");
       }
 
       setSuccessMessage(`Notes updated for ${editingPatient.full_name}.`);
@@ -140,7 +161,18 @@ export default function PatientsPage() {
       await fetchPatients(debouncedQuery);
       setTimeout(() => setSuccessMessage(null), 4000);
     } catch (err: unknown) {
-      setNotesError(err instanceof Error ? err.message : 'Error saving notes');
+      console.error('Error saving patient notes:', err);
+      const rawMsg = err instanceof Error ? err.message : '';
+      const isDbError =
+        !rawMsg ||
+        rawMsg.toLowerCase().includes('schema cache') ||
+        rawMsg.toLowerCase().includes('column') ||
+        rawMsg.toLowerCase().includes('relation') ||
+        rawMsg.toLowerCase().includes('database') ||
+        rawMsg.toLowerCase().includes('failed to save') ||
+        rawMsg.toLowerCase().includes('error saving');
+
+      setNotesError(isDbError ? "Couldn't save the patient. Please try again." : rawMsg);
     } finally {
       setSavingNotes(false);
     }

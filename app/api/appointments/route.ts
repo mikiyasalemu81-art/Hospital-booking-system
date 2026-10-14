@@ -116,8 +116,9 @@ export async function POST(request: NextRequest) {
         .single();
 
       if (createError || !created) {
+        console.error('Failed to create patient:', createError?.message);
         return NextResponse.json(
-          { error: createError?.message || 'Failed to create patient' },
+          { error: "Couldn't save the patient. Please try again." },
           { status: 500 }
         );
       }

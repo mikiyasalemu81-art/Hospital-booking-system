@@ -69,7 +69,11 @@ export async function PATCH(request: NextRequest, { params }: RouteContext) {
       .single();
 
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error('Database error updating patient notes:', error.message);
+      return NextResponse.json(
+        { error: "Couldn't save the patient. Please try again." },
+        { status: 500 }
+      );
     }
 
     if (!data) {
@@ -78,6 +82,10 @@ export async function PATCH(request: NextRequest, { params }: RouteContext) {
 
     return NextResponse.json({ patient: data });
   } catch (error: any) {
-    return NextResponse.json({ error: error?.message || 'Server error' }, { status: 500 });
+    console.error('Server error in PATCH /api/patients/[id]:', error);
+    return NextResponse.json(
+      { error: "Couldn't save the patient. Please try again." },
+      { status: 500 }
+    );
   }
 }

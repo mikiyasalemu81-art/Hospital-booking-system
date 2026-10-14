@@ -287,7 +287,17 @@ export default function BookingPage() {
       await fetchDoctorsAndPatients();
       await calculateSlots();
     } catch (err: unknown) {
-      setErrorAlert(err instanceof Error ? err.message : 'Error occurred while booking');
+      console.error('Error occurred while booking:', err);
+      const raw = err instanceof Error ? err.message : '';
+      const isDbError =
+        !raw ||
+        raw.toLowerCase().includes('schema cache') ||
+        raw.toLowerCase().includes('column') ||
+        raw.toLowerCase().includes('relation') ||
+        raw.toLowerCase().includes('database') ||
+        raw.toLowerCase().includes('failed to book');
+
+      setErrorAlert(isDbError ? "Couldn't complete booking. Please try again." : raw);
     } finally {
       setSubmittingBooking(false);
     }
